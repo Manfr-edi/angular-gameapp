@@ -1,0 +1,33 @@
+{{checkUserInfo()}}
+
+	<div style="width: 350px;">
+
+		<p *ngIf="errorMessage.length > 0" class="text-danger">
+			{{errorMessage}}</p>
+
+		<p *ngIf="error.message.length > 0" class="text-danger">
+			{{error.message}}</p>
+
+		<form (ngSubmit)="onLoginEmail()">
+			<div class="form-group">
+				<label for="email">Email</label>
+				<input type="text" class="form-control" id="email" name="email" required [(ngModel)]="email">
+			</div>
+
+			<div class="form-group">
+				<label for="password">Password</label>
+				<input type="password" class="form-control" id="password" name="password" required [(ngModel)]="password">
+			</div>
+
+			<button type="submit" class="btn btn-success">Log In</button>
+		</form>
+
+		<h4 class="text-primary" >Not have any Account yet??</h4>
+		<button [routerLink]= "'/register-user'" class="btn btn-success">Register </button>
+		<div>
+		<p> Password dimenticata? Inserisci l'indirizzo e-mail e clicca Reset password in basso</p>
+		<button  class="text-danger" (click)="sendResetEmail()">Reset Password</button>
+		</div>
+
+	</div>
+

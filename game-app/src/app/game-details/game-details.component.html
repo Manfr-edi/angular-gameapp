@@ -1,0 +1,39 @@
+
+<div *ngIf="game$ | async; let game">
+ {{ util.capitalize(game.title) }}  <br>
+ {{ util.capitalize(game.platform[0]) }}  <br>
+ {{ util.capitalize(game.developer) }}  <br>
+ {{ game.price }} 
+
+
+
+	<div *ngIf="authService.isUserEmailLoggedIn">
+		<div *ngIf="selectedOption==='CompletedGames'">
+				<input  type="number"  placeholder="ore" class="input" required [(ngModel)]="time"><br>
+
+				<h4>Inserisci la piattaforma</h4>
+
+				<select [(ngModel)]="selectedPlatform" value="{{game.platform[0]}}">
+					<option *ngFor="let plat of game.platform">
+					{{plat}}
+					</option>
+				</select><br>
+
+
+				<h4>Inserisci un voto</h4>
+				<input  type="number"  placeholder="voto" class="input"  [(ngModel)]="vote">
+		</div>
+		
+		<textarea rows="4" cols="180" placeholder="Inserisci Note Aggiuntive" [(ngModel)]="note"></textarea><br>
+
+		<select  [(ngModel)]="selectedOption">
+		<option *ngFor="let o of options" value="{{o.value}}">
+			{{o.name}}
+		</option>
+		</select>
+		
+		<button (click)="AddGame()" >Add Game On List Completed</button>
+
+	</div>
+
+</div>

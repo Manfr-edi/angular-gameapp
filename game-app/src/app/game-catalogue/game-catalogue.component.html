@@ -1,0 +1,25 @@
+<h2> Game Catalogue </h2>
+
+
+<h1>Firebase widgets!</h1>
+  <div *ngIf="games$ | async; let games; else loading">
+    <ul>
+      <div *ngFor="let game of games">
+       <a [routerLink]="['/games', game.payload.doc.id]">
+		{{ util.capitalize(game.payload.doc.data().title) }}
+		</a>
+        </div>
+    </ul>
+    <div *ngIf="games.length === 0">Nessun gioco trovato</div>
+  </div>
+  <ng-template #loading>Loading&hellip;</ng-template>
+  <div>
+	<input type="text" (keyup)="onKey($event)" placeholder="enter name" class="input">
+	
+  </div>
+  <div>
+	  <button 
+	  [routerLink]= "'/login'" class="btn btn-success">Log In
+	  </button>
+	 
+  </div>
