@@ -8,7 +8,7 @@
 
 
 	<div *ngIf="authService.isUserEmailLoggedIn">
-		<div *ngIf="selectedOption==='CompletedGames'">
+		<div *ngIf="selectedOption===userlists[0].code">
 				<input  type="number"  placeholder="ore" class="input" required [(ngModel)]="time"><br>
 
 				<h4>Inserisci la piattaforma</h4><br>
@@ -27,7 +27,7 @@
 		<textarea rows="4" cols="180" placeholder="Inserisci Note Aggiuntive" [(ngModel)]="note"></textarea><br>
 
 		<select  [(ngModel)]="selectedOption">
-		<option *ngFor="let o of options" value="{{o.value}}">
+		<option *ngFor="let o of userlists" value="{{o.code}}">
 			{{o.name}}
 		</option>
 		</select>

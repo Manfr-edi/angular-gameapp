@@ -9,7 +9,8 @@ import { UtilComponent } from '../util/util.component';
 import { AuthService } from '../shared/services/auth.service';
 import { TypeofExpr } from '@angular/compiler';
 
-import { platform } from '../util/platform/platform'
+import { platform } from '../util/platform/platform';
+import { userlist } from '../util/userlist/userlist';
 import { not } from '@angular/compiler/src/output/output_ast';
 
 
@@ -28,17 +29,14 @@ export class GameDetailsComponent implements OnInit {
   selectedOption: string;
   selectedPlatform: string;
   platforms = platform;
+  userlists = userlist;
   time = 0;
   note: string;
   vote = 0;
 
   
 
-  options = [
-    { name: "Completati", value: "CompletedGames" },
-    { name: "In gioco", value: "PlayingGames" },
-    { name: "Desiderati", value: "DesiredGames" },
-  ]
+  
   
   constructor(private route: ActivatedRoute, public authService: AuthService, public fdb : AngularFirestore) {
 	  this.util = new UtilComponent();
@@ -46,7 +44,7 @@ export class GameDetailsComponent implements OnInit {
 	  const routeParams = this.route.snapshot.paramMap;
     const gameID = String(routeParams.get('id'));
     this.gameid = gameID;
-    this.selectedOption = this.options[0].value;
+    this.selectedOption = this.userlists[0].code;//this.options[0].value;
     this.selectedPlatform = '';
     this.note = '';
 
@@ -63,16 +61,16 @@ export class GameDetailsComponent implements OnInit {
    AddGame(){
     
     var ref = this.fdb.collection("Users").doc(this.authService.currentUserId);
-    ref.collection("CompletedGames").ref.where("id","==", this.gameid).get().then(game =>
+    ref.collection(this.userlists[0].code).ref.where("id","==", this.gameid).get().then(game =>
        {if(game.empty){
-          ref.collection("PlayingGames").ref.where("id","==", this.gameid).get().then(game1 => {
+          ref.collection(this.userlists[1].code).ref.where("id","==", this.gameid).get().then(game1 => {
             if(game1.empty){
-              ref.collection("DesiredGames").ref.where("id","==", this.gameid).get().then(game2 => {
+              ref.collection(this.userlists[2].code).ref.where("id","==", this.gameid).get().then(game2 => {
                 if(game2.empty){
-                  if(this.selectedOption==="CompletedGames"){
+                  if(this.selectedOption===this.userlists[0].code){
                       console.log(this.time);
                   }
-                  if(this.selectedOption==="CompletedGames"){
+                  if(this.selectedOption===this.userlists[0].code){
                     if(this.time <= 0 || this.time > 9999){
                       window.alert("Non hai inserito un tempo di completamento valido");
                       return;

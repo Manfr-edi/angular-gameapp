@@ -1,8 +1,3 @@
-export interface Games {
-	
-  
-}
-
 export const platform = 
 
 [
