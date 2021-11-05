@@ -16,25 +16,22 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 import { environment } from '../environments/environment';
 
-
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { SignInComponent } from './components/sign-in/signin.component';
-import { SignUpComponent } from './components/sign-up/signup.component';
-import { ForgotPasswordComponent } from './components/forgot-password/forgot-password.component';
-import { VerifyEmailComponent } from './components/verify-email/verify-email.component';
+// Moduli per l'autenticazione
+import { DashboardComponent } from './authentication/dashboard/dashboard.component';
+import { SignInComponent } from './authentication/sign-in/signin.component';
+import { SignUpComponent } from './authentication/sign-up/signup.component'
+import { CheckUserVerifiedComponent } from './authentication/check-user-verified/check-user-verified.component';
 
 // Auth service
 import { AuthService } from "./shared/services/auth.service";
-import { CheckUserVerifiedComponent } from './check-user-verified/check-user-verified.component';
+
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
   { path: 'games/:id', component: GameDetailsComponent },
   { path: 'login', component: SignInComponent },
   { path: 'register-user', component: SignUpComponent },
-  { path: 'user', component: DashboardComponent },
-  { path: 'forgot-password', component: ForgotPasswordComponent },
-  { path: 'verify-email-address', component: VerifyEmailComponent }
+  { path: 'user', component: DashboardComponent }
 ];
 
 @NgModule({
@@ -57,8 +54,6 @@ const routes: Routes = [
     DashboardComponent,
     SignInComponent,
     SignUpComponent,
-    ForgotPasswordComponent,
-    VerifyEmailComponent,
     CheckUserVerifiedComponent
   ],
   providers: [AuthService],

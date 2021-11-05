@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { FirebaseApp } from '@angular/fire';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentChangeAction } from '@angular/fire/firestore';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { switchMap, map } from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { Observable,  } from 'rxjs';
 import { UtilService } from '../shared/services/util.service';
 
 @Component({

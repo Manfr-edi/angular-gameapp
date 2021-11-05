@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
-import { AngularFireDatabase, AngularFireAction, AngularFireObject, AngularFireList } from '@angular/fire/database';
-import { switchMap } from 'rxjs/operators';
-import { Observable, Subscription, BehaviorSubject } from 'rxjs';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
+import { AngularFirestore  } from '@angular/fire/firestore';
 
 
 @Component({

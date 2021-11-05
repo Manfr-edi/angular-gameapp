@@ -4,12 +4,15 @@
 	{{ util.capitalize(game.title) }} <br>
 	{{ util.capitalize(game.platform[0]) }} <br>
 	{{ util.capitalize(game.developer) }} <br>
-	{{ game.price }}
+	{{ game.price }}<br>
 
 	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 
 		<!--Dati aggiuntivi per gioco completato-->
 		<div *ngIf="selectedList===userlists[0].code">
+
+			<h4>Inserisci il tempo di completamento (in ore)</h4>
+			
 			<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
 
 			<h4>Inserisci la piattaforma</h4><br>

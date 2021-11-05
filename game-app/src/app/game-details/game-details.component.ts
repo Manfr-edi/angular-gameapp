@@ -1,17 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Games, games } from '../games';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { FirebaseApp } from '@angular/fire';
-import { AngularFirestore, AngularFirestoreDocument, DocumentChangeAction } from '@angular/fire/firestore';
 
-import { AuthService } from '../shared/services/auth.service';
-import { TypeofExpr } from '@angular/compiler';
+
 
 import { platformList } from '../data/platform/platform';
 import { userlist } from '../data/userlist/userlist';
-import { not } from '@angular/compiler/src/output/output_ast';
+
 import { UtilService } from '../shared/services/util.service';
+import { AuthService } from '../shared/services/auth.service';
 
 
 @Component({
