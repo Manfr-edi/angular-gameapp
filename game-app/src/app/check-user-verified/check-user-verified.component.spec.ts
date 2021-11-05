@@ -1,20 +1,20 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UtilComponent } from './util.component';
+import { CheckUserVerifiedComponent } from './check-user-verified.component';
 
-describe('UtilComponent', () => {
-  let component: UtilComponent;
-  let fixture: ComponentFixture<UtilComponent>;
+describe('CheckUserVerifiedComponent', () => {
+  let component: CheckUserVerifiedComponent;
+  let fixture: ComponentFixture<CheckUserVerifiedComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ UtilComponent ]
+      declarations: [ CheckUserVerifiedComponent ]
     })
     .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UtilComponent);
+    fixture = TestBed.createComponent(CheckUserVerifiedComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

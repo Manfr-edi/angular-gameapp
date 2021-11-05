@@ -1,4 +1,4 @@
-export const platform = 
+export const platformList = 
 
 [
 	{"name": "Playstation", "code": "ps1" },

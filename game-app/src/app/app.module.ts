@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { Routes,RouterModule } from '@angular/router';
+import { Routes, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
@@ -15,7 +15,6 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 
 
 import { environment } from '../environments/environment';
-import { UtilComponent } from './util/util.component';
 
 
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -26,42 +25,43 @@ import { VerifyEmailComponent } from './components/verify-email/verify-email.com
 
 // Auth service
 import { AuthService } from "./shared/services/auth.service";
+import { CheckUserVerifiedComponent } from './check-user-verified/check-user-verified.component';
 
 const routes: Routes = [
-	{ path: '', component: GameCatalogueComponent },
-    { path: 'games/:id', component: GameDetailsComponent },
-	{ path: 'login', component: SignInComponent },
-	{ path: 'register-user', component: SignUpComponent },
-	{ path: 'user', component: DashboardComponent },
-	{ path: 'forgot-password', component: ForgotPasswordComponent },
-	{ path: 'verify-email-address', component: VerifyEmailComponent }
+  { path: '', component: GameCatalogueComponent },
+  { path: 'games/:id', component: GameDetailsComponent },
+  { path: 'login', component: SignInComponent },
+  { path: 'register-user', component: SignUpComponent },
+  { path: 'user', component: DashboardComponent },
+  { path: 'forgot-password', component: ForgotPasswordComponent },
+  { path: 'verify-email-address', component: VerifyEmailComponent }
 ];
 
 @NgModule({
-  imports:[ 
-    BrowserModule, 
+  imports: [
+    BrowserModule,
     FormsModule,
-    RouterModule.forRoot(routes), 
+    RouterModule.forRoot(routes),
     AngularFireModule.initializeApp(environment.firebase),
-	AngularFireAuthModule,
+    AngularFireAuthModule,
     AngularFireDatabaseModule,
-	AngularFirestoreModule.enablePersistence()
+    AngularFirestoreModule.enablePersistence()
 
   ],
-   exports: [RouterModule],
-  
-  declarations:[ 
-    AppComponent, 
+  exports: [RouterModule],
+
+  declarations: [
+    AppComponent,
     GameCatalogueComponent,
     GameDetailsComponent,
-    UtilComponent,
     DashboardComponent,
     SignInComponent,
     SignUpComponent,
     ForgotPasswordComponent,
-    VerifyEmailComponent
+    VerifyEmailComponent,
+    CheckUserVerifiedComponent
   ],
   providers: [AuthService],
-  bootstrap:[ AppComponent ]
+  bootstrap: [AppComponent]
 })
 export class AppModule { }

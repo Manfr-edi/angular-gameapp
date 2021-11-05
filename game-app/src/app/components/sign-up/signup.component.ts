@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
-import { AngularFireDatabase, AngularFireAction, AngularFireObject,AngularFireList  } from '@angular/fire/database';
+import { AngularFireDatabase, AngularFireAction, AngularFireObject, AngularFireList } from '@angular/fire/database';
 import { switchMap } from 'rxjs/operators';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -26,8 +26,8 @@ export class SignUpComponent implements OnInit {
   resetPassword = false;
 
   constructor(public authService: AuthService, public db: AngularFireDatabase, public fdb: AngularFirestore, private router: Router) {
-	this.itemRef = this.itemRef = db.object('/Users');
-	  }
+    this.itemRef = this.itemRef = db.object('/Users');
+  }
 
   ngOnInit() { }
 
@@ -46,66 +46,49 @@ export class SignUpComponent implements OnInit {
     this.isNewUser = !this.isNewUser
   }
 
-   async onSignUp(): Promise<void> {
+  async onSignUp(): Promise<void> {
     this.clearErrorMessage()
 
-    if (await this.validateForm(this.username,this.email, this.password)) {
+    if (await this.validateForm(this.username, this.email, this.password)) {
       this.authService.signUpWithEmail(this.username, this.email, this.password)
-        .then(() => {			 
-			
-          this.router.navigate(['/'])
-        }).catch(_error => {
+      .catch(_error => {
           this.error = _error
-          this.router.navigate(['/'])
-        })
-		
-		
-		
-		
+        }).finally(() => this.router.navigate(['/']))
     }
   }
 
-  createUser(username: string, email: string){
-      const currentuserId = this.authService.currentUserId;
-      console.log("l'id è " + this.authService.currentUserId);
-			this.fdb.collection("Users").doc("currentuserId").set({ 
-                                  username: this.username,
-																  email: this.email });
-
-  }
-
-
-   async validateForm(username: string,email: string, password: string): Promise<boolean> {
+  async validateForm(username: string, email: string, password: string): Promise<boolean> {
     if (username.length === 0) {
-      this.errorMessage = 'Please enter Username!'
+      this.errorMessage = 'Inserisci Username!'
       return false
     }
-	if (username.length < 6) {
-      this.errorMessage = 'Username should be at least 6 characters!'
+
+    if (username.length < 6) {
+      this.errorMessage = "L'Username deve essere lungo almeno 6 caratteri!";
       return false
     }
-	if(!(await this.isUniqueUsername(username)))
-	{
-	  this.errorMessage = 'This Username already exists!'
+
+    if (!(await this.isUniqueUsername(username))) {
+      this.errorMessage = "Username già esistente!";
       return false
-	}
+    }
+
     if (email.length === 0) {
-      this.errorMessage = 'Please enter Email!'
+      this.errorMessage = "Inserisci l'email!"
       return false
     }
 
     if (password.length === 0) {
-      this.errorMessage = 'Please enter Password!'
+      this.errorMessage = 'Inserisci la password'
       return false
     }
 
     if (password.length < 6) {
-      this.errorMessage = 'Password should be at least 6 characters!'
+      this.errorMessage = "L'Username deve essere lungo almeno 6 caratteri!";
       return false
     }
 
     this.errorMessage = ''
-
     return true
   }
 
@@ -118,9 +101,8 @@ export class SignUpComponent implements OnInit {
 
     return true;
   }
-  
-  async isUniqueUsername(username: string): Promise<boolean> { 
-	var data = await this.fdb.collection('Users').ref.where("username","==", username).get();
-	return data.empty;
-  }
+
+  async isUniqueUsername(username: string): Promise<boolean> {
+    return (await this.fdb.collection('Users').ref.where("username", "==", username).get()).empty;
+   }
 }

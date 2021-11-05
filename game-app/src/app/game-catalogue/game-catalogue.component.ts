@@ -3,7 +3,7 @@ import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentChangeAction } from '@angular/fire/firestore';
 import { Observable, Subscription, BehaviorSubject } from 'rxjs';
 import { switchMap, map } from 'rxjs/operators';
-import { UtilComponent } from '../util/util.component'
+import { UtilService } from '../shared/services/util.service';
 
 @Component({
   selector: 'app-game-catalogue',
@@ -13,34 +13,28 @@ import { UtilComponent } from '../util/util.component'
 
 
 export class GameCatalogueComponent implements OnInit {
-	
-  games$ : Observable<DocumentChangeAction<any>[]>;
-  coll : AngularFirestoreCollection<any>;
-  title$ : BehaviorSubject<any>;
-  util   : UtilComponent;
- 
-  
-  constructor(public fdb: AngularFirestore) {
-	  
-	this.util = new UtilComponent();  
-  this.title$ = new BehaviorSubject(null);
-	this.coll= this.fdb.collection('Games');
-	
-	//DATO STAMPATO
-	this.coll.valueChanges().subscribe(val => console.log(val));
-	
-    this.games$ = this.title$.pipe(
-      switchMap(title => 
-        this.fdb.collection('Games').snapshotChanges()
-      )
-    );
-	
+
+  //Utilities
+  util: UtilService;
+
+  //Dati visualizzati
+  games$: Observable<any[]>;
+
+
+  constructor(public db: AngularFirestore) {
+    this.util = new UtilService();
+    //Di default si mostra tutto il catalogo
+    this.games$ = this.db.collection('Games').snapshotChanges();
   }
-  
-  onKey(event : any) {
-	  this.title$.next(event.target.value.toLowerCase());
+
+  onKey(event: any) {
+    let title = event.target.value.toLowerCase();
+
+    this.games$ = this.db.collection('Games', ref =>
+      ref.where('title', '>=', title).where('title', '<=', title + '\uf8ff')
+    ).snapshotChanges();
   }
-  
+
   ngOnInit() {
   }
 

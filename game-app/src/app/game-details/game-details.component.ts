@@ -1,17 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Games,games} from '../games';
+import { Games, games } from '../games';
 import { Observable } from 'rxjs';
 import { FirebaseApp } from '@angular/fire';
 import { AngularFirestore, AngularFirestoreDocument, DocumentChangeAction } from '@angular/fire/firestore';
-import { UtilComponent } from '../util/util.component';
 
 import { AuthService } from '../shared/services/auth.service';
 import { TypeofExpr } from '@angular/compiler';
 
-import { platform } from '../util/platform/platform';
-import { userlist } from '../util/userlist/userlist';
+import { platformList } from '../data/platform/platform';
+import { userlist } from '../data/userlist/userlist';
 import { not } from '@angular/compiler/src/output/output_ast';
+import { UtilService } from '../shared/services/util.service';
 
 
 @Component({
@@ -23,80 +23,87 @@ import { not } from '@angular/compiler/src/output/output_ast';
 
 export class GameDetailsComponent implements OnInit {
 
-  game$: Observable<any>;
-  util   : UtilComponent;
-  gameid = '';
-  selectedOption: string;
-  selectedPlatform: string;
-  platforms = platform;
+  //Utilities
+  util: UtilService;
+  platforms = platformList;
   userlists = userlist;
+
+  //Game
+  game$: Observable<any>;
+  gameid = '';
+
+  //Dati per l'inserimento
+  selectedList: string;
+  selectedPlatform: string;
   time = 0;
   note: string;
   vote = 0;
 
-  
+  constructor(private route: ActivatedRoute, public authService: AuthService, public db: AngularFirestore) {
 
-  
-  
-  constructor(private route: ActivatedRoute, public authService: AuthService, public fdb : AngularFirestore) {
-	  this.util = new UtilComponent();
-
-	  const routeParams = this.route.snapshot.paramMap;
-    const gameID = String(routeParams.get('id'));
-    this.gameid = gameID;
-    this.selectedOption = this.userlists[0].code;//this.options[0].value;
+    //Inizializzazione variabili
+    this.util = new UtilService();
+    this.selectedList = this.userlists[0].code;
     this.selectedPlatform = '';
     this.note = '';
 
-	  //fdb.collection('Games').doc(gameID).valueChanges().subscribe(val => console.log(val));
-    this.game$ = fdb.collection('Games').doc(gameID).valueChanges();
-    this.game$.subscribe(game => this.selectedPlatform=game.platform[0]);
-   
+    //Lettura id del gioco
+    const routeParams = this.route.snapshot.paramMap;
+    this.gameid = String(routeParams.get('id'));
 
-   }
+    //Lettura dati gioco
+    this.game$ = db.collection('Games').doc(this.gameid).valueChanges();
+
+    //La piattaforma di default è la prima possibile per il gioco
+    this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);
+  }
 
   ngOnInit() {
   }
 
-   AddGame(){
-    
-    var ref = this.fdb.collection("Users").doc(this.authService.currentUserId);
-    ref.collection(this.userlists[0].code).ref.where("id","==", this.gameid).get().then(game =>
-       {if(game.empty){
-          ref.collection(this.userlists[1].code).ref.where("id","==", this.gameid).get().then(game1 => {
-            if(game1.empty){
-              ref.collection(this.userlists[2].code).ref.where("id","==", this.gameid).get().then(game2 => {
-                if(game2.empty){
-                  if(this.selectedOption===this.userlists[0].code){
-                      console.log(this.time);
-                  }
-                  if(this.selectedOption===this.userlists[0].code){
-                    if(this.time <= 0 || this.time > 9999){
-                      window.alert("Non hai inserito un tempo di completamento valido");
-                      return;
-                    }
-                    this.fdb.collection("Users").doc(this.authService.currentUserId).collection(this.selectedOption).doc(this.gameid).set({id : this.gameid, platform : this.selectedPlatform, CompleteTime: this.time, Note: this.note});
-                    if(this.vote > 0 && this.vote <= 10){this.fdb.collection("Users").doc(this.authService.currentUserId).collection(this.selectedOption).doc(this.gameid).update({Vote: this.vote})}
-                    window.alert("e' stato aggiunto il gioco alla lista");
-                    return;
-                  }
-                  this.fdb.collection("Users").doc(this.authService.currentUserId).collection(this.selectedOption).doc(this.gameid).set({id : this.gameid, Note: this.note});
-                  window.alert("e' stato aggiunto il gioco alla lista");
-                }
-                else{
-                window.alert("gioco gia' inserito in lista Desired");
-                }
-              })
-            }
-            else{
-                window.alert("gioco gia' inserito in lista Playing");
-                }
-          })
-       }
-        else{
-          window.alert("gioco gia' inserito in lista Completed");
-        }});
-    
+  async AddGame() {
+
+    //Riferimento al documento relativo all'utente loggato
+    var ref = this.db.collection("Users").doc(this.authService.currentUserId);
+
+    //Controlli per verificare che il gioco non sia presente già in una lista
+    for (var i = 0; i < this.userlists.length; i++) {
+      if (await ref.collection(this.userlists[i].code).ref.where("id", "==", this.gameid).get().then(
+        game => !game.empty)) {
+        window.alert("Gioco gia' inserito in lista " + this.userlists[i].name);
+        return;
+      }
+    }
+
+    //Genero il documento base per inserire un gioco in una lista
+     let doc = new Map<String, any>([
+        ["id", this.gameid],
+        ["Note", this.note]
+    ]);
+
+    //Controlli per l'inserimento in lista completati
+    if( this.selectedList === this.userlists[0].code)
+    {
+      if( this.time <= 0 || this.time > 9999 )
+      {
+        window.alert("Non hai inserito un tempo di completamento valido");
+        return;
+      }
+
+      //Nel caso il tempo di completamento sia valido
+      doc.set("CompleteTime", this.time);
+
+      //Viene inserita la piattaforma
+      doc.set("platform", this.selectedPlatform);
+
+      //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
+      if( this.vote > 0 && this.vote < 10 )
+        doc.set("Vote", this.vote);
+    }
+
+    //Inserimento documento nel database
+    ref.collection(this.selectedList).doc(this.gameid).set(Object.fromEntries(doc));
+    window.alert("e' stato aggiunto il gioco alla lista");
   }
 
 }
