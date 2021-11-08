@@ -17,7 +17,6 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { environment } from '../environments/environment';
 
 // Moduli per l'autenticazione
-import { DashboardComponent } from './authentication/dashboard/dashboard.component';
 import { SignInComponent } from './authentication/sign-in/signin.component';
 import { SignUpComponent } from './authentication/sign-up/signup.component'
 import { CheckUserVerifiedComponent } from './authentication/check-user-verified/check-user-verified.component';
@@ -25,6 +24,9 @@ import { CheckUserVerifiedComponent } from './authentication/check-user-verified
 // Auth service
 import { AuthService } from "./shared/services/auth.service";
 
+//Componenti Utente
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { UpdateGameComponent } from './update-game/update-game.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -54,7 +56,8 @@ const routes: Routes = [
     DashboardComponent,
     SignInComponent,
     SignUpComponent,
-    CheckUserVerifiedComponent
+    CheckUserVerifiedComponent,
+    UpdateGameComponent
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

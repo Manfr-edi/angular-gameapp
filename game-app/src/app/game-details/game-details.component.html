@@ -1,5 +1,10 @@
 <app-check-user-verified></app-check-user-verified>
 
+<div>
+  <button [routerLink]="'/'">Home</button>
+</div>
+
+
 <div *ngIf="game$ | async; let game">
 	{{ util.capitalize(game.title) }} <br>
 	{{ util.capitalize(game.platform[0]) }} <br>

@@ -33,6 +33,7 @@ export class GameDetailsComponent implements OnInit {
   //Dati per l'inserimento
   selectedList: string;
   selectedPlatform: string;
+  gametitle: string;
   time = 0;
   note: string;
   vote = 0;
@@ -43,6 +44,7 @@ export class GameDetailsComponent implements OnInit {
     this.util = new UtilService();
     this.selectedList = this.userlists[0].code;
     this.selectedPlatform = '';
+    this.gametitle= '';
     this.note = '';
 
     //Lettura id del gioco
@@ -54,6 +56,7 @@ export class GameDetailsComponent implements OnInit {
 
     //La piattaforma di default è la prima possibile per il gioco
     this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);
+    this.game$.subscribe(g => this.gametitle = g.title);
   }
 
   ngOnInit() {
@@ -75,7 +78,7 @@ export class GameDetailsComponent implements OnInit {
 
     //Genero il documento base per inserire un gioco in una lista
      let doc = new Map<String, any>([
-        ["id", this.gameid],
+        ["title", this.gametitle],
         ["Note", this.note]
     ]);
 

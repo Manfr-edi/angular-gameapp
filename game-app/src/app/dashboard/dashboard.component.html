@@ -1,0 +1,36 @@
+<app-check-user-verified></app-check-user-verified>
+
+
+<div>
+  <button [routerLink]="'/'">Home</button>
+</div>
+
+<div *ngIf="authService.currentUser">
+	<h5 class="text-primary">User Information</h5>
+	<h4>
+		<strong>UID:</strong> {{ authService.currentUserId }}
+	</h4>
+	<h4>
+		<strong>Email:</strong> {{ authService.currentUserName }}
+	</h4>
+	<button class="button" (click)="logout()">Logout</button>
+</div>
+
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+	<div *ngIf="games$ | async; let games">
+		<ul>
+			<div *ngFor="let game of games">
+			<a [routerLink]="['/games', game.payload.doc.id]">
+				{{ util.capitalize(game.payload.doc.data().title) }}
+			</a>
+			<button (click)="RemoveGame(game.payload.doc.id)">Remove Game</button>
+			<button id="UpdateForm" (click)="UpdateForm()">Update Game</button>
+				<div *ngIf="updateForm===true">
+					<app-update-game></app-update-game>
+				</div>
+			</div>		
+		</ul>
+		<div *ngIf="games.length === 0">Nessun gioco trovato</div>
+	</div>	
+</div>
+
