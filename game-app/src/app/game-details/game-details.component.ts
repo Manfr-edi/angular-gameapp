@@ -95,7 +95,7 @@ export class GameDetailsComponent implements OnInit {
       doc.set("platform", this.selectedPlatform);
 
       //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
-      if( this.vote > 0 && this.vote < 10 )
+      if( this.vote > 0)
         doc.set("Vote", this.vote);
     }
 
