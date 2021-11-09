@@ -27,6 +27,7 @@ import { AuthService } from "./shared/services/auth.service";
 //Componenti Utente
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { UpdateGameComponent } from './update-game/update-game.component';
+import { GametabCompletedComponent } from './dashboard/gametab-completed/gametab-completed.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -57,7 +58,8 @@ const routes: Routes = [
     SignInComponent,
     SignUpComponent,
     CheckUserVerifiedComponent,
-    UpdateGameComponent
+    UpdateGameComponent,
+    GametabCompletedComponent
   ],
   providers: [AuthService],
   bootstrap: [AppComponent]

@@ -1,0 +1,44 @@
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+	<div *ngIf="games$ | async; let games">
+		<ul>
+			<div *ngFor="let game of games">
+			<a [routerLink]="['/games', game.payload.doc.id]">
+				{{ util.capitalize(game.payload.doc.data().title) }}
+			</a>
+			<button (click)="RemoveGame(game.payload.doc.id)">Remove Game</button>
+			<button id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Update Game</button>
+				<div *ngIf="updateForm===true">
+						<h4>Inserisci il tempo di completamento (in ore)</h4>
+						
+						<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
+
+						<h4>Inserisci la piattaforma</h4><br>
+
+						<select *ngIf="cgame$ | async; let gi" [(ngModel)]="selectedPlatform">
+							<option *ngFor="let plat of gi.platform">
+								{{plat}}
+							</option>
+						</select><br>
+
+						<h4>Inserisci un voto</h4>
+						<select [(ngModel)]="vote">
+							<option></option>
+							<option type="number" *ngFor="let number of [1,2,3,4,5,6,7,8,9,10]">
+								{{number}}
+							</option>
+						</select> <br>
+
+						<textarea rows="4" cols="180" placeholder="Inserisci Note Aggiuntive" [(ngModel)]="note"></textarea><br>
+								<select [(ngModel)]="selectedList">
+							<option *ngFor="let o of userlists" value="{{o.code}}">
+								{{o.name}}
+							</option>
+						</select>
+						<!--> DA IMPLEMENTARE LE FORM <button (click)="AddGame(game.payload.doc.id)">Add Game On List</button><!-->
+					
+				</div>
+			</div>		
+		</ul>
+		<div *ngIf="games.length === 0">Nessun gioco trovato</div>
+	</div>	
+</div>

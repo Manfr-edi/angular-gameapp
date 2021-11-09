@@ -98,8 +98,11 @@ export class GameDetailsComponent implements OnInit {
       doc.set("platform", this.selectedPlatform);
 
       //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
-      if( this.vote > 0)
-        doc.set("Vote", this.vote);
+      if( this.vote > 0){
+        var y: number = +this.vote;
+        doc.set("Vote", y);
+      }
+        
     }
 
     //Inserimento documento nel database

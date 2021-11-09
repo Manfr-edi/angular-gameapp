@@ -16,25 +16,11 @@ import { UtilService } from '../shared/services/util.service';
 })
 export class DashboardComponent implements OnInit {
 
-  //Utilities
-  util: UtilService;
-
-  selectedPlatform: string;
-  gametitle: string;
-  time = 0;
-  note: string;
-  vote = 0;
-
-  games$: Observable<any[]>;
   
-  updateForm = false;
+
 
   constructor(public authService: AuthService, public db: AngularFirestore) {
-      this.util = new UtilService();
-      this.selectedPlatform='';
-      this.gametitle='';
-      this.note=''
-      this.games$ = this.db.collection('Users').doc(this.authService.currentUserId).collection(userlist[0].code).snapshotChanges();
+
   }
 
   ngOnInit() {
@@ -44,17 +30,5 @@ export class DashboardComponent implements OnInit {
     this.authService.signOut();
   }
 
-  RemoveGame(id: string){
-    this.db.collection('Users').doc(this.authService.currentUserId).collection(userlist[0].code).doc(id).delete();
-  }
 
-  UpdateForm(){
-    this.updateForm = !this.updateForm;
-    if(this.updateForm){
-      
-    }
-    console.log(this.updateForm)
-  }
-
-  AddGame(){}
 }
