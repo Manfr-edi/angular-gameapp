@@ -23,10 +23,11 @@ import { CheckUserVerifiedComponent } from './authentication/check-user-verified
 
 // Auth service
 import { AuthService } from "./shared/services/auth.service";
+// GameList service
+import { GameListService } from "./shared/services/game-list.service";
 
 //Componenti Utente
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { UpdateGameComponent } from './update-game/update-game.component';
 import { GametabCompletedComponent } from './dashboard/gametab-completed/gametab-completed.component';
 
 const routes: Routes = [
@@ -58,10 +59,9 @@ const routes: Routes = [
     SignInComponent,
     SignUpComponent,
     CheckUserVerifiedComponent,
-    UpdateGameComponent,
     GametabCompletedComponent
   ],
-  providers: [AuthService],
+  providers: [AuthService, GameListService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

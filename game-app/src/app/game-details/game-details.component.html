@@ -46,7 +46,7 @@
 			</option>
 		</select>
 
-		<button (click)="AddGame()">Add Game On List</button>
+		<button (click)="gamelistService.AddGame( selectedList, gameid, game.title, note, time, vote, selectedPlatform)">Add Game On List</button>
 
 	</div>
 

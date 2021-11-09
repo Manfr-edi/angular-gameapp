@@ -5,9 +5,11 @@
 			<a [routerLink]="['/games', game.payload.doc.id]">
 				{{ util.capitalize(game.payload.doc.data().title) }}
 			</a>
-			<button (click)="RemoveGame(game.payload.doc.id)">Remove Game</button>
-			<button id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Update Game</button>
+			<button (click)="gamelistService.RemoveGame(userlists[0].code, game.payload.doc.id)">Remove Game</button>
+			<button *ngIf="!updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Update Game</button>
+			<button *ngIf="updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Close</button>
 				<div *ngIf="updateForm===true">
+					<div *ngIf="selectedList===userlists[0].code">
 						<h4>Inserisci il tempo di completamento (in ore)</h4>
 						
 						<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
@@ -28,14 +30,17 @@
 							</option>
 						</select> <br>
 
+						
+						</div>
+						
+
 						<textarea rows="4" cols="180" placeholder="Inserisci Note Aggiuntive" [(ngModel)]="note"></textarea><br>
-								<select [(ngModel)]="selectedList">
+						<select [(ngModel)]="selectedList">
 							<option *ngFor="let o of userlists" value="{{o.code}}">
 								{{o.name}}
 							</option>
-						</select>
-						<!--> DA IMPLEMENTARE LE FORM <button (click)="AddGame(game.payload.doc.id)">Add Game On List</button><!-->
-					
+						</select><br>
+						<button (click)="gamelistService.UpdateGame(selectedList,userlists[0].code,game.payload.doc.id, note, time, vote, selectedPlatform, gametitle)">Update</button>
 				</div>
 			</div>		
 		</ul>

@@ -8,6 +8,7 @@ import { userlist } from '../../data/userlist/userlist';
 
 
 import { UtilService } from '../../shared/services/util.service';
+import { GameListService } from '../../shared/services/game-list.service';
 
 
 @Component({
@@ -35,7 +36,7 @@ export class GametabCompletedComponent implements OnInit {
   game$: Observable<any>;
   cgame$: Observable<any>;
 
-  constructor(public authService: AuthService, public db: AngularFirestore) { 
+  constructor(public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) { 
 
       this.util = new UtilService();
       this.selectedList=this.userlists[0].code;
@@ -68,55 +69,6 @@ export class GametabCompletedComponent implements OnInit {
     }
   }
 
-  async  AddGame(id: string){
-
-
-        //Riferimento al documento relativo all'utente loggato
-    var ref = this.db.collection("Users").doc(this.authService.currentUserId);
-
-    //Controlli per verificare che il gioco non sia presente già in una lista
-    for (var i = 0; i < this.userlists.length; i++) {
-      if (await ref.collection(this.userlists[i].code).ref.where("id", "==", id).get().then(
-        game => !game.empty)) {
-        window.alert("Gioco gia' inserito in lista " + this.userlists[i].name);
-        return;
-      }
-    }
-
-    //Genero il documento base per inserire un gioco in una lista
-     let doc = new Map<String, any>([
-        
-        ["Note", this.note]
-    ]);
-
-    //Controlli per l'inserimento in lista completati
-    if( this.selectedList === this.userlists[0].code)
-    {
-      if( this.time <= 0 || this.time > 9999 )
-      {
-        window.alert("Non hai inserito un tempo di completamento valido");
-        return;
-      }
-
-      //Nel caso il tempo di completamento sia valido
-      doc.set("CompleteTime", this.time);
-
-      //Viene inserita la piattaforma
-      doc.set("platform", this.selectedPlatform);
-
-      //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
-      if( this.vote > 0){
-        var y: number = +this.vote;
-        doc.set("Vote", y);
-      }
-        
-    }
-
-    //Inserimento documento nel database
-    //ref.collection(this.selectedList).doc(id).set(Object.fromEntries(doc));
-    ref.collection(this.selectedList).doc(id).update(Object.fromEntries(doc));
-    
-    window.alert("e' stato aggiunto il gioco alla lista");
-  }
+ 
 
 }
