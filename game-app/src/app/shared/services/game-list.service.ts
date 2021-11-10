@@ -24,7 +24,10 @@ export class GameListService {
     var ref = this.db.collection("Users").doc(this.authService.currentUserId);
 
     //if( this.CheckUniqueList(gameid)){return;}
-    if(await this.CheckUniqueList(gameid).then(result => !result)){return}
+    if(await this.CheckUniqueList(gameid).then(result => !result)){
+      //TODO:SI PUO RIAGGIUNGERE A QUALE LISTA ERA INSERITO?
+      window.alert("Gioco gia' inserito in un'altra lista ");
+      return}
 
 
 
@@ -73,7 +76,7 @@ export class GameListService {
       for (var i = 0; i < this.userlists.length; i++) {
       if (await ref.collection(this.userlists[i].code).doc(id).ref.get().then(
         game => game.exists)) {
-        window.alert("Gioco gia' inserito in lista " + this.userlists[i].name);
+        //window.alert("Gioco gia' inserito in lista " + this.userlists[i].name);
         return false;
         }
         
@@ -120,9 +123,10 @@ export class GameListService {
     if(selectedList===previousList)
     ref.collection(selectedList).doc(gameid).update(Object.fromEntries(doc));
     else{
+      console.log("CANCELLO"+ selectedList + previousList)
       this.RemoveGame(previousList,gameid);
-      ref.collection(selectedList).doc(gameid).set(Object.fromEntries(doc));
+    ref.collection(selectedList).doc(gameid).set(Object.fromEntries(doc));
     }
-    window.alert("e' stato aggiunto il gioco alla lista");
+    window.alert("e' stato modificato il gioco");
   }
 }

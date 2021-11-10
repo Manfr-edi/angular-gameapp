@@ -11,8 +11,8 @@
 	{{ util.capitalize(game.developer) }} <br>
 	{{ game.price }}<br>
 
-	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-
+	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isunique">
+		
 		<!--Dati aggiuntivi per gioco completato-->
 		<div *ngIf="selectedList===userlists[0].code">
 
@@ -46,8 +46,7 @@
 			</option>
 		</select>
 
-		<button (click)="gamelistService.AddGame( selectedList, gameid, game.title, note, time, vote, selectedPlatform)">Add Game On List</button>
-
+		<button (click)="gamelistService.AddGame(selectedList, gameid, game.title, note, time, vote, selectedPlatform)">Add Game On List</button>
 	</div>
 
 </div>

@@ -18,10 +18,13 @@ import { GameListService } from '../../shared/services/game-list.service';
 })
 export class GametabCompletedComponent implements OnInit {
 
+  
   userlists = userlist;
+  viewlist: string;
 
   selectedList: string;
   selectedPlatform: string;
+  gameid: string;
   gametitle: string;
   time = 0;
   note: string;
@@ -38,12 +41,15 @@ export class GametabCompletedComponent implements OnInit {
 
   constructor(public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) { 
 
+      this.viewlist=this.userlists[0].code;
+
       this.util = new UtilService();
       this.selectedList=this.userlists[0].code;
       this.selectedPlatform='';
+      this.gameid='';
       this.gametitle='';
       this.note=''
-      this.games$ = this.db.collection('Users').doc(this.authService.currentUserId).collection(userlist[0].code).snapshotChanges();
+      this.games$ = this.db.collection('Users').doc(this.authService.currentUserId).collection(this.viewlist).snapshotChanges();
       this.game$ = new Observable;
       this.cgame$ = new Observable;
   }
@@ -51,21 +57,36 @@ export class GametabCompletedComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  RemoveGame(id: string){
-    this.db.collection('Users').doc(this.authService.currentUserId).collection(userlist[0].code).doc(id).delete();
+  UpdateList(actualList: string): void
+  {
+   this.viewlist=actualList;
+   this.games$ = this.db.collection('Users').doc(this.authService.currentUserId).collection(this.viewlist).snapshotChanges(); 
   }
-
   async UpdateForm(id: string){
     this.updateForm = !this.updateForm;
     if(this.updateForm){
-      this.game$ = this.db.collection('Users').doc(this.authService.currentUserId).collection(userlist[0].code).doc(id).valueChanges();
+      this.game$ = this.db.collection('Users').doc(this.authService.currentUserId).collection(this.viewlist).doc(id).valueChanges();
       this.cgame$ = this.db.collection('Games').doc(id).valueChanges();
-
+      this.gametitle='';
+      this.selectedPlatform='';
+      this.note='';
+      this.time=0;
+      this.vote=0;
+      if(this.viewlist===this.userlists[0].code)
+      {
+      this.gameid=id;
       this.game$.subscribe(g=> this.gametitle=g.title);
       this.game$.subscribe(g=> this.selectedPlatform=g.platform);
       this.game$.subscribe(g=> this.note=g.Note);
       this.game$.subscribe(g=> this.time=g.CompleteTime);
       this.game$.subscribe(g=> this.vote=g.Vote);
+      }
+      else
+      {
+      this.gameid=id;
+      this.game$.subscribe(g=> this.gametitle=g.title);
+      this.game$.subscribe(g=> this.note=g.Note);
+      }
     }
   }
 

@@ -39,6 +39,8 @@ export class GameDetailsComponent implements OnInit {
   note: string;
   vote = 0;
 
+  isunique = false;
+
   constructor(private route: ActivatedRoute, public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {
 
     //Inizializzazione variabili
@@ -58,6 +60,8 @@ export class GameDetailsComponent implements OnInit {
     //La piattaforma di default è la prima possibile per il gioco
     this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);
     this.game$.subscribe(g => this.gametitle = g.title);
+
+    gamelistService.CheckUniqueList(this.gameid).then(result => this.isunique=result);
   }
 
   ngOnInit() {

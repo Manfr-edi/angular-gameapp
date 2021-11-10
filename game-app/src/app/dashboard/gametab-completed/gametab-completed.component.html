@@ -1,14 +1,21 @@
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+	<button (click)="UpdateList(userlists[0].code); this.updateForm=false">Completed Games</button>
+	<button (click)="UpdateList(userlists[1].code); this.updateForm=false">Playing Games</button>
+	<button (click)="UpdateList(userlists[2].code); this.updateForm=false">Desired Games</button>
 	<div *ngIf="games$ | async; let games">
 		<ul>
 			<div *ngFor="let game of games">
 			<a [routerLink]="['/games', game.payload.doc.id]">
 				{{ util.capitalize(game.payload.doc.data().title) }}
 			</a>
-			<button (click)="gamelistService.RemoveGame(userlists[0].code, game.payload.doc.id)">Remove Game</button>
+			<a *ngIf="viewlist === userlists[0].code">Ore giocate: {{game.payload.doc.data().CompleteTime}} </a>
+			<button (click)="gamelistService.RemoveGame(viewlist, game.payload.doc.id)">Remove Game</button>
 			<button *ngIf="!updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Update Game</button>
 			<button *ngIf="updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Close</button>
-				<div *ngIf="updateForm===true">
+				
+			</div>
+			
+			<div *ngIf="updateForm===true">
 					<div *ngIf="selectedList===userlists[0].code">
 						<h4>Inserisci il tempo di completamento (in ore)</h4>
 						
@@ -40,9 +47,8 @@
 								{{o.name}}
 							</option>
 						</select><br>
-						<button (click)="gamelistService.UpdateGame(selectedList,userlists[0].code,game.payload.doc.id, note, time, vote, selectedPlatform, gametitle)">Update</button>
+						<button (click)="gamelistService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle); UpdateForm(gameid)">Update</button>
 				</div>
-			</div>		
 		</ul>
 		<div *ngIf="games.length === 0">Nessun gioco trovato</div>
 	</div>	
