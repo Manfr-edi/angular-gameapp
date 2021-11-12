@@ -18,6 +18,7 @@ export class DashboardComponent implements OnInit {
 
   
 
+  visualizzaSpese = false;
 
   constructor(public authService: AuthService, public db: AngularFirestore) {
 

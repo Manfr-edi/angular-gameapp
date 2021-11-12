@@ -1,0 +1,18 @@
+<table>
+	<th>
+		<li *ngFor="let p of platformNotPoss">
+			<input type="checkbox" id="scales" name="scales" [(ngModel)]="p.isPoss">
+			<label for="scales">{{p.name}}</label>
+		</li>
+	</th>
+	<th>
+
+		<li *ngFor="let g of genreNotPref">
+			<input type="checkbox" id="scales" name="scales" [(ngModel)]="g.isPref">
+			<label for="scales">{{g.name}}</label>
+		</li>
+	</th>
+</table>
+
+<br><button (click)="addGenre();">Aggiorna Genere Preferiti</button>
+<br><button (click)="addPlatform();">Aggiorna Piattaforme Preferite</button>

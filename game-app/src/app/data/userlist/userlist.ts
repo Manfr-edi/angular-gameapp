@@ -1,4 +1,4 @@
-//ATTENZIONE Completed deve rimanere in prima posizione
+//ATTENZIONE NON CAMBIARE L'ORDINE
 export const userlist = 
 [
 	{"name": "Completati", "code": "Completed" },

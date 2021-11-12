@@ -2,54 +2,88 @@
 	<button (click)="UpdateList(userlists[0].code); this.updateForm=false">Completed Games</button>
 	<button (click)="UpdateList(userlists[1].code); this.updateForm=false">Playing Games</button>
 	<button (click)="UpdateList(userlists[2].code); this.updateForm=false">Desired Games</button>
+
+	<select (change)="onChangeFilter()" [(ngModel)]="genreSelected">
+		<option value="">
+			Tutti i generi
+		</option>
+		<option *ngFor="let g of genreList" value="{{g.code}}">
+			{{g.name}}
+		</option>
+	</select>
+
+	<select (change)="onChangeFilter()" [(ngModel)]="platformSelected">
+		<option value="">
+			Tutte le Piattaforme
+		</option>
+		<option *ngFor="let p of platformList" value="{{p.code}}">
+			{{p.name}}
+		</option>
+	</select>
+
 	<div *ngIf="games$ | async; let games">
 		<ul>
 			<div *ngFor="let game of games">
-			<a [routerLink]="['/games', game.payload.doc.id]">
-				{{ util.capitalize(game.payload.doc.data().title) }}
-			</a>
-			<a *ngIf="viewlist === userlists[0].code">Ore giocate: {{game.payload.doc.data().CompleteTime}} </a>
-			<button (click)="gamelistService.RemoveGame(viewlist, game.payload.doc.id)">Remove Game</button>
-			<button *ngIf="!updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Update Game</button>
-			<button *ngIf="updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Close</button>
-				
+				<a [routerLink]="['/games', game.payload.doc.id]">
+					{{ util.capitalize(game.payload.doc.data().title) }}
+				</a>
+				<a *ngIf="viewlist === userlists[0].code">Ore giocate: {{game.payload.doc.data().CompleteTime}} </a>
+				<button (click)="gamelistService.RemoveGame(viewlist, game.payload.doc.id)">Remove Game</button>
+				<button *ngIf="!updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Update
+					Game</button>
+				<button *ngIf="updateForm" id="UpdateForm" (click)="UpdateForm(game.payload.doc.id)">Close</button>
+
 			</div>
-			
-			<div *ngIf="updateForm===true">
-					<div *ngIf="selectedList===userlists[0].code">
-						<h4>Inserisci il tempo di completamento (in ore)</h4>
-						
-						<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
 
-						<h4>Inserisci la piattaforma</h4><br>
+			<div *ngIf="viewlist === userlists[0].code && games.length > 0 && !updateForm">
+				Il numero di giochi e': {{games.length}} <br>
+				Il numero medio di tempi di completamento e': {{avg(games)}}
+			</div>
 
-						<select *ngIf="cgame$ | async; let gi" [(ngModel)]="selectedPlatform">
-							<option *ngFor="let plat of gi.platform">
-								{{plat}}
-							</option>
-						</select><br>
+			<div *ngIf="updateForm">
+				<div *ngIf="selectedList===userlists[0].code">
+					<h4>Inserisci il tempo di completamento (in ore)</h4>
 
-						<h4>Inserisci un voto</h4>
-						<select [(ngModel)]="vote">
-							<option></option>
-							<option type="number" *ngFor="let number of [1,2,3,4,5,6,7,8,9,10]">
-								{{number}}
-							</option>
-						</select> <br>
+					<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
 
-						
-						</div>
-						
+					<h4>Inserisci la piattaforma</h4><br>
 
-						<textarea rows="4" cols="180" placeholder="Inserisci Note Aggiuntive" [(ngModel)]="note"></textarea><br>
-						<select [(ngModel)]="selectedList">
-							<option *ngFor="let o of userlists" value="{{o.code}}">
-								{{o.name}}
-							</option>
-						</select><br>
-						<button (click)="gamelistService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle); UpdateForm(gameid)">Update</button>
+					<select *ngIf="cgame$ | async; let gi" [(ngModel)]="selectedPlatform">
+						<option *ngFor="let plat of gi.platform">
+							{{plat}}
+						</option>
+					</select><br>
+
+					<h4>Inserisci un voto</h4>
+					<select [(ngModel)]="vote">
+						<option></option>
+						<option type="number" *ngFor="let number of [1,2,3,4,5,6,7,8,9,10]">
+							{{number}}
+						</option>
+					</select> <br>
+
+
 				</div>
+
+
+				<textarea rows="4" cols="180" placeholder="Inserisci Note Aggiuntive" [(ngModel)]="note"></textarea><br>
+				<select [(ngModel)]="selectedList">
+					<option *ngFor="let o of userlists" value="{{o.code}}">
+						{{o.name}}
+					</option>
+				</select><br>
+				<button
+					(click)="gamelistService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle); UpdateForm(gameid)">Update</button>
+			</div>
 		</ul>
 		<div *ngIf="games.length === 0">Nessun gioco trovato</div>
-	</div>	
+	</div>
+
+
+	
+
+	
+
+
+
 </div>

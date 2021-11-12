@@ -11,6 +11,14 @@
       "port": 9245,
       "webRoot": "${workspaceFolder}",
       "url": "http://localhost:4200/#"
+    },
+    {
+      "name": "Launch Chrome game-app on Angular CLI Server",
+      "type": "chrome",
+      "request": "launch",
+      "port": 9253,
+      "webRoot": "${workspaceFolder}",
+      "url": "http://localhost:4200/#"
     }
   ]
 }

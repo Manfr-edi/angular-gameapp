@@ -18,4 +18,16 @@
 
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 	<app-gametab-completed></app-gametab-completed>
+
+	<button (click)="visualizzaSpese=!visualizzaSpese">Visualizza Spese</button>
+
+	<div *ngIf="visualizzaSpese">
+		<app-spese></app-spese>
+	</div>
+
+	<app-preferiti></app-preferiti>
 </div>
+
+
+
+
