@@ -2,12 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-
-
-
-import { platformList } from '../data/platform/platform';
 import { userlist } from '../data/userlist/userlist';
-
 import { UtilService } from '../shared/services/util.service';
 import { AuthService } from '../shared/services/auth.service';
 import { GameListService } from '../shared/services/game-list.service';
@@ -24,7 +19,6 @@ export class GameDetailsComponent implements OnInit {
 
   //Utilities
   util: UtilService;
-  platforms = platformList;
   userlists = userlist;
 
   //Game
@@ -38,7 +32,7 @@ export class GameDetailsComponent implements OnInit {
   time = 0;
   note: string;
   vote = 0;
-
+  price = 0;
   isunique = false;
 
   constructor(private route: ActivatedRoute, public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {

@@ -3,8 +3,8 @@
 		<option value="">
 			Tutti i generi
 		</option>
-		<option *ngFor="let g of genreList" value="{{g.code}}">
-			{{g.name}}
+		<option *ngFor="let g of genreList">
+			{{g}}
 		</option>
 	</select>
 
@@ -12,8 +12,8 @@
 		<option value="">
 			Tutte le Piattaforme
 		</option>
-		<option *ngFor="let p of platformList" value="{{p.code}}">
-			{{p.name}}
+		<option *ngFor="let p of platformList">
+			{{p}}
 		</option>
 	</select>
 

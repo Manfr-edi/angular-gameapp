@@ -1,12 +1,9 @@
 <app-check-user-verified></app-check-user-verified>
 
-
-<div>
-  <button [routerLink]="'/'">Home</button>
-</div>
+<button [routerLink]="'/'">Home</button>
 
 <div *ngIf="authService.currentUser">
-	<h5 class="text-primary">User Information</h5>
+	<h5>User Information</h5>
 	<h4>
 		<strong>UID:</strong> {{ authService.currentUserId }}
 	</h4>
@@ -19,6 +16,7 @@
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 	<app-gametab-completed></app-gametab-completed>
 
+	
 	<button (click)="visualizzaSpese=!visualizzaSpese">Visualizza Spese</button>
 
 	<div *ngIf="visualizzaSpese">
@@ -27,7 +25,3 @@
 
 	<app-preferiti></app-preferiti>
 </div>
-
-
-
-

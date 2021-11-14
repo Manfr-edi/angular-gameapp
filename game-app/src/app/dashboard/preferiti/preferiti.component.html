@@ -1,18 +1,21 @@
 <table>
 	<th>
-		<li *ngFor="let p of platformNotPoss">
-			<input type="checkbox" id="scales" name="scales" [(ngModel)]="p.isPoss">
-			<label for="scales">{{p.name}}</label>
-		</li>
+		<ul>
+			<li *ngFor="let item of [].constructor(platformList.length); let i = index">
+				<input type="checkbox" id="scales" name="scales" [(ngModel)]="platforms[i]">
+				<label for="scales">{{platformList[i]}}</label>
+			</li>
+		</ul>
+		<button (click)="updateData('Platforms', platformList, platforms)">Aggiorna Piattaforme Preferite</button>
 	</th>
-	<th>
 
-		<li *ngFor="let g of genreNotPref">
-			<input type="checkbox" id="scales" name="scales" [(ngModel)]="g.isPref">
-			<label for="scales">{{g.name}}</label>
-		</li>
+	<th>
+		<ul>
+			<li *ngFor="let item of [].constructor(genreList.length); let i = index">
+				<input type="checkbox" id="scales" name="scales" [(ngModel)]="genres[i]">
+				<label for="scales">{{genreList[i]}}</label>
+			</li>
+		</ul>
+		<button (click)="updateData('Genres',genreList, genres)">Aggiorna Piattaforme Preferite</button>
 	</th>
 </table>
-
-<br><button (click)="addGenre();">Aggiorna Genere Preferiti</button>
-<br><button (click)="addPlatform();">Aggiorna Piattaforme Preferite</button>

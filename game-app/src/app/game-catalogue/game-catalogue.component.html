@@ -19,10 +19,10 @@
   <input type="text" (keyup)="onKey($event)" placeholder="Inserisci titolo">
 </div>
 
-<div>
+<div *ngIf="!authService.isUserEmailLoggedIn">
   <button [routerLink]="'/login'">Log In / Register</button>
 </div>
 
-<div>
+<div *ngIf="authService.isUserEmailLoggedIn">
   <button [routerLink]="'/user'">Dashboard</button>
 </div>

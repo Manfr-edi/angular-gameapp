@@ -11,88 +11,55 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 })
 export class PreferitiComponent implements OnInit {
 
-  prova1: boolean = true;
+  //Data
   genreList = genreList;
   platformList = platformList;
 
-  genreSelected = "";
-  platformSelected = "";
+  //Filtri
+  selectedGenre = "";
+  selectedPlatform = "";
 
-  genreNotPref: { name: string, code: string, isPref: boolean }[] = [];
-  platformNotPoss: { name: string, code: string, isPoss: boolean }[] = [];
+  //Selezione dei dati
+  genres: boolean[] = [];
+  platforms: boolean[] = [];
 
   constructor(public authService: AuthService, public db: AngularFirestore) {
-    this.prova();
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    //Documento relativo all'utente corrente
+    let userDoc = (await this.db.collection('Users').doc(this.authService.currentUserId).ref.get());
+
+    this.initList(userDoc.get("Platforms"), this.platformList, this.platforms);
+    this.initList(userDoc.get("Genres"), this.genreList, this.genres);
   }
 
-  addGenre() {
-    let genres: string[] = [];
-    for (let g of this.genreNotPref)
-      if (g.isPref)
-        genres.push(g.code);
-
-    this.db.collection('Users').doc(this.authService.currentUserId).update({ Genres: genres });
+  updateData(colDB: string, list: string[], selected: boolean[]) {
+    let dataSelected: string[] = [];
+    for (let i = 0; i < list.length; i++)
+      if (selected[i])
+        dataSelected.push(list[i]);
+    this.db.collection('Users').doc(this.authService.currentUserId).update({ [colDB]: dataSelected });
   }
 
-  addPlatform() {
-    let platforms: string[] = [];
-    for (let p of this.platformNotPoss)
-      if (p.isPoss)
-        platforms.push(p.code);
+  initList(listaDB: string[], list: string[], selected: boolean[]) {
+    let i = 0;
+    let f;
 
-    this.db.collection('Users').doc(this.authService.currentUserId).update({ Platforms: platforms });
-  }
-
-  async prova() {
-
-    let f = true;
-    var platforms: string[] = (await this.db.collection('Users').doc(this.authService.currentUserId).ref.get()).get("Platforms");
-
-    if (platforms !== undefined) {
-
-      for (let p of platformList) {
+    if (listaDB !== undefined) {
+      for (let l of list) {
         f = true;
-        for (let p1 of platforms) {
-          if (p.code == p1) {
-            this.platformNotPoss.push({ name: p.name, code: p.code, isPoss: true });
+        for (let l1 of listaDB) {
+          if (l == l1) {
             f = false;
             break;
           }
         }
-        if (f)
-          this.platformNotPoss.push({ name: p.name, code: p.code, isPoss: false });
+        selected[i++] = !f;
       }
     }
 
-
-    else
-      for (let p of platformList)
-        this.platformNotPoss.push({ name: p.name, code: p.code, isPoss: false });
-
-    let genres: string[] = (await this.db.collection('Users').doc(this.authService.currentUserId).ref.get()).get("Genres");
-
-    if (genres !== undefined) {
-
-      f = true;
-      for (let p of genreList) {
-        f = true;
-        for (let p1 of genres) {
-          if (p.code == p1) {
-            this.genreNotPref.push({ name: p.name, code: p.code, isPref: true });
-            f = false;
-            break;
-          }
-        }
-        if (f) {
-          this.genreNotPref.push({ name: p.name, code: p.code, isPref: false });
-        }
-      }
-    }
-    else
-      for (let g of genreList)
-        this.genreNotPref.push({ name: g.name, code: g.code, isPref: false });
   }
+
+
 }

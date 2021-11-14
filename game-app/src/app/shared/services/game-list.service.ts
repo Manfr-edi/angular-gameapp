@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
 
 import { userlist } from '../../data/userlist/userlist';
 import { AuthService } from '../../shared/services/auth.service';
@@ -20,6 +19,7 @@ export class GameListService {
 
   async AddGame(selectedList: string, gameid: string, gametitle: string, note: string, time: number, vote: number, selectedPlatform: string, genre: string, price: number) {
 
+    console.log(price);
     //Riferimento al documento relativo all'utente loggato
     var ref = this.db.collection("Users").doc(this.authService.currentUserId);
 
@@ -30,14 +30,11 @@ export class GameListService {
       return
     }
 
-
-
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([
       ["title", gametitle],
       ["Note", note],
-      ["genre", genre],
-      ["price", price]
+      ["genre", genre]
     ]);
 
     //Controlli per l'inserimento in lista completati
@@ -50,15 +47,24 @@ export class GameListService {
       //Nel caso il tempo di completamento sia valido
       doc.set("CompleteTime", time);
 
-      //Viene inserita la piattaforma
-      doc.set("platform", selectedPlatform);
-
       //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
       if (vote > 0) {
         var y: number = +vote;
         doc.set("Vote", y);
       }
 
+    }
+
+    //Nel caso la lista completati o in gioco
+    if (selectedList !== this.userlists[2].code) {
+      if (price <= 0 && price >= 9999) {
+        window.alert("Non hai inserito prezzo di acquisto valido");
+        return;
+      }
+
+      doc.set("price", price);
+      //Viene inserita la piattaforma
+      doc.set("platform", selectedPlatform);
     }
 
     //Inserimento documento nel database
@@ -89,7 +95,6 @@ export class GameListService {
 
     //Riferimento al documento relativo all'utente loggato
     var ref = this.db.collection("Users").doc(this.authService.currentUserId);
-
 
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([

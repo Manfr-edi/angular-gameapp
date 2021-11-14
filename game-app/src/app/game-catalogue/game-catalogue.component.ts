@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable,  } from 'rxjs';
 import { UtilService } from '../shared/services/util.service';
+import { AuthService } from '../shared/services/auth.service';
 
 @Component({
   selector: 'app-game-catalogue',
@@ -19,7 +20,7 @@ export class GameCatalogueComponent implements OnInit {
   games$: Observable<any[]>;
 
 
-  constructor(public db: AngularFirestore) {
+  constructor(public db: AngularFirestore, public authService: AuthService) {
     this.util = new UtilService();
     //Di default si mostra tutto il catalogo
     this.games$ = this.db.collection('Games').snapshotChanges();
