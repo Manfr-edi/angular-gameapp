@@ -28,7 +28,7 @@ import { GameListService } from "./shared/services/game-list.service";
 
 //Componenti Utente
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { GametabCompletedComponent } from './dashboard/gametab-completed/gametab-completed.component';
+import { GametabComponent } from './dashboard/gametab/gametab.component';
 import { SpeseComponent } from './dashboard/spese/spese.component';
 import { PreferitiComponent } from './dashboard/preferiti/preferiti.component';
 
@@ -61,7 +61,7 @@ const routes: Routes = [
     SignInComponent,
     SignUpComponent,
     CheckUserVerifiedComponent,
-    GametabCompletedComponent,
+    GametabComponent,
     SpeseComponent,
     PreferitiComponent
   ],

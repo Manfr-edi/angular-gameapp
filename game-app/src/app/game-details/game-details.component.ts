@@ -34,6 +34,7 @@ export class GameDetailsComponent implements OnInit {
   vote = 0;
   price = 0;
   isunique = false;
+  timenumber=0;
 
   constructor(private route: ActivatedRoute, public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {
 
@@ -56,6 +57,7 @@ export class GameDetailsComponent implements OnInit {
     this.game$.subscribe(g => this.gametitle = g.title);
 
     gamelistService.CheckUniqueList(this.gameid).then(result => this.isunique=result);
+    this.gamelistService.AvgTime(this.gameid).then(result1 =>this.timenumber=result1);
   }
 
   ngOnInit() {

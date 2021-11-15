@@ -15,4 +15,13 @@ export class UtilService {
     }
     return cap;
   }
+
+    avgTime(games: any[]) {
+    let sumTime = 0;
+    for (let game of games)
+      sumTime += game.payload.doc.data().CompleteTime;
+
+    return sumTime / games.length;
+  }
+
 }

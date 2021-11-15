@@ -10,10 +10,10 @@ import { platformList } from 'src/app/data/platform/platform';
 
 @Component({
   selector: 'app-gametab-completed',
-  templateUrl: './gametab-completed.component.html',
-  styleUrls: ['./gametab-completed.component.css']
+  templateUrl: './gametab.component.html',
+  styleUrls: ['./gametab.component.css']
 })
-export class GametabCompletedComponent implements OnInit {
+export class GametabComponent implements OnInit {
 
   //Data
   genreList = genreList;
@@ -37,6 +37,7 @@ export class GametabCompletedComponent implements OnInit {
   time = 0;
   note: string;
   vote = 0;
+  price = 0;
 
   games$: Observable<any[]>;
 
@@ -90,12 +91,6 @@ export class GametabCompletedComponent implements OnInit {
         ).snapshotChanges();
   }
 
-  avg(games: any[]) {
-    let sum = 0;
-    for (let game of games)
-      sum += game.payload.doc.data().CompleteTime;
-    return sum / games.length;
-  }
 
   async UpdateForm(id: string) {
 
@@ -107,9 +102,10 @@ export class GametabCompletedComponent implements OnInit {
     this.gameid = id;
     this.gametitle = g.get("title");
 
-    //Dati per i giochi completati e desiderati
+    //Dati per i giochi completati e in gioco
     if( this.viewlist !== this.userlists[2].code )
       this.selectedPlatform = g.get("platform");
+      this.price = g.get("price");
 
     //Dati per giochi completati
     if (this.viewlist === this.userlists[0].code) {

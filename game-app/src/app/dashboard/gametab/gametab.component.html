@@ -35,7 +35,7 @@
 
 			<div *ngIf="viewlist === userlists[0].code && games.length > 0 && !updateForm">
 				Il numero di giochi e': {{games.length}} <br>
-				Il numero medio di tempi di completamento e': {{avg(games)}}
+				Il numero medio di tempi di completamento e': {{util.avgTime(games)}}
 			</div>
 
 			<div *ngIf="games.length === 0">Nessun gioco trovato</div>
@@ -47,11 +47,6 @@
 			<h4>Inserisci il tempo di completamento (in ore)</h4>
 			<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
 
-			<h4>Inserisci la piattaforma</h4><br>
-			<select  [(ngModel)]="selectedPlatform">
-				<option *ngFor="let plat of platformsGame"> {{plat}} </option>
-			</select><br>
-
 			<h4>Inserisci un voto</h4>
 			<select [(ngModel)]="vote">
 				<option></option>
@@ -59,11 +54,15 @@
 			</select> <br>
 		</div>
 
-		<div *ngIf="selectedList===userlists[1].code">
+		<!--Dati aggiuntivi per gioci completati e desiderati-->
+		<div *ngIf="selectedList!==userlists[2].code" >
 			<h4>Inserisci la piattaforma</h4><br>
 			<select  [(ngModel)]="selectedPlatform">
 				<option *ngFor="let plat of platformsGame"> {{plat}} </option>
-			</select>
+			</select><br>
+
+			<h4>Inserisci il prezzo di acquisto</h4>
+			<input type="number" placeholder="prezzo" required [(ngModel)]="price"><br>
 		</div>
 
 
@@ -72,7 +71,7 @@
 			<option *ngFor="let o of userlists" value="{{o.code}}"> {{o.name}} </option>
 		</select><br>
 		<button
-			(click)="gamelistService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle); UpdateForm(gameid)">Update</button>
+			(click)="gamelistService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle, price); UpdateForm(gameid)">Update</button>
 		<button (click)="updateForm=false">Annulla</button>
 	</div>
 </div>
