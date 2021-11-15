@@ -57,7 +57,6 @@ export class GameDetailsComponent implements OnInit {
     this.game$.subscribe(g => this.gametitle = g.title);
 
     gamelistService.CheckUniqueList(this.gameid).then(result => this.isunique=result);
-    this.gamelistService.AvgTime(this.gameid).then(result1 =>this.timenumber=result1);
   }
 
   ngOnInit() {

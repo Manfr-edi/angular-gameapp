@@ -8,6 +8,9 @@
       <a [routerLink]="['/games', game.payload.doc.id]">
         {{ util.capitalize(game.payload.doc.data().title) }}
       </a>
+      <a *ngIf="game.payload.doc.data().CompletedTimeAvg">
+      Tempo medio: {{game.payload.doc.data().CompletedTimeAvg}}
+      </a>
     </div>
   </ul>
   <div *ngIf="games.length === 0">Nessun gioco trovato</div>

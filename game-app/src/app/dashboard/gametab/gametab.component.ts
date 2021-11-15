@@ -46,7 +46,7 @@ export class GametabComponent implements OnInit {
 
   userDoc: AngularFirestoreDocument;
 
-  constructor(public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {
+  constructor(public authService: AuthService, public gameListService: GameListService, public db: AngularFirestore) {
     //Init delle variabili
     this.util = new UtilService();
     this.games$ = new Observable;
@@ -89,6 +89,7 @@ export class GametabComponent implements OnInit {
         this.games$ = this.userDoc.collection(this.viewlist, ref =>
           ref.where('platform', '==', this.platformSelected)
         ).snapshotChanges();
+        
   }
 
 

@@ -1,9 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Query } from '@angular/core';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
 import { AuthService } from 'src/app/shared/services/auth.service';
 import { AngularFirestore, QuerySnapshot, DocumentData } from '@angular/fire/firestore';
 import { userlist } from 'src/app/data/userlist/userlist';
+import { GameListService } from 'src/app/shared/services/game-list.service';
 
 @Component({
   selector: 'app-spese',
@@ -29,7 +30,7 @@ export class SpeseComponent implements OnInit {
   //Documento usente
   userDoc: any;
 
-  constructor(public authService: AuthService, public db: AngularFirestore) {
+  constructor(public authService: AuthService, public db: AngularFirestore, public gameListService: GameListService) {
     this.userDoc = this.db.collection('Users').doc(this.authService.currentUserId);
   }
 
@@ -41,9 +42,8 @@ export class SpeseComponent implements OnInit {
     let sum = 0;
     let count = 0;
 
-    
+    let query : Promise<QuerySnapshot<DocumentData>>;
 
-    var query: Promise<QuerySnapshot<DocumentData>>;
     for (let i = 0; i < 2; i++) {
       let userListRef = this.userDoc.collection(this.userlists[i].code).ref;
 
@@ -65,7 +65,6 @@ export class SpeseComponent implements OnInit {
           count++;
         })
       });
-
     }
 
     //Calcolo la media e aggiorno i dati
