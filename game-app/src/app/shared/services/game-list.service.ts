@@ -11,19 +11,16 @@ import { GameCatalogueService } from './game-catalogue.service';
 export class GameListService {
 
   game: any;
-  //Riferimento al documento relativo all'utente loggato
-  userDoc: AngularFirestoreDocument<any>;
-
   userlists = userlist;
 
-
   constructor(public authService: AuthService, public db: AngularFirestore, public gameCatalogueService: GameCatalogueService) {
-    this.game = db.collection('Games');
-   this.userDoc = this.db.doc('Users/'+this.authService.currentUserId);
+    this.game = db.collection('Games');      
   }
 
 
   async AddGame(selectedList: string, gameid: string, gametitle: string, note: string, time: number, vote: number, selectedPlatform: string, genre: string, price: number) {
+
+   let userDoc = this.db.doc('Users/'+this.authService.currentUserId);
 
     //if( this.CheckUniqueList(gameid)){return;}
     if (await this.CheckUniqueList(gameid).then(result => !result)) {
@@ -70,7 +67,7 @@ export class GameListService {
     }
 
     //Inserimento documento nel database
-    this.userDoc.collection(selectedList).doc(gameid).set(Object.fromEntries(doc));
+    userDoc.collection(selectedList).doc(gameid).set(Object.fromEntries(doc));
 
     //Aggiornamento tempi di completamento nel catalogo
     if (selectedList == userlist[0].code)
@@ -80,16 +77,22 @@ export class GameListService {
   }
 
   async RemoveGame(selectedList: string, id: string) {
+    
+    let userDoc = this.db.doc('Users/'+this.authService.currentUserId);
+
     if (selectedList === userlist[0].code)
       this.gameCatalogueService.updateCompletedAvg(id, await this.getParam(id, selectedList, "completetime"), 0);
 
-    this.userDoc.collection(selectedList).doc(id).delete();
+    userDoc.collection(selectedList).doc(id).delete();
   }
 
   async CheckUniqueList(id: string): Promise<boolean> {
+   
+    let userDoc = this.db.doc('Users/'+this.authService.currentUserId);
+
     //Controlli per verificare che il gioco non sia presente già in una lista
     for (var i = 0; i < this.userlists.length; i++) {
-      if (await this.userDoc.collection(this.userlists[i].code).doc(id).ref.get().then(
+      if (await userDoc.collection(this.userlists[i].code).doc(id).ref.get().then(
         game => game.exists)) {
         //window.alert("Gioco gia' inserito in lista " + this.userlists[i].name);
         return false;
@@ -100,7 +103,7 @@ export class GameListService {
   }
 
   async UpdateGame(selectedList: string, previousList: string, gameid: string, note: string, time: number, vote: number, selectedPlatform: string, gametitle: string, price: number) {
-
+    let userDoc = this.db.doc('Users/'+this.authService.currentUserId);
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([
       ["title", gametitle],
@@ -117,8 +120,6 @@ export class GameListService {
 
       //Nel caso il tempo di completamento sia valido
       doc.set("completetime", time);
-
-
 
       //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
       if (vote > 0) {
@@ -144,11 +145,11 @@ export class GameListService {
     if (selectedList === previousList) {
       if (selectedList === userlist[0].code)
         this.gameCatalogueService.updateCompletedAvg(gameid, await this.getParam(gameid, selectedList, "completetime"), time);
-      this.userDoc.collection(selectedList).doc(gameid).update(Object.fromEntries(doc));
+      userDoc.collection(selectedList).doc(gameid).update(Object.fromEntries(doc));
     }
     else {
       this.RemoveGame(previousList, gameid);
-      this.userDoc.collection(selectedList).doc(gameid).set(Object.fromEntries(doc));
+      userDoc.collection(selectedList).doc(gameid).set(Object.fromEntries(doc));
 
       //Aggiornamento tempi di completamento nel catalogo
       if (selectedList === userlist[0].code)
@@ -158,6 +159,8 @@ export class GameListService {
   }
 
   async getParam(id: string, list: string, param: string): Promise<any> {
-    return (await this.userDoc.collection(list).doc(id).ref.get()).get(param);
+    let userDoc = this.db.doc('Users/'+this.authService.currentUserId);
+
+    return (await userDoc.collection(list).doc(id).ref.get()).get(param);
   }
 }

@@ -6,6 +6,8 @@ import { userlist } from '../data/userlist/userlist';
 import { UtilService } from '../shared/services/util.service';
 import { AuthService } from '../shared/services/auth.service';
 import { GameListService } from '../shared/services/game-list.service';
+import { GameCatalogueComponent } from '../game-catalogue/game-catalogue.component';
+import { GameCatalogueService } from '../shared/services/game-catalogue.service';
 
 
 @Component({
@@ -34,7 +36,6 @@ export class GameDetailsComponent implements OnInit {
   vote = 0;
   price = 0;
   isunique = false;
-  timenumber=0;
 
   constructor(private route: ActivatedRoute, public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {
 
@@ -56,8 +57,8 @@ export class GameDetailsComponent implements OnInit {
     this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);
     this.game$.subscribe(g => this.gametitle = g.title);
 
-    gamelistService.CheckUniqueList(this.gameid).then(result => this.isunique=result);
-  }
+    if( authService.isUserEmailLoggedIn )
+      gamelistService.CheckUniqueList(this.gameid).then(result => this.isunique = result)};
 
   ngOnInit() {
   }
