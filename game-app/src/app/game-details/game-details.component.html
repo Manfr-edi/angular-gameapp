@@ -10,49 +10,8 @@
 	{{ util.capitalize(game.platform[0]) }} <br>
 	{{ util.capitalize(game.developer) }} <br>
 	{{ game.price }}<br>
+</div>
 
-	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isunique">
-		
-		<!--Dati aggiuntivi per gioco completato-->
-		<div *ngIf="selectedList===userlists[0].code">
-
-			<h4>Inserisci il tempo di completamento (in ore)</h4>
-			
-			<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
-
-			<h4>Inserisci un voto</h4>
-			<select [(ngModel)]="vote" value="0">
-				<option></option>
-				<option *ngFor="let number of [1,2,3,4,5,6,7,8,9,10]">
-					{{number}}
-				</option>
-			
-			</select>
-		</div>
-
-		<!--Dati aggiuntivi per gioci completati e desiderati-->
-		<div *ngIf="selectedList!==userlists[2].code" >
-			<h4>Inserisci la piattaforma</h4><br>
-
-			<select [(ngModel)]="selectedPlatform" value="{{game.platform[0]}}">
-				<option *ngFor="let plat of game.platform">
-					{{plat}}
-				</option>
-			</select><br>
-
-			<h4>Inserisci il prezzo di acquisto</h4>
-			<input type="number" placeholder="prezzo" required [(ngModel)]="price"><br>
-		</div>
-
-		<textarea rows="4" cols="180" placeholder="Inserisci Note Aggiuntive" [(ngModel)]="note"></textarea><br>
-
-		<select [(ngModel)]="selectedList">
-			<option *ngFor="let o of userlists" value="{{o.code}}">
-				{{o.name}}
-			</option>
-		</select>
-
-		<button (click)="gamelistService.AddGame(selectedList, gameid, game.title, note, time, vote, selectedPlatform, game.genre, price)">Add Game On List</button>
-		</div>
-
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+	<app-insertgamelist></app-insertgamelist>
 </div>

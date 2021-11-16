@@ -31,6 +31,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { GametabComponent } from './dashboard/gametab/gametab.component';
 import { SpeseComponent } from './dashboard/spese/spese.component';
 import { PreferitiComponent } from './dashboard/preferiti/preferiti.component';
+import { InsertgamelistComponent } from './insertgamelist/insertgamelist.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -63,7 +64,8 @@ const routes: Routes = [
     CheckUserVerifiedComponent,
     GametabComponent,
     SpeseComponent,
-    PreferitiComponent
+    PreferitiComponent,
+    InsertgamelistComponent
   ],
   providers: [AuthService, GameListService],
   bootstrap: [AppComponent]
