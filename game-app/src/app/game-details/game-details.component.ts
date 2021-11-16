@@ -50,7 +50,7 @@ export class GameDetailsComponent implements OnInit {
     this.gameid = String(routeParams.get('id'));
 
     //Lettura dati gioco
-    this.game$ = db.collection('Games').doc(this.gameid).valueChanges();
+    this.game$ = db.doc('Games/'+this.gameid).valueChanges();
 
     //La piattaforma di default è la prima possibile per il gioco
     this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);

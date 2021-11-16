@@ -42,7 +42,7 @@ export class GametabComponent implements OnInit {
   games$: Observable<any[]>;
 
   //Piattaforme per un determinato gioco
-  platformsGame : string[] = [];
+  platformsGame: string[] = [];
 
   userDoc: AngularFirestoreDocument;
 
@@ -50,9 +50,9 @@ export class GametabComponent implements OnInit {
     //Init delle variabili
     this.util = new UtilService();
     this.games$ = new Observable;
-    
+
     this.selectedList = this.userlists[0].code;
-    this.userDoc = this.db.collection('Users').doc(this.authService.currentUserId);
+    this.userDoc = this.db.doc('Users/' + this.authService.currentUserId);
     this.selectedPlatform = '';
     this.gameid = '';
     this.gametitle = '';
@@ -89,30 +89,34 @@ export class GametabComponent implements OnInit {
         this.games$ = this.userDoc.collection(this.viewlist, ref =>
           ref.where('platform', '==', this.platformSelected)
         ).snapshotChanges();
-        
+
   }
 
 
   async UpdateForm(id: string) {
 
+    this.selectedList = this.viewlist;
     let g = await this.userDoc.collection(this.viewlist).doc(id).ref.get();
 
-    this.platformsGame = (await this.db.collection('Games').doc(id).ref.get()).get('platform');
-    
+    this.platformsGame = (await this.db.doc('Games/' + id).ref.get()).get('platform');
+
     //Dati generici
     this.gameid = id;
     this.gametitle = g.get("title");
 
     //Dati per i giochi completati e in gioco
-    if( this.viewlist !== this.userlists[2].code )
+    if (this.viewlist !== this.userlists[2].code) {
       this.selectedPlatform = g.get("platform");
       this.price = g.get("price");
+    }
+    else 
+      this.selectedPlatform = this.platformsGame[0];
 
     //Dati per giochi completati
     if (this.viewlist === this.userlists[0].code) {
-      this.note = g.get("Note");
-      this.time = g.get("CompleteTime");
-      this.vote = g.get("Vote");
+      this.note = g.get("note");
+      this.time = g.get("completetime");
+      this.vote = g.get("vote");
     }
   }
 

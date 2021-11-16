@@ -28,7 +28,7 @@ export class PreferitiComponent implements OnInit {
 
   async ngOnInit() {
     //Documento relativo all'utente corrente
-    let userDoc = (await this.db.collection('Users').doc(this.authService.currentUserId).ref.get());
+    let userDoc = (await this.db.doc('Users/'+this.authService.currentUserId).ref.get());
 
     this.initList(userDoc.get("Platforms"), this.platformList, this.platforms);
     this.initList(userDoc.get("Genres"), this.genreList, this.genres);

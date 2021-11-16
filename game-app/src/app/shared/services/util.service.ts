@@ -19,7 +19,7 @@ export class UtilService {
     avgTime(games: any[]) {
     let sumTime = 0;
     for (let game of games)
-      sumTime += game.payload.doc.data().CompleteTime;
+      sumTime += game.payload.doc.data().completetime;
 
     return sumTime / games.length;
   }

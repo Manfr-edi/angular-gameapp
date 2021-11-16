@@ -19,7 +19,7 @@ export class GameListService {
 
   constructor(public authService: AuthService, public db: AngularFirestore, public gameCatalogueService: GameCatalogueService) {
     this.game = db.collection('Games');
-    this.userDoc = this.db.collection("Users").doc(this.authService.currentUserId);
+   this.userDoc = this.db.doc('Users/'+this.authService.currentUserId);
   }
 
 
@@ -35,7 +35,7 @@ export class GameListService {
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([
       ["title", gametitle],
-      ["Note", note],
+      ["note", note],
       ["genre", genre]
     ]);
 
@@ -47,12 +47,12 @@ export class GameListService {
       }
 
       //Nel caso il tempo di completamento sia valido
-      doc.set("CompleteTime", time);
+      doc.set("completetime", time);
 
       //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
       if (vote > 0) {
         var y: number = +vote;
-        doc.set("Vote", y);
+        doc.set("vote", y);
       }
 
     }
@@ -81,7 +81,8 @@ export class GameListService {
 
   async RemoveGame(selectedList: string, id: string) {
     if (selectedList === userlist[0].code)
-      this.gameCatalogueService.updateCompletedAvg(id, await this.getParam(id, selectedList, "CompleteTime"), 0);
+      this.gameCatalogueService.updateCompletedAvg(id, await this.getParam(id, selectedList, "completetime"), 0);
+
     this.userDoc.collection(selectedList).doc(id).delete();
   }
 
@@ -103,7 +104,7 @@ export class GameListService {
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([
       ["title", gametitle],
-      ["Note", note]
+      ["note", note]
     ]);
 
 
@@ -115,14 +116,14 @@ export class GameListService {
       }
 
       //Nel caso il tempo di completamento sia valido
-      doc.set("CompleteTime", time);
+      doc.set("completetime", time);
 
 
 
       //Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
       if (vote > 0) {
         var y: number = +vote;
-        doc.set("Vote", y);
+        doc.set("vote", y);
       }
 
     }
@@ -142,7 +143,7 @@ export class GameListService {
     //Inserimento documento nel database
     if (selectedList === previousList) {
       if (selectedList === userlist[0].code)
-        this.gameCatalogueService.updateCompletedAvg(gameid, await this.getParam(gameid, selectedList, "CompleteTime"), time);
+        this.gameCatalogueService.updateCompletedAvg(gameid, await this.getParam(gameid, selectedList, "completetime"), time);
       this.userDoc.collection(selectedList).doc(gameid).update(Object.fromEntries(doc));
     }
     else {

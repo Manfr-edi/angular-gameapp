@@ -31,7 +31,7 @@ export class SpeseComponent implements OnInit {
   userDoc: any;
 
   constructor(public authService: AuthService, public db: AngularFirestore, public gameListService: GameListService) {
-    this.userDoc = this.db.collection('Users').doc(this.authService.currentUserId);
+   this.userDoc = this.db.doc('Users/'+this.authService.currentUserId);
   }
 
   ngOnInit(): void {

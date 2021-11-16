@@ -27,7 +27,7 @@
 				<a [routerLink]="['/games', game.payload.doc.id]">
 					{{ util.capitalize(game.payload.doc.data().title) }}
 				</a>
-				<a *ngIf="viewlist === userlists[0].code">Ore giocate: {{game.payload.doc.data().CompleteTime}} </a>
+				<a *ngIf="viewlist === userlists[0].code">Ore giocate: {{game.payload.doc.data().completetime}} </a>
 
 				<button (click)="gameListService.RemoveGame(viewlist, game.payload.doc.id)">Remove Game</button>
 				<button *ngIf="!updateForm" (click)="UpdateForm(game.payload.doc.id); updateForm=true">Update Game</button>
@@ -71,7 +71,7 @@
 			<option *ngFor="let o of userlists" value="{{o.code}}"> {{o.name}} </option>
 		</select><br>
 		<button
-			(click)="gameListService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle, price); UpdateForm(gameid)">Update</button>
+			(click)="gameListService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle, price); UpdateForm(gameid); updateForm=false">Update</button>
 		<button (click)="updateForm=false">Annulla</button>
 	</div>
 </div>
