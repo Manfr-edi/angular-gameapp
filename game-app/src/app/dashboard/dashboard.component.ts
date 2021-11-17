@@ -8,6 +8,7 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class DashboardComponent implements OnInit {
 
+  module = 'games'
   //Toggle per mostrare/nascondere il componente VisualizzaSpese
   visualizzaSpese = false;
 

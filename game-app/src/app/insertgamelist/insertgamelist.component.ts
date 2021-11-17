@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../shared/services/auth.service';
 import { GameListService } from '../shared/services/game-list.service';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { userlist } from '../data/userlist/userlist';
 import { Observable } from 'rxjs';
 
@@ -11,12 +11,13 @@ import { Observable } from 'rxjs';
   templateUrl: './insertgamelist.component.html',
   styleUrls: ['./insertgamelist.component.css']
 })
-export class InsertgamelistComponent implements OnInit {
+export class InsertgamelistComponent implements OnChanges {
+
+  @Input() gameid: string = "";
 
   userlists = userlist;
 
-  game$: Observable<any>;
-  gameid = '';
+  game$: Observable<any> = new Observable;
 
   //Dati per l'inserimento
   selectedList: string;
@@ -28,29 +29,56 @@ export class InsertgamelistComponent implements OnInit {
   price = 0;
   isunique = false;
 
-  constructor(private route: ActivatedRoute, public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {
+  viewlist: string = userlist[0].code;
+  userDoc: AngularFirestoreDocument;
+  platformsGame: string[] = [];
 
+  constructor(private route: ActivatedRoute, public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {
     //Inizializzazione variabili
     this.selectedList = this.userlists[0].code;
     this.selectedPlatform = '';
     this.gametitle = '';
     this.note = '';
 
-    //Lettura id del gioco
-    const routeParams = this.route.snapshot.paramMap;
-    this.gameid = String(routeParams.get('id'));
+    this.userDoc = this.db.doc("Users/" + this.authService.currentUserId);
+  }
+
+  async UpdateForm() {
+    this.selectedList = this.viewlist;
+    let g = await this.userDoc.collection(this.viewlist).doc(this.gameid).ref.get();
+
+    console.log(g);
+    this.platformsGame = (await this.db.doc('Games/' + this.gameid).ref.get()).get('platform');
+
+    //Dati generici
+    this.gametitle = g.get("title");
+
+    //Dati per i giochi completati e in gioco
+    if (this.viewlist !== this.userlists[2].code) {
+      this.selectedPlatform = g.get("platform");
+      this.price = g.get("price");
+    }
+    else
+      this.selectedPlatform = this.platformsGame[0];
+
+    //Dati per giochi completati
+    if (this.viewlist === this.userlists[0].code) {
+      this.note = g.get("note");
+      this.time = g.get("completetime");
+      this.vote = g.get("vote");
+    }
+  }
+
+  ngOnChanges(changes: any){
 
     //Lettura dati gioco
-    this.game$ = db.doc('Games/' + this.gameid).valueChanges();
+    this.game$ = this.db.doc('Games/' + this.gameid).valueChanges();
 
     //La piattaforma di default è la prima possibile per il gioco
     this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);
     this.game$.subscribe(g => this.gametitle = g.title);
 
-    gamelistService.CheckUniqueList(this.gameid).then(result => this.isunique = result);
-  }
-
-  ngOnInit(): void {
-  }
+    this.UpdateForm();
+ }
 
 }

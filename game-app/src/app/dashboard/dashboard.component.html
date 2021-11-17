@@ -1,27 +1,38 @@
 <app-check-user-verified></app-check-user-verified>
 
-<button [routerLink]="'/'">Home</button>
-
 <div *ngIf="authService.currentUser">
-	<h5>User Information</h5>
-	<h4>
-		<strong>UID:</strong> {{ authService.currentUserId }}
-	</h4>
-	<h4>
-		<strong>Email:</strong> {{ authService.currentUserName }}
-	</h4>
-	<button class="button" (click)="logout()">Logout</button>
-</div>
+
+<nav class="navbar navbar-expand-sm bg-light sticky-top">
+
+  <!-- Links -->
+  <ul class="nav">
+    <li class="nav-item">
+      <a type="button" class="btn btn-light" [routerLink]="'/'">Home</a>
+    </li>
+    <li class="nav-item">
+      <a type="button" class="btn btn-light" (click)="module='games'" >Games</a>
+    </li>
+    <li class="nav-item">
+      <a type="button" class="btn btn-light" (click)="module='settings'">Settings</a>
+	</li>
+
+    <li class="nav-item">
+      <a type="button" class="btn btn-light" (click)="logout()">Logout</a>
+	</li>
+	
+  </ul>
+ 
+
+</nav>
+
 
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-	<app-gametab-completed></app-gametab-completed>
-
-	
+	<div *ngIf="module==='games'"><app-gametab-completed></app-gametab-completed><app-spese></app-spese></div>
+	<div *ngIf="module==='settings'"><app-preferiti></app-preferiti></div>
 	<button (click)="visualizzaSpese=!visualizzaSpese">Visualizza Spese</button>
 
 	<div *ngIf="visualizzaSpese">
 		<app-spese></app-spese>
 	</div>
 
-	<app-preferiti></app-preferiti>
 </div>

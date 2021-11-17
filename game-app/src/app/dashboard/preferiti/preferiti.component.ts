@@ -61,5 +61,9 @@ export class PreferitiComponent implements OnInit {
 
   }
 
+  logout(){
+    this.authService.signOut();
+  }
+
 
 }

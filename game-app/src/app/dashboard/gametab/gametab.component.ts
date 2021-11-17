@@ -109,7 +109,7 @@ export class GametabComponent implements OnInit {
       this.selectedPlatform = g.get("platform");
       this.price = g.get("price");
     }
-    else 
+    else
       this.selectedPlatform = this.platformsGame[0];
 
     //Dati per giochi completati

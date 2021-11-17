@@ -13,5 +13,5 @@
 </div>
 
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-	<app-insertgamelist></app-insertgamelist>
+	<app-insertgamelist *ngIf="gameid" [gameid]="gameid"></app-insertgamelist>
 </div>

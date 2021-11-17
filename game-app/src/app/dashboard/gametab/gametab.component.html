@@ -1,9 +1,13 @@
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-	<button (click)="UpdateList(userlists[0].code); updateForm=false">Completed Games</button>
-	<button (click)="UpdateList(userlists[1].code); updateForm=false">Playing Games</button>
-	<button (click)="UpdateList(userlists[2].code); updateForm=false">Desired Games</button>
+	<div class="btn-group">
+	<button class="btn btn-outline-primary" (click)="UpdateList(userlists[0].code); updateForm=false">Completed Games</button>
+	<button class="btn btn-outline-primary" (click)="UpdateList(userlists[1].code); updateForm=false">Playing Games</button>
+	<button class="btn btn-outline-primary" (click)="UpdateList(userlists[2].code); updateForm=false">Desired Games</button>
+	</div>
+	<br>
+	
 
-	<select (change)="onChangeFilter()" [(ngModel)]="genreSelected">
+	<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()" [(ngModel)]="genreSelected">
 		<option value="">
 			Tutti i generi
 		</option>
@@ -11,8 +15,9 @@
 			{{g}}
 		</option>
 	</select>
+	
 
-	<select (change)="onChangeFilter()" [(ngModel)]="platformSelected">
+	<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()" [(ngModel)]="platformSelected">
 		<option value="">
 			Tutte le Piattaforme
 		</option>
@@ -42,7 +47,10 @@
 		</div>
 	</div>
 
+
 	<div *ngIf="updateForm">
+		<app-insertgamelist *ngIf="gameid" [gameid]="gameid"></app-insertgamelist>
+		<!--
 		<div *ngIf="selectedList===userlists[0].code">
 			<h4>Inserisci il tempo di completamento (in ore)</h4>
 			<input type="number" placeholder="ore" required [(ngModel)]="time"><br>
@@ -54,7 +62,7 @@
 			</select> <br>
 		</div>
 
-		<!--Dati aggiuntivi per gioci completati e desiderati-->
+		Dati aggiuntivi per gioci completati e desiderati
 		<div *ngIf="selectedList!==userlists[2].code" >
 			<h4>Inserisci la piattaforma</h4><br>
 			<select  [(ngModel)]="selectedPlatform">
@@ -73,5 +81,6 @@
 		<button
 			(click)="gameListService.UpdateGame(selectedList, viewlist, gameid, note, time, vote, selectedPlatform, gametitle, price); UpdateForm(gameid); updateForm=false">Update</button>
 		<button (click)="updateForm=false">Annulla</button>
+	-->
 	</div>
 </div>

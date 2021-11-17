@@ -1,3 +1,12 @@
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">	<h5>User Information</h5>
+	<h4>
+		<strong>UID:</strong> {{ authService.currentUserId }}
+	</h4>
+	<h4>
+		<strong>Email:</strong> {{ authService.currentUserName }}
+	</h4>
+	<button class="button" (click)="logout()">Logout</button>
+
 <table>
 	<th>
 		<ul>
@@ -19,3 +28,5 @@
 		<button (click)="updateData('Genres',genreList, genres)">Aggiorna Piattaforme Preferite</button>
 	</th>
 </table>
+
+</div>
