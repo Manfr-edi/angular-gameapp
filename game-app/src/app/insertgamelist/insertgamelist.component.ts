@@ -14,6 +14,7 @@ import { Observable } from 'rxjs';
 export class InsertgamelistComponent implements OnChanges {
 
   @Input() gameid: string = "";
+  @Input() viewlist: string = "";
 
   userlists = userlist;
 
@@ -27,9 +28,9 @@ export class InsertgamelistComponent implements OnChanges {
   note: string;
   vote = 0;
   price = 0;
-  isunique = false;
+  show = false;
 
-  viewlist: string = userlist[0].code;
+  //viewlist: string = '';//userlist[0].code;
   userDoc: AngularFirestoreDocument;
   platformsGame: string[] = [];
 
@@ -41,6 +42,8 @@ export class InsertgamelistComponent implements OnChanges {
     this.note = '';
 
     this.userDoc = this.db.doc("Users/" + this.authService.currentUserId);
+
+    
   }
 
   async UpdateForm() {
@@ -71,14 +74,20 @@ export class InsertgamelistComponent implements OnChanges {
 
   ngOnChanges(changes: any){
 
+    console.log("il valore di viewlist "+ this.viewlist);
+    console.log("il valore di gameid "+ this.gameid);
+
     //Lettura dati gioco
     this.game$ = this.db.doc('Games/' + this.gameid).valueChanges();
 
     //La piattaforma di default è la prima possibile per il gioco
     this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);
     this.game$.subscribe(g => this.gametitle = g.title);
-
-    this.UpdateForm();
+    this.gamelistService.CheckUniqueList(this.gameid).then(result => this.show = result);
+    
+    
+    if(this.viewlist!=='')
+      {this.UpdateForm();}
  }
 
 }

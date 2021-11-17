@@ -1,4 +1,4 @@
-
+<div *ngIf="show || viewlist===userlists[0].code || viewlist===userlists[1].code || viewlist===userlists[2].code">
 <div *ngIf="game$ | async; let game;">
 	<div *ngIf="selectedList===userlists[0].code">
 		<h4>Inserisci il tempo di completamento (in ore)</h4>
@@ -37,7 +37,9 @@
 	</select>
 
 	<button
-		(click)="gamelistService.AddGame(selectedList, gameid, game.title, note, time, vote, selectedPlatform, game.genre, price)">Add
+		(click)="gamelistService.UpdateGame(selectedList, viewlist, gameid, game.title, note, time, vote, selectedPlatform, game.genre, price)">Add
 		Game On List</button>
+
+</div>
 
 </div>

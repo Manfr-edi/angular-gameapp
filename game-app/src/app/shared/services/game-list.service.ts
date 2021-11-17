@@ -97,11 +97,12 @@ export class GameListService {
     return true;
   }
 
-  async UpdateGame(selectedList: string, previousList: string, gameid: string, note: string, time: number, vote: number, selectedPlatform: string, gametitle: string, price: number) {
+  async UpdateGame(selectedList: string, previousList: string, gameid: string, gametitle: string, note: string, time: number, vote: number, selectedPlatform: string,  genre: string, price: number) {
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([
       ["title", gametitle],
-      ["note", note]
+      ["note", note],
+      ["genre", genre]
     ]);
 
 

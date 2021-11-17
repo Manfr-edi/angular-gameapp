@@ -13,6 +13,7 @@ export class DashboardComponent implements OnInit {
   visualizzaSpese = false;
 
   constructor(public authService: AuthService) {
+
   }
 
   ngOnInit() {

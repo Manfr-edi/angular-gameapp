@@ -93,7 +93,7 @@ export class GametabComponent implements OnInit {
   }
 
 
-  async UpdateForm(id: string) {
+ /* async UpdateForm(id: string) {
 
     this.selectedList = this.viewlist;
     let g = await this.userDoc.collection(this.viewlist).doc(id).ref.get();
@@ -118,6 +118,6 @@ export class GametabComponent implements OnInit {
       this.time = g.get("completetime");
       this.vote = g.get("vote");
     }
-  }
+  }*/
 
 }

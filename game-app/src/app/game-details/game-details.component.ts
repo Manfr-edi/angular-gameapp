@@ -5,7 +5,6 @@ import { Observable } from 'rxjs';
 import { userlist } from '../data/userlist/userlist';
 import { UtilService } from '../shared/services/util.service';
 import { AuthService } from '../shared/services/auth.service';
-import { GameListService } from '../shared/services/game-list.service';
 import { GameCatalogueComponent } from '../game-catalogue/game-catalogue.component';
 import { GameCatalogueService } from '../shared/services/game-catalogue.service';
 
@@ -22,6 +21,7 @@ export class GameDetailsComponent implements OnInit {
   //Game
   game$: Observable<any>;
   gameid = '';
+  viewlist= "";
 
   constructor(private route: ActivatedRoute, public util: UtilService, public authService: AuthService, public db: AngularFirestore) {
     //Lettura id del gioco
@@ -35,4 +35,5 @@ export class GameDetailsComponent implements OnInit {
   ngOnInit() {
 
   }
+
 }
