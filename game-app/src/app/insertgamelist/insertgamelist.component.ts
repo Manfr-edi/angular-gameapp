@@ -1,10 +1,9 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { Component, Input, OnChanges } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 import { GameListService } from '../shared/services/game-list.service';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { userlist } from '../data/userlist/userlist';
-import { Observable } from 'rxjs';
+import { GameCatalogueService } from '../shared/services/game-catalogue.service';
 
 @Component({
   selector: 'app-insertgamelist',
@@ -13,81 +12,76 @@ import { Observable } from 'rxjs';
 })
 export class InsertgamelistComponent implements OnChanges {
 
+  //L'input gameid è obbligatorio ed indica l'id del gioco da aggiornare o da inserire
+  //L'input updateList è facoltativo ed indica in quale lista spostare il gioco, quindi risulta obbligatorio in caso di Update 
   @Input() gameid: string = "";
-  @Input() viewlist: string = "";
+  @Input() updateList: string = "";
 
+  //Data
   userlists = userlist;
 
-  game$: Observable<any> = new Observable;
-
   //Dati per l'inserimento
-  selectedList: string;
-  selectedPlatform: string;
-  gametitle: string;
-  time = 0;
-  note: string;
-  vote = 0;
-  price = 0;
-  show = false;
-
-  //viewlist: string = '';//userlist[0].code;
-  userDoc: AngularFirestoreDocument;
+  selectedList: string = '';
+  selectedPlatform: string = '';
+  gametitle: string = '';
+  gamegenre: string = '';
+  time: number = 0;
+  note: string = '';
+  vote: number = 0
+  price: number = 0;
+  show: boolean = false;
   platformsGame: string[] = [];
 
-  constructor(private route: ActivatedRoute, public authService: AuthService, public gamelistService: GameListService, public db: AngularFirestore) {
-    //Inizializzazione variabili
-    this.selectedList = this.userlists[0].code;
-    this.selectedPlatform = '';
-    this.gametitle = '';
-    this.note = '';
-
-    this.userDoc = this.db.doc("Users/" + this.authService.currentUserId);
-
-    
+  constructor(public authService: AuthService, public gamelistService: GameListService, public gameCatalogueService: GameCatalogueService,
+    public db: AngularFirestore) {
   }
 
   async UpdateForm() {
-    this.selectedList = this.viewlist;
-    let g = await this.userDoc.collection(this.viewlist).doc(this.gameid).ref.get();
+    //Dati del gioco nel catalogo
+    let game = await this.gameCatalogueService.getDataGame(this.gameid);
 
-    console.log(g);
-    this.platformsGame = (await this.db.doc('Games/' + this.gameid).ref.get()).get('platform');
+    //Piattaforme sulle quali è disponibile un gioco
+    this.platformsGame = game.get('platform');
+    //Titolo del gioco
+    this.gametitle = game.get("title");
+    //Genere del gioco
+    this.gamegenre = game.get("genre");
 
-    //Dati generici
-    this.gametitle = g.get("title");
+    ///Nel caso si tratti di un update
+    if (this.updateList !== '') {
+      this.selectedList = this.updateList;
+      //Dati relatiivi al gioco nella lista dell'utente
+      let gameUserList = await this.gamelistService.getGameDataFromList(this.gameid, this.updateList);
 
-    //Dati per i giochi completati e in gioco
-    if (this.viewlist !== this.userlists[2].code) {
-      this.selectedPlatform = g.get("platform");
-      this.price = g.get("price");
+      //Dati per i giochi completati e in gioco
+      if (this.updateList !== this.userlists[2].code) {
+        this.selectedPlatform = gameUserList.get("platform");
+        this.price = gameUserList.get("price");
+      }
+      else
+        this.selectedPlatform = this.platformsGame[0];
+
+      //Dati per giochi completati
+      if (this.updateList === this.userlists[0].code) {
+        this.note = gameUserList.get("note");
+        this.time = gameUserList.get("completetime");
+        this.vote = gameUserList.get("vote");
+      }
     }
-    else
+    else {
       this.selectedPlatform = this.platformsGame[0];
-
-    //Dati per giochi completati
-    if (this.viewlist === this.userlists[0].code) {
-      this.note = g.get("note");
-      this.time = g.get("completetime");
-      this.vote = g.get("vote");
+      this.selectedList = userlist[0].code;
     }
   }
 
-  ngOnChanges(changes: any){
+  async ngOnChanges(changes: any) {
 
-    console.log("il valore di viewlist "+ this.viewlist);
-    console.log("il valore di gameid "+ this.gameid);
-
-    //Lettura dati gioco
-    this.game$ = this.db.doc('Games/' + this.gameid).valueChanges();
-
-    //La piattaforma di default è la prima possibile per il gioco
-    this.game$.subscribe(game => this.selectedPlatform = game.platform[0]);
-    this.game$.subscribe(g => this.gametitle = g.title);
-    this.gamelistService.CheckUniqueList(this.gameid).then(result => this.show = result);
-    
-    
-    if(this.viewlist!=='')
-      {this.UpdateForm();}
- }
+    //La form viene mostrata nel caso in cui sto facendo un Update oppure
+    //nel caso in cui sto facendo un add di un gioco non inserito in un'altra lista
+    if (this.updateList !== '' || await this.gamelistService.CheckUniqueList(this.gameid)) {
+      this.show = true;
+      this.UpdateForm();
+    }
+  }
 
 }

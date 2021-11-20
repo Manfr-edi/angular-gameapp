@@ -3,6 +3,7 @@ import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { UserLoggedService } from 'src/app/shared/services/user-logged.service';
 
 @Component({
   selector: 'app-preferiti',
@@ -23,45 +24,44 @@ export class PreferitiComponent implements OnInit {
   genres: boolean[] = [];
   platforms: boolean[] = [];
 
-  constructor(public authService: AuthService, public db: AngularFirestore) {
+  constructor(public authService: AuthService, public db: AngularFirestore, public userLoggedService: UserLoggedService) {
   }
 
   async ngOnInit() {
-    //Documento relativo all'utente corrente
-    let userDoc = (await this.db.doc('Users/'+this.authService.currentUserId).ref.get());
-
-    this.initList(userDoc.get("Platforms"), this.platformList, this.platforms);
-    this.initList(userDoc.get("Genres"), this.genreList, this.genres);
+    this.initList("Platforms", this.platformList, this.platforms);
+    this.initList("Genres", this.genreList, this.genres);
   }
 
   updateData(colDB: string, list: string[], selected: boolean[]) {
     let dataSelected: string[] = [];
+    
     for (let i = 0; i < list.length; i++)
       if (selected[i])
         dataSelected.push(list[i]);
-    this.db.collection('Users').doc(this.authService.currentUserId).update({ [colDB]: dataSelected });
+
+    this.userLoggedService.update({ [colDB]: dataSelected });
   }
 
-  initList(listaDB: string[], list: string[], selected: boolean[]) {
+  async initList(parDB: string, list: string[], selected: boolean[]) {
+
+    let listaDB: string[] = await this.userLoggedService.getDataParam(parDB);
+
     let i = 0;
     let f;
 
-    if (listaDB !== undefined) {
+    if (listaDB !== undefined)
       for (let l of list) {
         f = true;
-        for (let l1 of listaDB) {
+        for (let l1 of listaDB)
           if (l == l1) {
             f = false;
             break;
           }
-        }
         selected[i++] = !f;
       }
-    }
-
   }
 
-  logout(){
+  logout() {
     this.authService.signOut();
   }
 

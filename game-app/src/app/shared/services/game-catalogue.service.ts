@@ -6,11 +6,19 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 })
 export class GameCatalogueService {
 
-  catalogueDoc: AngularFirestoreCollection<any>;
+  catalogue: AngularFirestoreCollection<any>;
 
   constructor(public db: AngularFirestore) {
+    this.catalogue = this.db.collection("Games");
+  }
 
-    this.catalogueDoc = this.db.collection("Games");
+  getCatalogue() {
+    return this.catalogue;
+  }
+
+  getGamesByTitle(title: string) {
+    return this.db.collection('Games', ref =>
+      ref.where('title', '>=', title).where('title', '<=', title + '\uf8ff'));
   }
 
   //Nel caso in cui sto inserendo il tempo di completamento
@@ -18,7 +26,7 @@ export class GameCatalogueService {
   //Nel caso in cui sto rimuovendo il tempo di completamento
   //completedTime DEVE essere pasi a 0
   async updateCompletedAvg(gameid: string, completedTime_old: number, completedTime: number) {
-    let gameDoc = this.catalogueDoc.doc(gameid);
+    let gameDoc = this.catalogue.doc(gameid);
 
     let completedTimeAvg_cur = (await gameDoc.ref.get()).get("completedtimeavg");
     let completedTimeCount_cur = (await gameDoc.ref.get()).get("completedtimecount");
@@ -35,11 +43,16 @@ export class GameCatalogueService {
         par.completedtimeavg = 0;
     }
 
-
     gameDoc.update(par);
 
   }
 
+  async getDataGame(gameid: string) {
+    return await this.db.doc('Games/' + gameid).ref.get();
+  }
 
+  getGame(gameid: string) {
+    return this.db.doc('Games/' + gameid);
+  }
 
 }

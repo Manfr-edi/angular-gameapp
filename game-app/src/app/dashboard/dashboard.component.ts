@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from '../shared/services/auth.service';
 
 @Component({
@@ -8,9 +8,8 @@ import { AuthService } from '../shared/services/auth.service';
 })
 export class DashboardComponent implements OnInit {
 
+ @Input() 
   module = 'games'
-  //Toggle per mostrare/nascondere il componente VisualizzaSpese
-  visualizzaSpese = false;
 
   constructor(public authService: AuthService) {
 

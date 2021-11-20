@@ -21,15 +21,15 @@ export class GameDetailsComponent implements OnInit {
   //Game
   game$: Observable<any>;
   gameid = '';
-  viewlist= "";
 
-  constructor(private route: ActivatedRoute, public util: UtilService, public authService: AuthService, public db: AngularFirestore) {
+  constructor(private route: ActivatedRoute, public util: UtilService, public authService: AuthService, public db: AngularFirestore,
+    public gameCatalogueService: GameCatalogueService) {
     //Lettura id del gioco
     const routeParams = this.route.snapshot.paramMap;
     this.gameid = String(routeParams.get('id'));
 
     //Lettura dati gioco
-    this.game$ = db.doc('Games/' + this.gameid).valueChanges();
+    this.game$ = gameCatalogueService.getGame(this.gameid).valueChanges();
   }
 
   ngOnInit() {
