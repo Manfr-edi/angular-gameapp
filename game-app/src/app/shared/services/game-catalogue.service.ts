@@ -24,11 +24,13 @@ export class GameCatalogueService {
   //Nel caso in cui sto inserendo il tempo di completamento
   //completedTime_old DEVE essere pari a 0
   //Nel caso in cui sto rimuovendo il tempo di completamento
-  //completedTime DEVE essere pasi a 0
+  //completedTime DEVE essere pari a 0
   async updateCompletedAvg(gameid: string, completedTime_old: number, completedTime: number) {
     let gameDoc = this.catalogue.doc(gameid);
 
+    //Tempo medio memorizzato nel database
     let completedTimeAvg_cur = (await gameDoc.ref.get()).get("completedtimeavg");
+    //Contatore dei giochi completati memorizzato nel database
     let completedTimeCount_cur = (await gameDoc.ref.get()).get("completedtimecount");
 
     var par = { completedtimeavg: 0, completedtimecount: 0 };

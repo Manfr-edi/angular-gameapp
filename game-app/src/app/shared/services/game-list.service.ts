@@ -117,6 +117,4 @@ export class GameListService {
     window.alert("e' stato modificato il gioco");
   }
 
-
-
 }

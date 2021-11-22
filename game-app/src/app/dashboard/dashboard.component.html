@@ -15,21 +15,24 @@
       <a type="button" class="btn btn-light" [routerLink]="'/'">Home</a>
     </li>
     <li class="nav-item">
-      <a  type="button" (click)="module='games'" class="btn btn-light">Games</a>
+      <a type="button" (click)="module='games'" class="btn btn-light">Games</a>
     </li>
     <li class="nav-item">
       <a type="button" (click)="module='settings'" class="btn btn-light">Settings</a>
-	</li>
-
+    </li>
+    <li class="nav-item">
+      <a type="button" class="btn btn-light" (click)="module='friends'">Friends</a>
+    </li>
     <li class="nav-item">
       <a type="button" class="nav-link" (click)="logout()">Logout</a>
-	</li>
-	
+    </li>
+  
   </ul>
  
 </nav>
 
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 	<div *ngIf="module==='games'"><app-gametab></app-gametab></div>
-	<div *ngIf="module==='settings'"><app-preferiti></app-preferiti></div>
+  <div *ngIf="module==='settings'"><app-preferiti></app-preferiti></div>
+  <div *ngIf="module==='friends'"><app-friend-tab></app-friend-tab></div>
 </div>

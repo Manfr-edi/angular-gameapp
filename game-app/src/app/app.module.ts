@@ -32,13 +32,16 @@ import { GametabComponent } from './dashboard/gametab/gametab.component';
 import { SpeseComponent } from './dashboard/spese/spese.component';
 import { PreferitiComponent } from './dashboard/preferiti/preferiti.component';
 import { InsertgamelistComponent } from './insertgamelist/insertgamelist.component';
+import { UserComponent } from './user/user.component';
+import { FriendTabComponent } from './dashboard/friend-tab/friend-tab.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
   { path: 'games/:id', component: GameDetailsComponent },
   { path: 'login', component: SignInComponent },
   { path: 'register-user', component: SignUpComponent },
-  { path: 'user', component: DashboardComponent }
+  { path: 'user', component: DashboardComponent },
+  { path: 'user/:userid', component: UserComponent}
 ];
 
 @NgModule({
@@ -65,7 +68,9 @@ const routes: Routes = [
     GametabComponent,
     SpeseComponent,
     PreferitiComponent,
-    InsertgamelistComponent
+    InsertgamelistComponent,
+    UserComponent,
+    FriendTabComponent
   ],
   providers: [AuthService, GameListService],
   bootstrap: [AppComponent]

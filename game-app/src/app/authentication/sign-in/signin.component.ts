@@ -58,13 +58,11 @@ export class SignInComponent implements OnInit {
 
     if (password.length === 0) {
       this.errorMessage = 'Please enter Password!'
-      return false
+      return false;
     }
 
-
     this.errorMessage = ''
-
-    return true
+    return true;
   }
 
   isValidMailFormat(email: string) {
