@@ -1,7 +1,5 @@
 <h2> Game Catalogue </h2>
 
-<h1>Firebase widgets!</h1>
-
 <div *ngIf="games$ | async; let games; else loading">
   <ul>
     <div *ngFor="let game of games">

@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, DocumentData } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
+import { GameListService } from './game-list.service';
+import { userlist } from 'src/app/data/userlist/userlist';
+
 
 
 
@@ -12,6 +15,7 @@ export class UserLoggedService {
 
 
 userDoc: AngularFirestoreDocument;
+userlists = userlist
 
 
 

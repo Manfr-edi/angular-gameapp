@@ -24,4 +24,6 @@ export class UtilService {
     return sumTime / games.length;
   }
 
+
+
 }

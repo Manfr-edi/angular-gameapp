@@ -31,15 +31,47 @@
 		<div *ngFor="let u of list">
 			<a [routerLink]="['/games', u.payload.doc.id]">
         		{{ util.capitalize(u.payload.doc.data().title) }}
-      		</a>
+			  </a>
 			<a *ngIf="viewlist===userlists[0].code">
 			Tempo di completamento: {{u.payload.doc.data().completetime}}
 			</a>
 		</div>
-			<div *ngIf="viewlist === userlists[0].code">
-				Il numero di giochi e': {{list.length}} <br>
-				Il numero medio di tempi di completamento e': {{util.avgTime(list)}}
-			</div>
+		<br>
+			<a *ngIf="(viewlist === userlists[0].code && (mylist$ | async)); let mylist">
+				Giochi totali: {{list.length}} 
+				Giochi totali miei: {{mylist.length}} <br>
+					
+				
+				Media di Completamento: {{util.avgTime(list)}}
+				Media di Completamento mia: {{util.avgTime(mylist)}} <br>
+		<button class="btn btn-outline-primary" (click)="gameListService.updateSpese('','')">Giochi Comuni</button>
 
-		
+			Somma spese mie: {{spese.sum}}
+			Media spese mie: {{spese.avg}}
+			Numero giochi acquistati miei: {{spese.count}}
+
+			</a>
+			
+			<a *ngIf="mylist$ | async; let mylist">
+				<a *ngIf="viewlist === userlists[0].code">
+					
+				</a>
+			</a>
+				
 	</div>
+
+
+
+		<button class="btn btn-outline-primary" (click)="CommonGames();">Giochi Comuni</button>
+		<div *ngIf="common$; let common">
+		<div *ngFor="let u of common">
+			<a>
+				Titolo: {{ util.capitalize(u.title) }}
+				Tempo di completamento mio: {{u.mytime }}
+				Tempo di completamento: {{u.usertime }}
+				Spese del gioco mie: {{u.myprice }}
+				Spese del gioco: {{u.userprice }}
+			  </a>
+		
+		</div>
+

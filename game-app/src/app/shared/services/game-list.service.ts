@@ -117,4 +117,29 @@ export class GameListService {
     window.alert("e' stato modificato il gioco");
   }
 
+
+  async updateSpese(platformSelected: string, genreSelected: string): Promise<{sumprice: number, avgprice: number, countBoughtGame: number}> {
+    let sum = 0;
+  let count = 0;
+
+
+    let filter = [{ par: "platform", val: platformSelected }, { par: "genre", val: genreSelected }];
+    for (let i=0; i<2; i++) {
+
+      await this.getGamesWithEqualFilterNotEmpty(userlist[i].code, filter)
+        .get().forEach(docs => docs.forEach(doc => {
+          sum += doc.get("price");
+            console.log("ciaooo" + count)
+          count++;
+        }));
+      }
+
+      //Calcolo la media e aggiorno i dati
+      if (count > 0) {
+        console.log(sum);
+		  return{sumprice: sum,avgprice: sum/count, countBoughtGame: count};
+      }
+      else
+       return{sumprice: 0,avgprice: 0, countBoughtGame: 0};
+    }
 }
