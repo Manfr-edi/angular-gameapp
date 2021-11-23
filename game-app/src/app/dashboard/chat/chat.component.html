@@ -1,0 +1,37 @@
+
+
+<button (click)="inserisci=!inserisci">Nuova Chat</button>
+
+<div *ngIf="chats$ | async; let chats">
+	<p (click)="apriChat(c.payload.doc.id)" *ngFor="let c of chats">Chat: {{c.payload.doc.id}}</p>
+</div>
+
+
+<div *ngIf="inserisci">
+	Amico: <input (keyup)="onKey($event)" type="text">
+	<button>Inizia Chat</button>
+
+	<div *ngIf="users$ | async; let users">
+		<ul>
+			<div *ngFor="let user of users">
+				<div *ngIf="authService.currentUserId !== user.payload.doc.id">
+					<a (click)="avviaChat(user.payload.doc.id)">
+						{{ user.payload.doc.data().username }}
+					</a>
+				</div>
+			</div>
+		</ul>
+		<div *ngIf="users.length === 0">Nessun utente trovato</div>
+	</div>
+</div>
+
+<div *ngIf="mostraChat">
+	<div *ngIf="messaggi$ | async; let messaggi">
+		<div *ngFor="let m of messaggi"> 
+			<p *ngIf="authService.currentUserId === m.payload.doc.data().sender" align="right" > {{m.payload.doc.data().mex}}</p>
+			<p *ngIf="authService.currentUserId !== m.payload.doc.data().sender" align="left" > {{m.payload.doc.data().mex}}</p>
+		</div>
+	</div>
+	<input type="text" [(ngModel)]="mex" placeholder="Inserisci messaggio">
+	<button (click)="inviaMex()">Invia</button>
+</div>

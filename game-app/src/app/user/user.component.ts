@@ -5,9 +5,7 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { UtilService } from 'src/app/shared/services/util.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-//import { map } from 'rxjs/operators';
 import { userlist } from 'src/app/data/userlist/userlist';
-import { UserLoggedService } from '../shared/services/user-logged.service';
 import { GameListService } from '../shared/services/game-list.service';
 
 @Component({
@@ -35,6 +33,7 @@ export class UserComponent implements OnInit {
   mylist$: Observable<any[]>;
   common$: any[] = [];
   spese ={sum: 0,avg: 0,count:0};
+  spese_amico ={sum: 0,avg: 0,count:0};
 
   constructor(private route: ActivatedRoute ,public db: AngularFirestore, public friendListService: FriendListService, public authService: AuthService, public gameListService: GameListService) {
     
@@ -59,6 +58,11 @@ export class UserComponent implements OnInit {
         this.spese.avg = s.avgprice
         this.spese.count= s.countBoughtGame
         this.spese.sum= s.sumprice});
+
+        this.gameListService.updateSpese("","", this.userid).then(s => {
+        this.spese_amico.avg = s.avgprice
+        this.spese_amico.count= s.countBoughtGame
+        this.spese_amico.sum= s.sumprice});
    }
 
   UpdateList(actualList: string): void {

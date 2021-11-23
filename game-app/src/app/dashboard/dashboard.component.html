@@ -24,6 +24,9 @@
       <a type="button" class="btn btn-light" (click)="module='friends'">Friends</a>
     </li>
     <li class="nav-item">
+      <a type="button" class="btn btn-light" (click)="module='chat'">Chat</a>
+    </li>
+    <li class="nav-item">
       <a type="button" class="nav-link" (click)="logout()">Logout</a>
     </li>
   
@@ -35,4 +38,5 @@
 	<div *ngIf="module==='games'"><app-gametab></app-gametab></div>
   <div *ngIf="module==='settings'"><app-preferiti></app-preferiti></div>
   <div *ngIf="module==='friends'"><app-friend-tab></app-friend-tab></div>
+  <div *ngIf="module==='chat'"><app-chat></app-chat></div>
 </div>

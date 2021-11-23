@@ -1,41 +1,36 @@
-<button class="btn btn-outline-secondary" (click)="searchview=!searchview">Ricerca Utente</button>
-<div *ngIf="searchview">
-	<div>
-		<input type="text" class="form-control form-control-sm" (keyup)="onKey($event)" placeholder="Cerca Utente">
-	</div>
-
-	<div *ngIf="users$ | async; let users">
-		<ul>
-			<div *ngFor="let user of users">
-				<div *ngIf="authService.currentUserId !== user.payload.doc.id">
-					<a [routerLink]="['/user', user.payload.doc.id]">
-						{{ user.payload.doc.data().username }}
-
-					</a>
-
-				</div>
-			</div>
-		</ul>
-		<div *ngIf="users.length === 0">Nessun utente trovato</div>
-	</div>
+<div>
+	<input type="text" class="form-control form-control-sm" (keyup)="onKey($event)" placeholder="Cerca Utente">
 </div>
 
-<div *ngIf="!searchview">
-	<div *ngIf="friends$ | async; let friends">
-		<ul>
-			<div *ngFor="let friend of friends">
-
-				<a [routerLink]="['/user', friend.payload.doc.id]">
-					{{ friend.payload.doc.data().username }}
-
+<div *ngIf="users$ | async; let users">
+	<ul>
+		<div *ngFor="let user of users">
+			<div *ngIf="authService.currentUserId !== user.payload.doc.id">
+				<a [routerLink]="['/user', user.payload.doc.id]">
+					{{ user.payload.doc.data().username }}
 				</a>
-				<button class="btn btn-outline-primary"
-					(click)="friendListService.RemoveFriend(friend.payload.doc.id)">Rimuovi
-					Amico
-				</button>
 
 			</div>
-		</ul>
-		<div *ngIf="friends.length === 0">Nessun amico</div>
-	</div>
+		</div>
+	</ul>
+	<div *ngIf="users.length === 0">Nessun utente trovato</div>
+</div>
+
+
+<div *ngIf="friends$ | async; let friends">
+	<ul>
+		<div *ngFor="let friend of friends">
+
+			<a [routerLink]="['/user', friend.payload.doc.id]">
+				{{ friend.payload.doc.data().username }}
+
+			</a>
+			<button class="btn btn-outline-primary"
+				(click)="friendListService.RemoveFriend(friend.payload.doc.id)">Rimuovi
+				Amico
+			</button>
+
+		</div>
+	</ul>
+	<div *ngIf="friends.length === 0">Nessun amico</div>
 </div>

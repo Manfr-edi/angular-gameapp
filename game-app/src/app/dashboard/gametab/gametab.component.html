@@ -50,6 +50,7 @@
 
 	<div *ngIf="updateForm">
 		<app-insertgamelist *ngIf="gameid && viewlist" [gameid]="gameid" [updateList]="viewlist"></app-insertgamelist>
+		<button (click)="updateForm=false">Annulla</button>
 	</div>
 
 	<app-spese [genreSelected]="genreSelected" [platformSelected]="platformSelected"></app-spese>

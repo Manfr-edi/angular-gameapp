@@ -34,6 +34,7 @@ import { PreferitiComponent } from './dashboard/preferiti/preferiti.component';
 import { InsertgamelistComponent } from './insertgamelist/insertgamelist.component';
 import { UserComponent } from './user/user.component';
 import { FriendTabComponent } from './dashboard/friend-tab/friend-tab.component';
+import { ChatComponent } from './dashboard/chat/chat.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -70,7 +71,8 @@ const routes: Routes = [
     PreferitiComponent,
     InsertgamelistComponent,
     UserComponent,
-    FriendTabComponent
+    FriendTabComponent,
+    ChatComponent
   ],
   providers: [AuthService, GameListService],
   bootstrap: [AppComponent]

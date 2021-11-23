@@ -12,7 +12,6 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 })
 export class FriendTabComponent implements OnInit {
 
-  searchview= false;
   //Utilities
   util: UtilService;
 
@@ -21,30 +20,24 @@ export class FriendTabComponent implements OnInit {
   users$: Observable<any[]>;
   friends$: Observable<any[]>;
 
-  constructor(public db: AngularFirestore, public friendListService: FriendListService, public authService: AuthService) { 
+  constructor(public db: AngularFirestore, public friendListService: FriendListService, public authService: AuthService) {
 
     this.util = new UtilService();
     this.users$ = new Observable();
-    this.friends$ = db.collection("Users/"+authService.currentUserId+"/Friends").snapshotChanges()
+    this.friends$ = db.collection("Users/" + authService.currentUserId + "/Friends").snapshotChanges()
   }
 
   ngOnInit(): void {
   }
 
   onKey(event: any) {
-  let username = event.target.value.toLowerCase();
+    let username = event.target.value.toLowerCase();
 
-  if(username ===""){
-        //SE SI SCOMMENTA QUESTO FUNZIONA, MA FA CAGARE
-        //this.users$ = this.db.collection('salcazzo').snapshotChanges();
-    return;
+    this.users$ = username === "" ? new Observable : this.db.collection('Users', ref =>
+      ref.where('username', '>=', username).where('username', '<=', username + '\uf8ff')
+    ).snapshotChanges();
   }
 
-  this.users$ = this.db.collection('Users', ref =>
-    ref.where('username', '>=', username).where('username', '<=', username + '\uf8ff')
-  ).snapshotChanges();
-  }
 
-    
 
 }
