@@ -10,11 +10,11 @@ import { platformList } from 'src/app/data/platform/platform';
 import { UserLoggedService } from 'src/app/shared/services/user-logged.service';
 
 @Component({
-  selector: 'app-gametab',
-  templateUrl: './gametab.component.html',
-  styleUrls: ['./gametab.component.css']
+  selector: 'app-game-tab',
+  templateUrl: './game-tab.component.html',
+  styleUrls: ['./game-tab.component.css']
 })
-export class GametabComponent implements OnInit {
+export class GameTabComponent implements OnInit {
 
   //Data
   genreList = genreList;

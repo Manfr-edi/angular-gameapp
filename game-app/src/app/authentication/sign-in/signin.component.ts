@@ -41,7 +41,7 @@ export class SignInComponent implements OnInit {
 
     if (this.validateForm(this.email, this.password)) {
       this.authService.loginWithEmail(this.email, this.password)
-        .then(() => this.router.navigate(['/user']))
+        .then(() => this.router.navigate(['/gametab']))
         .catch(_error => {
           this.error = _error
           window.alert(this.error.message)

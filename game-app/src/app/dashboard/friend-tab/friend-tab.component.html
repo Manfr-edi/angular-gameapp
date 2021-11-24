@@ -1,3 +1,5 @@
+<app-check-user-verified></app-check-user-verified>
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 <div>
 	<input type="text" class="form-control form-control-sm" (keyup)="onKey($event)" placeholder="Cerca Utente">
 </div>
@@ -33,4 +35,5 @@
 		</div>
 	</ul>
 	<div *ngIf="friends.length === 0">Nessun amico</div>
+</div>
 </div>

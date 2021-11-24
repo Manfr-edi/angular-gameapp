@@ -7,11 +7,11 @@ import { userlist } from 'src/app/data/userlist/userlist';
 import { GameListService } from 'src/app/shared/services/game-list.service';
 
 @Component({
-  selector: 'app-spese',
-  templateUrl: './spese.component.html',
-  styleUrls: ['./spese.component.css']
+  selector: 'app-shopping-report',
+  templateUrl: './shopping-report.component.html',
+  styleUrls: ['./shopping-report.component.css']
 })
-export class SpeseComponent implements OnChanges {
+export class ShoppingReportComponent implements OnChanges {
 
   //Filtri
   @Input() genreSelected: string = "";

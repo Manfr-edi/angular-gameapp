@@ -6,11 +6,11 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 import { UserLoggedService } from 'src/app/shared/services/user-logged.service';
 
 @Component({
-  selector: 'app-preferiti',
-  templateUrl: './preferiti.component.html',
-  styleUrls: ['./preferiti.component.css']
+  selector: 'app-settings-tab',
+  templateUrl: './settings-tab.component.html',
+  styleUrls: ['./settings-tab.component.css']
 })
-export class PreferitiComponent implements OnInit {
+export class SettingsTabComponent implements OnInit {
 
   //Data
   genreList = genreList;

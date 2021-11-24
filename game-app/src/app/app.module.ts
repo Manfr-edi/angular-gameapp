@@ -28,13 +28,22 @@ import { GameListService } from "./shared/services/game-list.service";
 
 //Componenti Utente
 import { DashboardComponent } from './dashboard/dashboard.component';
-import { GametabComponent } from './dashboard/gametab/gametab.component';
-import { SpeseComponent } from './dashboard/spese/spese.component';
-import { PreferitiComponent } from './dashboard/preferiti/preferiti.component';
+import { GameTabComponent } from './dashboard/game-tab/game-tab.component';
+import { ShoppingReportComponent } from './dashboard/shopping-report/shopping-report.component';
+import { SettingsTabComponent } from './dashboard/settings-tab/settings-tab.component';
 import { InsertgamelistComponent } from './insertgamelist/insertgamelist.component';
 import { UserComponent } from './user/user.component';
 import { FriendTabComponent } from './dashboard/friend-tab/friend-tab.component';
 import { ChatComponent } from './dashboard/chat/chat.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
+
+//Import di Material design
+import {MatButtonModule} from '@angular/material/button'; 
+import {MatIconModule} from '@angular/material/icon'
+import {MatMenuModule} from '@angular/material/menu';
+
+
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -42,7 +51,11 @@ const routes: Routes = [
   { path: 'login', component: SignInComponent },
   { path: 'register-user', component: SignUpComponent },
   { path: 'user', component: DashboardComponent },
-  { path: 'user/:userid', component: UserComponent}
+  { path: 'user/:userid', component: UserComponent},
+  { path: 'gametab', component: GameTabComponent},
+  { path: 'friendtab', component: FriendTabComponent},
+  { path: 'chat', component: ChatComponent},
+  { path: 'settings', component: SettingsTabComponent},
 ];
 
 @NgModule({
@@ -53,7 +66,11 @@ const routes: Routes = [
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
-    AngularFirestoreModule.enablePersistence()
+    AngularFirestoreModule.enablePersistence(),
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule
 
   ],
   exports: [RouterModule],
@@ -66,9 +83,9 @@ const routes: Routes = [
     SignInComponent,
     SignUpComponent,
     CheckUserVerifiedComponent,
-    GametabComponent,
-    SpeseComponent,
-    PreferitiComponent,
+    GameTabComponent,
+    ShoppingReportComponent,
+    SettingsTabComponent,
     InsertgamelistComponent,
     UserComponent,
     FriendTabComponent,

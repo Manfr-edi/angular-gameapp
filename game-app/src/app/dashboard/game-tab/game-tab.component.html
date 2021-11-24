@@ -1,3 +1,4 @@
+<app-check-user-verified></app-check-user-verified>
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 	<div class="btn-group">
 	<button class="btn btn-outline-primary" (click)="UpdateList(userlists[0].code); updateForm=false">Completed Games</button>
@@ -53,5 +54,5 @@
 		<button (click)="updateForm=false">Annulla</button>
 	</div>
 
-	<app-spese [genreSelected]="genreSelected" [platformSelected]="platformSelected"></app-spese>
+	<app-shopping-report [genreSelected]="genreSelected" [platformSelected]="platformSelected"></app-shopping-report>
 </div>
