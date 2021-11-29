@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable, combineLatest } from 'rxjs';
-import { map } from 'rxjs/operators'
+import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/shared/services/auth.service';
-
-import * as firebase from 'firebase';
+import { UserLoggedService, MessageInfo } from 'src/app/shared/services/user-logged.service';
 
 @Component({
   selector: 'app-chat',
@@ -13,75 +11,69 @@ import * as firebase from 'firebase';
 })
 export class ChatComponent implements OnInit {
 
-  inserisci = false;
-  users$: Observable<any[]> = new Observable;
+  //Ricerca Amico
+  searchFriendToggle = false;
+  users$?: Observable<any[]> = new Observable;
 
-  idFriend = "";
-  idCurChat: string | undefined = "";
-  mex: string = "";
+  //Chat
+  idCurChat = ""; //ID della chat corrente
+  message: string = "";
+  messages$: Observable<any> = new Observable;
 
-  mostraChat = false;
+  //Chats
+  chats: { lastMessage: MessageInfo | undefined, chatID: string }[] = [];
+  newChat: boolean = false;
+  idFriend: string = "";
 
-  messaggi$: Observable<any> = new Observable;
-  chats$: Observable<any> = new Observable;
-
-  constructor(public db: AngularFirestore, public authService: AuthService) { }
-
-  ngOnInit(): void {
-    const coll1 = this.db.collection("Chats", ref => ref.where("user1", "==", this.authService.currentUserId)).snapshotChanges();
-    const coll2 = this.db.collection("Chats", ref => ref.where("user2", "==", this.authService.currentUserId)).snapshotChanges();
-
-    this.chats$ = combineLatest<any[]>(coll1, coll2).pipe(map(arr => arr.reduce((acc, cur) => acc.concat(cur))));
-  }
-
-  onKey(event: any) {
-    let username = event.target.value.toLowerCase();
-
-    this.users$ = username !== "" ? this.db.collection("Users/" + this.authService.currentUserId + "/Friends/", ref =>
-      ref.where('username', '>=', username).where('username', '<=', username + '\uf8ff')).snapshotChanges() : new Observable;
+  constructor(public db: AngularFirestore, public authService: AuthService, public userLoggedService: UserLoggedService) {
 
   }
 
-  async avviaChat(id: string) {
-    this.inserisci = false;
-    this.users$ = new Observable;
-
-    this.idFriend = id;
-
-
-    if ((await this.db.collection("Chats").ref.where("user1", "==", this.authService.currentUserId).where("user2", "==", id).get()).empty)
-      if ((await this.db.collection("Chats").ref.where("user2", "==", this.authService.currentUserId).where("user1", "==", id).get()).empty) {
-        let doc = this.db.collection("Chats").doc();
-        await doc.set({ user1: this.authService.currentUserId, user2: id });
-
-        this.idCurChat = doc.ref.id
-      }
-      else
-        this.idCurChat = (await this.db.collection("Chats").ref.where("user2", "==", this.authService.currentUserId).where("user1", "==", id).get()).docs.pop()?.id;
-    else
-      this.idCurChat = (await this.db.collection("Chats").ref.where("user1", "==", this.authService.currentUserId).where("user2", "==", id).get()).docs.pop()?.id;
-
-
-    this.messaggi$ = this.db.doc("Chats/" + this.idCurChat).collection("messaggi", ref => ref.orderBy("time")).snapshotChanges();
-    this.mostraChat = true;
+  async ngOnInit() {
+    this.userLoggedService.getUserDoc().snapshotChanges().subscribe(d => {
+      this.chats = [];
+      let c = (d.payload.get("chats") as string[]);
+      if (c != undefined && c.length != 0)
+        c.forEach(async chat => {
+          //prendo l'ultimo messaggio
+          this.chats.push({ lastMessage: (await this.userLoggedService.getLastMessageInfo(chat)), chatID: chat });
+        })
+    });
   }
 
-  async apriChat(idChat: string) {
-    this.inserisci = false;
+  searchFriend(event: any) {
+    this.users$ = this.userLoggedService.searchFriends(event.target.value.toLowerCase())?.snapshotChanges();
+  }
+
+  createChat(idFriend: string) {
+    //this.userLoggedService.createChat(idFriend);
+    this.newChat = true;
+    this.idFriend = idFriend;
+    this.openChat(this.userLoggedService.getChatID(idFriend));
+  }
+
+  async openChat(idChat: string) {
+    //Disabilito la ricerca dell'amico
+    this.searchFriendToggle = false;
     this.users$ = new Observable;
 
     this.idCurChat = idChat;
-
-
-    this.messaggi$ = this.db.doc("Chats/" + this.idCurChat).collection("messaggi", ref => ref.orderBy("time")).snapshotChanges();
-    this.mostraChat = true;
+    if (!this.newChat)
+      this.messages$ = this.userLoggedService.getMessaggesOrdered(idChat).snapshotChanges();
+    else
+      this.messages$ = new Observable;
   }
 
-  inviaMex() {
-    if (this.mex !== '') {
-      this.db.doc("Chats/" + this.idCurChat).collection("messaggi").doc().set(
-        { mex: this.mex, time: firebase.default.firestore.FieldValue.serverTimestamp(), sender: this.authService.currentUserId });
-      this.mex = "";
+
+  sendMessage() {
+    if (this.message !== '') {
+      if (this.newChat) {
+        this.newChat = false;
+        this.userLoggedService.createChat(this.idFriend);
+        this.openChat(this.idCurChat);
+      }
+      this.userLoggedService.sendMessage(this.idCurChat, this.message);
+      this.message = "";
     }
     else
       window.alert("Impossibile mandare un messaggio vuoto");

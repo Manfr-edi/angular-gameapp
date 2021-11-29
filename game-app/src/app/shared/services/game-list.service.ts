@@ -6,6 +6,13 @@ import { AuthService } from '../../shared/services/auth.service';
 import { GameCatalogueService } from './game-catalogue.service';
 import { UserLoggedService } from './user-logged.service';
 
+export interface Spese
+{
+  sumPrice: number;
+  avgPrice: number;
+  countBoughtGame: number;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -17,16 +24,13 @@ export class GameListService {
     public userLoggedService: UserLoggedService) {
   }
 
-  getList(list: string): AngularFirestoreCollection {
-    return this.userLoggedService.getUserDoc().collection(list);
+  getList(list: string, userid?: string): AngularFirestoreCollection {
+    return this.userLoggedService.getUserDoc(userid).collection(list);
   }
 
   //Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente attualmente loggato
   //che rispetta dei filtri presentati in ingresso, in particare i filtri sono di uguaglianza e i valori non devono essere nulli.
   getGamesWithEqualFilterNotEmpty(list: string, filter: { par: string; val: any }[], userid?: string): AngularFirestoreCollection {
-
-    this.userLoggedService.getUserDoc(userid).get().subscribe(d => console.log(d));
-    
     return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
       let a = (ref as Query<DocumentData>);
       if (filter.length > 0)
@@ -60,7 +64,7 @@ export class GameListService {
   }
 
   async UpdateGame(selectedList: string, previousList: string, gameid: string, gametitle: string, note: string, time: number,
-     vote: number, selectedPlatform: string, genre: string, price: number) {
+    vote: number, selectedPlatform: string, genre: string, price: number) {
 
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([
@@ -116,15 +120,14 @@ export class GameListService {
       if (selectedList === userlist[0].code)
         this.gameCatalogueService.updateCompletedAvg(gameid, 0, time);
     }
-    
+
     window.alert("e' stato modificato il gioco");
   }
 
 
-  async updateSpese(platformSelected: string, genreSelected: string, userid?: string): Promise<{ sumprice: number, avgprice: number, countBoughtGame: number }> {
+  async getSpese(platformSelected: string, genreSelected: string, userid?: string): Promise<Spese> {
     let sum = 0;
     let count = 0;
-
 
     let filter = [{ par: "platform", val: platformSelected }, { par: "genre", val: genreSelected }];
     for (let i = 0; i < 2; i++) {
@@ -132,17 +135,14 @@ export class GameListService {
       await this.getGamesWithEqualFilterNotEmpty(userlist[i].code, filter, userid)
         .get().forEach(docs => docs.forEach(doc => {
           sum += doc.get("price");
-          console.log("ciaooo" + count)
           count++;
         }));
     }
 
     //Calcolo la media e aggiorno i dati
-    if (count > 0) {
-      console.log(sum);
-      return { sumprice: sum, avgprice: sum / count, countBoughtGame: count };
-    }
+    if (count > 0) 
+      return { sumPrice: sum, avgPrice: sum / count, countBoughtGame: count };
     else
-      return { sumprice: 0, avgprice: 0, countBoughtGame: 0 };
+      return { sumPrice: 0, avgPrice: 0, countBoughtGame: 0 };
   }
 }

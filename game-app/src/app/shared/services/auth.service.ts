@@ -9,10 +9,18 @@ import { AngularFirestore } from '@angular/fire/firestore';
 export class AuthService {
 
   authState: any = null;
+  username: string = "";
 
   constructor(private afAuth: AngularFireAuth, private router: Router, private db: AngularFirestore) {
     this.afAuth.authState.subscribe((auth) => {
-      this.authState = auth
+      if (auth != null) {
+        this.authState = auth;
+        this.db.doc("Users/" + this.currentUserId).ref.get().then(data => {
+          this.username = data.get("username");
+        });
+      }
+      else
+        this.authState = null;
     });
   }
 
@@ -24,9 +32,12 @@ export class AuthService {
     return (this.authState !== null) ? this.authState.uid : ''
   }
 
-  get currentUserName(): string {
+  get currentEmail(): string {
     return this.authState['email']
+  }
 
+  get currentUserName(): string {
+    return this.username
   }
 
   get currentUser(): any {
@@ -41,7 +52,7 @@ export class AuthService {
     return (this.isUserEmailLoggedIn && this.authState?.emailVerified);
   }
 
-  public sendEmailVerification(): void{
+  public sendEmailVerification(): void {
     this.authState?.sendEmailVerification();
   }
 

@@ -1,9 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { Observable, empty } from 'rxjs';
-import { FriendListService } from 'src/app/shared/services/friend-list.service';
+import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/shared/services/auth.service';
+import { UserLoggedService } from 'src/app/shared/services/user-logged.service';
 
 @Component({
   selector: 'app-friend-tab',
@@ -12,32 +11,19 @@ import { AuthService } from 'src/app/shared/services/auth.service';
 })
 export class FriendTabComponent implements OnInit {
 
-  //Utilities
-  util: UtilService;
-
-
   //Dati visualizzati
-  users$: Observable<any[]>;
+  users$?: Observable<any[]>;
   friends$: Observable<any[]>;
 
-  constructor(public db: AngularFirestore, public friendListService: FriendListService, public authService: AuthService) {
-
-    this.util = new UtilService();
+  constructor(public db: AngularFirestore, public authService: AuthService, public userLoggedService: UserLoggedService) {
     this.users$ = new Observable();
-    this.friends$ = db.collection("Users/" + authService.currentUserId + "/Friends").snapshotChanges()
+    this.friends$ = userLoggedService.getFriends().snapshotChanges();
   }
 
   ngOnInit(): void {
   }
 
   onKey(event: any) {
-    let username = event.target.value.toLowerCase();
-
-    this.users$ = username === "" ? new Observable : this.db.collection('Users', ref =>
-      ref.where('username', '>=', username).where('username', '<=', username + '\uf8ff')
-    ).snapshotChanges();
+    this.users$ = this.userLoggedService.search(event.target.value.toLowerCase())?.snapshotChanges();
   }
-
-
-
 }

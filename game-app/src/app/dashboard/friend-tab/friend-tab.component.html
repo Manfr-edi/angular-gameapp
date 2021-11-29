@@ -1,39 +1,34 @@
 <app-check-user-verified></app-check-user-verified>
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-<div>
 	<input type="text" class="form-control form-control-sm" (keyup)="onKey($event)" placeholder="Cerca Utente">
-</div>
 
-<div *ngIf="users$ | async; let users">
-	<ul>
-		<div *ngFor="let user of users">
-			<div *ngIf="authService.currentUserId !== user.payload.doc.id">
-				<a [routerLink]="['/user', user.payload.doc.id]">
+	<div *ngIf="users$ | async; let users">
+		<ul>
+			<div *ngFor="let user of users">
+
+				<a *ngIf="user.payload.doc.id !== userLoggedService.getID() "
+					[routerLink]="['/user', user.payload.doc.id]">
 					{{ user.payload.doc.data().username }}
 				</a>
+			</div>
+		</ul>
+		<div *ngIf="users?.length === 0">Nessun utente trovato</div>
+	</div>
+
+
+	<div *ngIf="friends$ | async; let friends">
+		<ul>
+			<div *ngFor="let friend of friends">
+
+				<a [routerLink]="['/user', friend.payload.doc.id]">
+					{{ friend.payload.doc.data().username }}
+				</a>
+				<button class="btn btn-outline-primary"
+					(click)="userLoggedService.removeFriend(friend.payload.doc.id)">Rimuovi Amico
+				</button>
 
 			</div>
-		</div>
-	</ul>
-	<div *ngIf="users.length === 0">Nessun utente trovato</div>
-</div>
-
-
-<div *ngIf="friends$ | async; let friends">
-	<ul>
-		<div *ngFor="let friend of friends">
-
-			<a [routerLink]="['/user', friend.payload.doc.id]">
-				{{ friend.payload.doc.data().username }}
-
-			</a>
-			<button class="btn btn-outline-primary"
-				(click)="friendListService.RemoveFriend(friend.payload.doc.id)">Rimuovi
-				Amico
-			</button>
-
-		</div>
-	</ul>
-	<div *ngIf="friends.length === 0">Nessun amico</div>
-</div>
+		</ul>
+		<div *ngIf="friends.length === 0">Nessun amico</div>
+	</div>
 </div>

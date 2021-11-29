@@ -1,41 +1,40 @@
 <app-check-user-verified></app-check-user-verified>
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 
-	<button (click)="inserisci=!inserisci">Nuova Chat</button>
+	<button (click)="searchFriendToggle=!searchFriendToggle; idCurChat=''">Nuova Chat</button>
 
-	<div *ngIf="chats$ | async; let chats">
-		<p (click)="apriChat(c.payload.doc.id)" *ngFor="let c of chats">Chat: {{c.payload.doc.id}}</p>
-	</div>
-
-
-	<div *ngIf="inserisci">
-		Amico: <input (keyup)="onKey($event)" type="text">
-		<button>Inizia Chat</button>
+	<div *ngIf="searchFriendToggle">
+		Amico: <input (keyup)="searchFriend($event)" type="text">
 
 		<div *ngIf="users$ | async; let users">
 			<ul>
 				<div *ngFor="let user of users">
 					<div *ngIf="authService.currentUserId !== user.payload.doc.id">
-						<a (click)="avviaChat(user.payload.doc.id)">
+						<a (click)="createChat(user.payload.doc.id)">
 							{{ user.payload.doc.data().username }}
 						</a>
 					</div>
 				</div>
 			</ul>
-			<div *ngIf="users.length === 0">Nessun utente trovato</div>
+			<div *ngIf="users?.length === 0">Nessun utente trovato</div>
 		</div>
 	</div>
 
-	<div *ngIf="mostraChat">
-		<div *ngIf="messaggi$ | async; let messaggi">
-			<div *ngFor="let m of messaggi">
-				<p *ngIf="authService.currentUserId === m.payload.doc.data().sender" align="right">
-					{{m.payload.doc.data().mex}}</p>
-				<p *ngIf="authService.currentUserId !== m.payload.doc.data().sender" align="left">
-					{{m.payload.doc.data().mex}}</p>
+	<p *ngFor="let chat of chats" (click)="newChat=false; idCurChat = ''; openChat(chat.chatID);">
+		{{chat.lastMessage?.text }} - {{ chat.lastMessage?.sender }} - {{chat.lastMessage?.time }}
+	</p>
+
+	<div *ngIf="idCurChat !== ''">
+		Stai guardando la chat: {{idCurChat}}
+		<div *ngIf="messages$ | async; let message">
+			<div *ngFor="let m of message">
+				<p *ngIf="authService.currentUserName === m.payload.doc.data().sender" align="right">
+					{{m.payload.doc.data().text}} : {{m.payload.doc.data().sender}} : {{m.payload.doc.data().time}} </p>
+				<p *ngIf="authService.currentUserName !== m.payload.doc.data().sender" align="left">
+					{{m.payload.doc.data().text}} : {{m.payload.doc.data().sender}} : {{m.payload.doc.data().time}} </p>
 			</div>
 		</div>
-		<input type="text" [(ngModel)]="mex" placeholder="Inserisci messaggio">
-		<button (click)="inviaMex()">Invia</button>
+		<input type="text" [(ngModel)]="message" placeholder="Inserisci messaggio">
+		<button (click)="sendMessage()">Invia</button>
 	</div>
 </div>

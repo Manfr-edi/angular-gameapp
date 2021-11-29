@@ -1,72 +1,68 @@
-<div *ngIf="userInfo$ | async; let userInfo">
-	
+<div *ngIf="isFriend !== undefined">
+	<div *ngIf="userInfo$ | async; let userInfo">
+
 		{{userInfo.username}}
 
-		<div *ngIf="!isfriend">
-				<button class="btn btn-outline-primary"
-						(click)="friendListService.AddFriend(userid,userInfo.username); checkFriend()">Aggiungi
-						Amico
-				</button>
+		<div *ngIf="!isFriend">
+			<button class="btn btn-outline-primary"
+				(click)="userLoggedService.addFriend(userid,userInfo.username);">Aggiungi Amico
+			</button>
 		</div>
 
-		<div *ngIf="isfriend">
-				<button class="btn btn-outline-primary"
-						(click)="friendListService.RemoveFriend(userid); checkFriend()">Rimuovi Amico
-				</button>
-				<button class="btn btn-outline-primary"
-						(click)="checkFriend()">Invia Messaggio
-				</button>
-
+		<div *ngIf="isFriend">
+			<button class="btn btn-outline-primary" (click)="userLoggedService.removeFriend(userid);">Rimuovi Amico
+			</button>
 		</div>
 
-</div>
-
-	<div class="btn-group">
-	<button class="btn btn-outline-primary" (click)="UpdateList(userlists[0].code);">Completed Games</button>
-	<button class="btn btn-outline-primary" (click)="UpdateList(userlists[1].code);">Playing Games</button>
-	<button class="btn btn-outline-primary" (click)="UpdateList(userlists[2].code);">Desired Games</button>
 	</div>
 
-	<div *ngIf="list$ | async; let list">
+	<div class="btn-group">
+		<button class="btn btn-outline-primary" (click)="UpdateList(userlists[0].code);">Completed Games</button>
+		<button class="btn btn-outline-primary" (click)="UpdateList(userlists[1].code);">Playing Games</button>
+		<button class="btn btn-outline-primary" (click)="UpdateList(userlists[2].code);">Desired Games</button>
+	</div>
+
+	<div *ngIf="gameList$ | async; let list">
 		<div *ngFor="let u of list">
 			<a [routerLink]="['/games', u.payload.doc.id]">
-        		{{ util.capitalize(u.payload.doc.data().title) }}
-			  </a>
+				{{ util.capitalize(u.payload.doc.data().title) }}
+			</a>
 			<a *ngIf="viewlist===userlists[0].code">
-			Tempo di completamento: {{u.payload.doc.data().completetime}}
+				Tempo di completamento: {{u.payload.doc.data().completetime}}
 			</a>
 		</div>
 		<br>
-			<a *ngIf="(viewlist === userlists[0].code && (mylist$ | async)); let mylist">
-				Giochi totali: {{list.length}} 
-				Giochi totali miei: {{mylist.length}} <br>
-					
-				
-				Media di Completamento: {{util.avgTime(list)}}
-				Media di Completamento mia: {{util.avgTime(mylist)}} <br>
-		<button class="btn btn-outline-primary" (click)="gameListService.updateSpese('','')">Giochi Comuni</button>
+		<div *ngIf="(viewlist === userlists[0].code && (myGameList$ | async)); let mylist">
+			Giochi totali: {{list.length}}
+			Giochi totali miei: {{mylist.length}} <br>
 
-			Somma spese mie: {{spese.sum}}
-			Media spese mie: {{spese.avg}}
-			Numero giochi acquistati miei: {{spese.count}}
+			Media di Completamento: {{util.avgTime(list)}}
+			Media di Completamento mia: {{util.avgTime(mylist)}} <br>
 
-			Somma spese utente: {{spese_amico.sum}}
-			Media spese utente: {{spese_amico.avg}}
-			Numero giochi acquistati utente: {{spese_amico.count}}
+			Somma spese mie: {{mySpese.sumPrice}}
+			Media spese mie: {{mySpese.avgPrice}}
+			Numero giochi acquistati miei: {{mySpese.countBoughtGame}}
+
+			Somma spese utente: {{userSpese.sumPrice}}
+			Media spese utente: {{userSpese.avgPrice}}}
+			Numero giochi acquistati utente: {{userSpese.countBoughtGame}}
+		</div>
+
+		<!--
+		<a *ngIf="myGameList$ | async; let mylist">
+			<a *ngIf="viewlist === userlists[0].code">
 			</a>
-			
-			<a *ngIf="mylist$ | async; let mylist">
-				<a *ngIf="viewlist === userlists[0].code">
-					
-				</a>
-			</a>
-				
+		</a>
+	-->
+
 	</div>
 
 
 
-		<button class="btn btn-outline-primary" (click)="CommonGames();">Giochi Comuni</button>
-		<div *ngIf="common$; let common">
+	<button *ngIf="!isCommonGames" class="btn btn-outline-primary" (click)="isCommonGames = true; CommonGames(); ">Giochi Comuni</button>
+
+	<div *ngIf="isCommonGames && common$; let common">
+		<p>Giochi Comuni</p>
 		<div *ngFor="let u of common">
 			<a>
 				Titolo: {{ util.capitalize(u.title) }}
@@ -74,7 +70,8 @@
 				Tempo di completamento: {{u.usertime }}
 				Spese del gioco mie: {{u.myprice }}
 				Spese del gioco: {{u.userprice }}
-			  </a>
-		
+			</a>
+
 		</div>
 
+	</div>
