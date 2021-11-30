@@ -27,7 +27,6 @@ import { AuthService } from "./shared/services/auth.service";
 import { GameListService } from "./shared/services/game-list.service";
 
 //Componenti Utente
-import { DashboardComponent } from './dashboard/dashboard.component';
 import { GameTabComponent } from './dashboard/game-tab/game-tab.component';
 import { ShoppingReportComponent } from './dashboard/shopping-report/shopping-report.component';
 import { SettingsTabComponent } from './dashboard/settings-tab/settings-tab.component';
@@ -42,6 +41,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule} from '@angular/material/button'; 
 import {MatIconModule} from '@angular/material/icon'
 import {MatMenuModule} from '@angular/material/menu';
+import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
+import { InsertNewPasswordComponent } from './authentication/insert-new-password/insert-new-password.component';
 
 
 
@@ -50,12 +51,13 @@ const routes: Routes = [
   { path: 'games/:id', component: GameDetailsComponent },
   { path: 'login', component: SignInComponent },
   { path: 'register-user', component: SignUpComponent },
-  { path: 'user', component: DashboardComponent },
   { path: 'user/:userid', component: UserComponent},
   { path: 'gametab', component: GameTabComponent},
   { path: 'friendtab', component: FriendTabComponent},
   { path: 'chat', component: ChatComponent},
   { path: 'settings', component: SettingsTabComponent},
+  { path: 'resetpassword', component: ResetPasswordComponent},
+  { path: 'newpassword', component: InsertNewPasswordComponent}
 ];
 
 @NgModule({
@@ -79,7 +81,6 @@ const routes: Routes = [
     AppComponent,
     GameCatalogueComponent,
     GameDetailsComponent,
-    DashboardComponent,
     SignInComponent,
     SignUpComponent,
     CheckUserVerifiedComponent,
@@ -89,7 +90,9 @@ const routes: Routes = [
     InsertgamelistComponent,
     UserComponent,
     FriendTabComponent,
-    ChatComponent
+    ChatComponent,
+    ResetPasswordComponent,
+    InsertNewPasswordComponent
   ],
   providers: [AuthService, GameListService],
   bootstrap: [AppComponent]

@@ -26,7 +26,7 @@
 		<button [routerLink]= "'/register-user'" class="btn btn-success">Register </button>
 		<div>
 		<p> Password dimenticata? Inserisci l'indirizzo e-mail e clicca Reset password in basso</p>
-		<button  class="text-danger" (click)="sendResetEmail()">Reset Password</button>
+		<button class="text-danger"  [routerLink]= "'/resetpassword'">Reset Password</button>
 		</div>
 
 	</div>

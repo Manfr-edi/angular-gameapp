@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
+import { UtilService } from 'src/app/shared/services/util.service';
 
 @Component({
   selector: 'app-signin',
@@ -17,13 +18,13 @@ export class SignInComponent implements OnInit {
 
   resetPassword = false;
 
-  constructor(public authService: AuthService, private router: Router) { }
+  constructor(public authService: AuthService, private router: Router, public util: UtilService) { }
 
   ngOnInit() { }
 
   checkUserInfo() {
     if (this.authService.isUserEmailLoggedIn) {
-      this.router.navigate(['/user'])
+      this.router.navigate(['/user/'+this.authService.currentUserId])
     }
   }
 
@@ -45,7 +46,7 @@ export class SignInComponent implements OnInit {
         .catch(_error => {
           this.error = _error
           window.alert(this.error.message)
-          this.router.navigate(['/'])
+          //this.router.navigate(['/'])
         })
     }
   }
@@ -61,24 +62,19 @@ export class SignInComponent implements OnInit {
       return false;
     }
 
-    this.errorMessage = ''
-    return true;
-  }
-
-  isValidMailFormat(email: string) {
-    const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-
-    if ((email.length === 0) && (!EMAIL_REGEXP.test(email))) {
-      return false;
+    if (!this.util.isValidMailFormat(this.email)) {
+      this.errorMessage = 'Please enter valid Mail format!'
+      return false
     }
 
+    this.errorMessage = ''
     return true;
   }
 
   sendResetEmail() {
     this.clearErrorMessage()
 
-    this.authService.ForgotPassword(this.email)
+    this.authService.ResetPassword(this.email)
       .then(() => this.resetPassword = true)
       .catch(_error => {
         this.error = _error

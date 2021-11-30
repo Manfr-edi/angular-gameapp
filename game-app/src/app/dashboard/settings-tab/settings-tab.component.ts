@@ -34,7 +34,7 @@ export class SettingsTabComponent implements OnInit {
 
   updateData(colDB: string, list: string[], selected: boolean[]) {
     let dataSelected: string[] = [];
-    
+
     for (let i = 0; i < list.length; i++)
       if (selected[i])
         dataSelected.push(list[i]);
@@ -61,9 +61,8 @@ export class SettingsTabComponent implements OnInit {
       }
   }
 
-  logout() {
-    this.authService.signOut();
+  resetPsw() {
+    this.authService.ResetPassword(this.authService.currentEmail)
   }
-
 
 }

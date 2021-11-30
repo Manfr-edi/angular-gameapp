@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../shared/services/auth.service';
 import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
 import { AngularFirestore  } from '@angular/fire/firestore';
+import { UtilService } from 'src/app/shared/services/util.service';
 
 
 @Component({
@@ -23,7 +24,8 @@ export class SignUpComponent implements OnInit {
 
   resetPassword = false;
 
-  constructor(public authService: AuthService, public db: AngularFireDatabase, public fdb: AngularFirestore, private router: Router) {
+  constructor(public authService: AuthService, public db: AngularFireDatabase, public fdb: AngularFirestore, private router: Router,
+    public util: UtilService) {
     this.itemRef = this.itemRef = db.object('/Users');
   }
 
@@ -76,14 +78,11 @@ export class SignUpComponent implements OnInit {
       return false
     }
 
-    if (password.length === 0) {
-      this.errorMessage = 'Inserisci la password'
-      return false
-    }
-
-    if (password.length < 6) {
-      this.errorMessage = "L'Username deve essere lungo almeno 6 caratteri!";
-      return false
+   
+    if( !this.util.isValidPswFormat(password) )
+    {
+      this.errorMessage = "Inserisci una password valida";
+      return false;
     }
 
     this.errorMessage = ''

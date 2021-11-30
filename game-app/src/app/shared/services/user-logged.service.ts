@@ -100,7 +100,6 @@ export class UserLoggedService {
 		let chats = (await this.getDataParam("chats", user1) as string[]);
 		//Se chats esiste e in esso è presente la chat, restituisce true
 		return chats && chats.findIndex(v => v === chatId) != -1;
-
 	}
 
 	async createChat(user1: string, user2?: string) {

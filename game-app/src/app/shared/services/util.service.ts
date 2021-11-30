@@ -16,7 +16,7 @@ export class UtilService {
     return cap;
   }
 
-    avgTime(games: any[]) {
+  avgTime(games: any[]) {
     let sumTime = 0;
     for (let game of games)
       sumTime += game.payload.doc.data().completetime;
@@ -24,6 +24,19 @@ export class UtilService {
     return sumTime / games.length;
   }
 
+  isValidMailFormat(email: string) {
+    const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
+
+    if ((email.length === 0) || (!EMAIL_REGEXP.test(email))) {
+      return false;
+    }
+
+    return true;
+  }
+
+  isValidPswFormat(password: string) {
+     return password.length > 6;
+  }
 
 
 }

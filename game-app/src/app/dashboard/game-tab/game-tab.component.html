@@ -33,7 +33,7 @@
 				<a [routerLink]="['/games', game.payload.doc.id]">
 					{{ util.capitalize(game.payload.doc.data().title) }}
 				</a>
-				<a *ngIf="viewlist === userlists[0].code">Ore giocate: {{game.payload.doc.data().completetime}} </a>
+				<p *ngIf="viewlist === userlists[0].code">Ore giocate: {{game.payload.doc.data().completetime}} </p>
 
 				<button (click)="gameListService.RemoveGame(viewlist, game.payload.doc.id)">Remove Game</button>
 				<button *ngIf="!updateForm" (click)=" updateForm=true; gameid=game.payload.doc.id">Update Game</button> <!--UpdateForm(game.payload.doc.id);-->

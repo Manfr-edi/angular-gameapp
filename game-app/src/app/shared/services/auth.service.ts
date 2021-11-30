@@ -15,7 +15,7 @@ export class AuthService {
     this.afAuth.authState.subscribe((auth) => {
       if (auth != null) {
         this.authState = auth;
-        this.db.doc("Users/" + this.currentUserId).ref.get().then(data => {
+       this.db.doc("Users/" + this.currentUserId).ref.get().then(data => {
           this.username = data.get("username");
         });
       }
@@ -89,14 +89,18 @@ export class AuthService {
 
 
 
-  async ForgotPassword(passwordResetEmail: string) {
+  async ResetPassword(passwordResetEmail: string) {
     return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
-
         //TOGLIERE
         window.alert('Password reset email sent, check your inbox.');
       }).catch((error) => {
         window.alert(error)
       })
+  }
+
+  changePassword(code: string, new_psw: string)
+  {
+    this.afAuth.confirmPasswordReset(code, new_psw);
   }
 }

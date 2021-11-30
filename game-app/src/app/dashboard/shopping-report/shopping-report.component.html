@@ -1,29 +1,8 @@
-
-<select (change)="updateSpese()" [(ngModel)]="genreSelected">
-		<option value="">
-			Tutti i generi
-		</option>
-		<option *ngFor="let g of genreList">
-			{{g}}
-		</option>
-	</select>
-
-	<select (change)="updateSpese()" [(ngModel)]="platformSelected">
-		<option value="">
-			Tutte le Piattaforme
-		</option>
-		<option *ngFor="let p of platformList">
-			{{p}}
-		</option>
-	</select>
-
-	<div *ngIf="countBougthGame > 0">
-		<h4> Spesa totale:  </h4> {{sumPrice}} <br>
-		<h4> Spesa media:  </h4> {{avgPrice}} <br>
-		<h4> Numero giochi acquistati:  </h4> {{countBougthGame}} 
-	</div>
-	<div *ngIf="countBougthGame == 0">
-		<h4> Non ci sono giochi acquistati che rispettano questi filtri </h4> 
-	</div>
-		
-	
+<div *ngIf="countBougthGame > 0">
+	<h4> Spesa totale: </h4> {{sumPrice}} <br>
+	<h4> Spesa media: </h4> {{avgPrice}} <br>
+	<h4> Numero giochi acquistati: </h4> {{countBougthGame}}
+</div>
+<div *ngIf="countBougthGame == 0">
+	<h4> Non ci sono giochi acquistati che rispettano questi filtri </h4>
+</div>
