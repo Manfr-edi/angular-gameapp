@@ -3,10 +3,10 @@ import { ActivatedRoute } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { userlist } from '../data/userlist/userlist';
-import { UtilService } from '../shared/services/util.service';
-import { AuthService } from '../shared/services/auth.service';
+import { UtilService } from '../services/util.service';
+import { AuthService } from '../services/auth.service';
 import { GameCatalogueComponent } from '../game-catalogue/game-catalogue.component';
-import { GameCatalogueService } from '../shared/services/game-catalogue.service';
+import { GameCollectionService } from '../services/game-collection.service';
 
 
 @Component({
@@ -23,13 +23,13 @@ export class GameDetailsComponent implements OnInit {
   gameid = '';
 
   constructor(private route: ActivatedRoute, public util: UtilService, public authService: AuthService, public db: AngularFirestore,
-    public gameCatalogueService: GameCatalogueService) {
+    public gameCollectionService: GameCollectionService) {
     //Lettura id del gioco
     const routeParams = this.route.snapshot.paramMap;
     this.gameid = String(routeParams.get('id'));
 
     //Lettura dati gioco
-    this.game$ = gameCatalogueService.getGame(this.gameid).valueChanges();
+    this.game$ = gameCollectionService.getGame(this.gameid).valueChanges();
   }
 
   ngOnInit() {

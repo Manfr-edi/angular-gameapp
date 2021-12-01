@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { UtilService } from 'src/app/shared/services/util.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UtilService } from 'src/app/services/util.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { userlist } from 'src/app/data/userlist/userlist';
-import { GameListService, Spese } from '../shared/services/game-list.service';
-import { UserLoggedService } from '../shared/services/user-logged.service';
+import { UserCollectionService, Spese } from '../services/user-collection.service';
+import { UserLoggedService } from '../services/user-logged.service';
 
 @Component({
   selector: 'app-user',
@@ -33,7 +33,7 @@ export class UserComponent implements OnInit {
   mySpese: Spese = {} as Spese;
 
   constructor(private route: ActivatedRoute, public db: AngularFirestore, public authService: AuthService,
-    public gameListService: GameListService, public userLoggedService: UserLoggedService, public util: UtilService) {
+    public userCollectionService: UserCollectionService, public userLoggedService: UserLoggedService, public util: UtilService) {
 
     const routeParams = this.route.snapshot.paramMap;
     this.userid = String(routeParams.get('userid'));
@@ -43,16 +43,16 @@ export class UserComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.userSpese = await this.gameListService.getSpese("", "", this.userid);
-    this.mySpese = await this.gameListService.getSpese("", "");
+    this.userSpese = await this.userCollectionService.getSpese("", "", this.userid);
+    this.mySpese = await this.userCollectionService.getSpese("", "");
 
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
   }
 
   UpdateList(actualList: string): void {
     this.viewlist = actualList;
-    this.gameList$ = this.gameListService.getList(this.viewlist, this.userid).snapshotChanges();
-    this.myGameList$ = this.gameListService.getList(this.viewlist).snapshotChanges();
+    this.gameList$ = this.userCollectionService.getList(this.viewlist, this.userid).snapshotChanges();
+    this.myGameList$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
   }
 
 
@@ -60,10 +60,10 @@ export class UserComponent implements OnInit {
 
     this.common$ = [];
     for (let u of userlist) {
-      this.gameListService.getList(u.code).get().forEach(games =>
+      this.userCollectionService.getList(u.code).get().forEach(games =>
         games.forEach(async game => {
           for (let u1 of userlist) {
-            let g = await (this.gameListService.getGameFromList(game.id, u1.code).ref.get());
+            let g = await (this.userCollectionService.getGameFromList(game.id, u1.code).ref.get());
             if (g.exists) {
               this.common$.push({
                 title: g.get("title"), mytime: g.get("completetime"),

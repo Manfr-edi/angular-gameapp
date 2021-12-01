@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentData, Query, DocumentSnapshot, CollectionReference } from '@angular/fire/firestore';
 
-import { userlist } from '../../data/userlist/userlist';
-import { AuthService } from '../../shared/services/auth.service';
-import { GameCatalogueService } from './game-catalogue.service';
+import { userlist } from '../data/userlist/userlist';
+import { AuthService } from '../services/auth.service';
+import { GameCollectionService } from './game-collection.service';
 import { UserLoggedService } from './user-logged.service';
 
 export interface Spese
@@ -16,11 +16,11 @@ export interface Spese
 @Injectable({
   providedIn: 'root'
 })
-export class GameListService {
+export class UserCollectionService {
 
   userlists = userlist;
 
-  constructor(public authService: AuthService, public db: AngularFirestore, public gameCatalogueService: GameCatalogueService,
+  constructor(public authService: AuthService, public db: AngularFirestore, public gameCatalogueService: GameCollectionService,
     public userLoggedService: UserLoggedService) {
   }
 

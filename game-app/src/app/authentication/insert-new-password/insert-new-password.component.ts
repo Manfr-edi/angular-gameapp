@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouteConfigLoadEnd, Router } from '@angular/router';
-import { UtilService } from 'src/app/shared/services/util.service';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { UtilService } from 'src/app/services/util.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-insert-new-password',

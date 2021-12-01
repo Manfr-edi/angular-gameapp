@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { UserLoggedService, MessageInfo } from 'src/app/shared/services/user-logged.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserLoggedService, MessageInfo } from 'src/app/services/user-logged.service';
 
 @Component({
   selector: 'app-chat',

@@ -1,5 +1,9 @@
 <h2> Game Catalogue </h2>
 
+<div>
+  <input type="text" (keyup)="onKey($event)" placeholder="Inserisci titolo">
+</div><br>
+
 <div *ngIf="games$ | async; let games; else loading">
   <ul>
     <div *ngFor="let game of games">
@@ -16,6 +20,4 @@
 
 <ng-template #loading>Loading&hellip;</ng-template>
 
-<div>
-  <input type="text" (keyup)="onKey($event)" placeholder="Inserisci titolo">
-</div>
+

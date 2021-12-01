@@ -4,7 +4,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 @Injectable({
   providedIn: 'root'
 })
-export class GameCatalogueService {
+export class GameCollectionService {
 
   catalogue: AngularFirestoreCollection<any>;
 

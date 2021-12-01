@@ -22,9 +22,15 @@ import { SignUpComponent } from './authentication/sign-up/signup.component'
 import { CheckUserVerifiedComponent } from './authentication/check-user-verified/check-user-verified.component';
 
 // Auth service
-import { AuthService } from "./shared/services/auth.service";
-// GameList service
-import { GameListService } from "./shared/services/game-list.service";
+import { AuthService } from "./services/auth.service";
+// UserCollection service
+import { UserCollectionService } from "./services/user-collection.service";
+// GameCollection service
+import { GameCollectionService } from "./services/game-collection.service";
+// UserLogged service
+import { UserLoggedService } from "./services/user-logged.service";
+// Util service
+import { UtilService } from "./services/util.service";
 
 //Componenti Utente
 import { GameTabComponent } from './dashboard/game-tab/game-tab.component';
@@ -94,7 +100,7 @@ const routes: Routes = [
     ResetPasswordComponent,
     InsertNewPasswordComponent
   ],
-  providers: [AuthService, GameListService],
+  providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

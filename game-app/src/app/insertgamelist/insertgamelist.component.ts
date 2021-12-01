@@ -1,9 +1,9 @@
 import { Component, Input, OnChanges } from '@angular/core';
-import { AuthService } from '../shared/services/auth.service';
-import { GameListService } from '../shared/services/game-list.service';
+import { AuthService } from '../services/auth.service';
+import { UserCollectionService } from '../services/user-collection.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { userlist } from '../data/userlist/userlist';
-import { GameCatalogueService } from '../shared/services/game-catalogue.service';
+import { GameCollectionService } from '../services/game-collection.service';
 
 @Component({
   selector: 'app-insertgamelist',
@@ -32,13 +32,13 @@ export class InsertgamelistComponent implements OnChanges {
   show: boolean = false;
   platformsGame: string[] = [];
 
-  constructor(public authService: AuthService, public gamelistService: GameListService, public gameCatalogueService: GameCatalogueService,
+  constructor(public authService: AuthService, public userCollectionService: UserCollectionService, public gameCollectionService: GameCollectionService,
     public db: AngularFirestore) {
   }
 
   async UpdateForm() {
     //Dati del gioco nel catalogo
-    let game = await this.gameCatalogueService.getDataGame(this.gameid);
+    let game = await this.gameCollectionService.getDataGame(this.gameid);
 
     //Piattaforme sulle quali è disponibile un gioco
     this.platformsGame = game.get('platform');
@@ -51,7 +51,7 @@ export class InsertgamelistComponent implements OnChanges {
     if (this.updateList !== '') {
       this.selectedList = this.updateList;
       //Dati relatiivi al gioco nella lista dell'utente
-      let gameUserList = await this.gamelistService.getGameDataFromList(this.gameid, this.updateList);
+      let gameUserList = await this.userCollectionService.getGameDataFromList(this.gameid, this.updateList);
 
       //Dati per i giochi completati e in gioco
       if (this.updateList !== this.userlists[2].code) {
@@ -78,7 +78,7 @@ export class InsertgamelistComponent implements OnChanges {
 
     //La form viene mostrata nel caso in cui sto facendo un Update oppure
     //nel caso in cui sto facendo un add di un gioco non inserito in un'altra lista
-    if (this.updateList !== '' || await this.gamelistService.CheckUniqueList(this.gameid)) {
+    if (this.updateList !== '' || await this.userCollectionService.CheckUniqueList(this.gameid)) {
       this.show = true;
       this.UpdateForm();
     }

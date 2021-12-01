@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../shared/services/auth.service';
+import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { userlist } from '../../data/userlist/userlist';
-import { UtilService } from '../../shared/services/util.service';
-import { GameListService } from '../../shared/services/game-list.service';
+import { UtilService } from '../../services/util.service';
+import { UserCollectionService } from '../../services/user-collection.service';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
-import { UserLoggedService } from 'src/app/shared/services/user-logged.service';
+import { UserLoggedService } from 'src/app/services/user-logged.service';
 
 @Component({
   selector: 'app-game-tab',
@@ -44,7 +44,7 @@ export class GameTabComponent implements OnInit {
   //Piattaforme per un determinato gioco
   platformsGame: string[] = [];
 
-  constructor(public authService: AuthService, public gameListService: GameListService, public db: AngularFirestore,
+  constructor(public authService: AuthService, public userCollectionService: UserCollectionService, public db: AngularFirestore,
     public userLoggedService: UserLoggedService, public util: UtilService) {
     //La lista di default è Completed
     this.selectedList = this.userlists[0].code;
@@ -57,11 +57,11 @@ export class GameTabComponent implements OnInit {
 
   UpdateList(actualList: string): void {
     this.viewlist = actualList;
-    this.games$ = this.gameListService.getList(this.viewlist).snapshotChanges();
+    this.games$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
   }
 
   async onChangeFilter() {
-    this.games$ = this.gameListService.getGamesWithEqualFilterNotEmpty(this.viewlist, 
+    this.games$ = this.userCollectionService.getGamesWithEqualFilterNotEmpty(this.viewlist, 
       [{par:"platform", val:this.platformSelected}, {par:"genre", val:this.genreSelected}]).snapshotChanges();
   }
 }

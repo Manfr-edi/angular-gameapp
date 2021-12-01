@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
-import { AuthService } from 'src/app/shared/services/auth.service';
-import { UserLoggedService } from 'src/app/shared/services/user-logged.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UserLoggedService } from 'src/app/services/user-logged.service';
 
 @Component({
   selector: 'app-friend-tab',

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
-import { AuthService } from 'src/app/shared/services/auth.service';
+import { AuthService } from 'src/app/services/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { userlist } from 'src/app/data/userlist/userlist';
-import { GameListService } from 'src/app/shared/services/game-list.service';
+import { UserCollectionService } from 'src/app/services/user-collection.service';
 
 @Component({
   selector: 'app-shopping-report',
@@ -28,7 +28,7 @@ export class ShoppingReportComponent implements OnChanges {
   countBougthGame = 0;
 
  
-  constructor(public authService: AuthService, public db: AngularFirestore, public gameListService: GameListService) {
+  constructor(public authService: AuthService, public db: AngularFirestore, public userCollectionService: UserCollectionService) {
    }
 
   ngOnChanges(changes: any){
@@ -42,7 +42,7 @@ export class ShoppingReportComponent implements OnChanges {
     let filter = [{ par: "platform", val: this.platformSelected }, { par: "genre", val: this.genreSelected }];
     for (let i=0; i<2; i++) {
 
-      await this.gameListService.getGamesWithEqualFilterNotEmpty(userlist[i].code, filter)
+      await this.userCollectionService.getGamesWithEqualFilterNotEmpty(userlist[i].code, filter)
         .get().forEach(docs => docs.forEach(doc => {
           sum += doc.get("price");
           count++;
