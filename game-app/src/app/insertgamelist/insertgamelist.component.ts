@@ -4,6 +4,8 @@ import { UserCollectionService } from '../services/user-collection.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { userlist } from '../data/userlist/userlist';
 import { GameCollectionService } from '../services/game-collection.service';
+import { UtilService } from '../services/util.service';
+import { FormControl, FormGroup, FormBuilder, ReactiveFormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-insertgamelist',
@@ -21,19 +23,33 @@ export class InsertgamelistComponent implements OnChanges {
   userlists = userlist;
 
   //Dati per l'inserimento
-  selectedList: string = '';
-  selectedPlatform: string = '';
+  //selectedList: string = '';
+  selectedList: FormControl = new FormControl('');
+  selectedPlatform: FormControl = new FormControl('');
   gametitle: string = '';
   gamegenre: string = '';
-  time: number = 0;
-  note: string = '';
-  vote: number = 0
-  price: number = 0;
+  time: FormControl = new FormControl(0);
+  note: FormControl = new FormControl('');
+  vote: FormControl = new FormControl(0);
+  price: FormControl = new FormControl(0);
   show: boolean = false;
   platformsGame: string[] = [];
 
-  constructor(public authService: AuthService, public userCollectionService: UserCollectionService, public gameCollectionService: GameCollectionService,
-    public db: AngularFirestore) {
+  options: FormGroup;
+
+  constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
+    public gameCollectionService: GameCollectionService, public db: AngularFirestore, public util: UtilService,
+    fb: FormBuilder) {
+
+    this.options = fb.group({
+      selectedList: this.selectedList,
+      time: this.time,
+      note: this.note,
+      selectedPlatform: this.selectedPlatform,
+      vote: this.vote,
+      price: this.price
+
+    });
   }
 
   async UpdateForm() {
@@ -49,28 +65,28 @@ export class InsertgamelistComponent implements OnChanges {
 
     ///Nel caso si tratti di un update
     if (this.updateList !== '') {
-      this.selectedList = this.updateList;
+      this.selectedList.setValue(this.updateList);
       //Dati relatiivi al gioco nella lista dell'utente
       let gameUserList = await this.userCollectionService.getGameDataFromList(this.gameid, this.updateList);
 
       //Dati per i giochi completati e in gioco
       if (this.updateList !== this.userlists[2].code) {
-        this.selectedPlatform = gameUserList.get("platform");
-        this.price = gameUserList.get("price");
+        this.selectedPlatform.setValue(gameUserList.get("platform"));
+        this.price.setValue(gameUserList.get("price"));
       }
       else
-        this.selectedPlatform = this.platformsGame[0];
+        this.selectedPlatform.setValue(this.platformsGame[0]);
 
       //Dati per giochi completati
       if (this.updateList === this.userlists[0].code) {
-        this.note = gameUserList.get("note");
-        this.time = gameUserList.get("completetime");
-        this.vote = gameUserList.get("vote");
+        this.note.setValue(gameUserList.get("note"));
+        this.time.setValue(gameUserList.get("completetime"));
+        this.vote.setValue(gameUserList.get("vote"));
       }
     }
     else {
-      this.selectedPlatform = this.platformsGame[0];
-      this.selectedList = userlist[0].code;
+      this.selectedPlatform.setValue(this.platformsGame[0]);
+      this.selectedList.setValue(userlist[0].code);
     }
   }
 
@@ -83,5 +99,6 @@ export class InsertgamelistComponent implements OnChanges {
       this.UpdateForm();
     }
   }
+
 
 }

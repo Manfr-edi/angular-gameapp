@@ -41,12 +41,12 @@ export class UserCollectionService {
     });
   }
 
-  async getGameDataFromList(gameid: string, list: string): Promise<any> {
-    return (await this.getGameFromList(gameid, list).ref.get());
+  async getGameDataFromList(gameid: string, list: string, userid?: string): Promise<any> {
+    return (await this.getGameFromList(gameid, list, userid).ref.get());
   }
 
-  getGameFromList(gameid: string, list: string): AngularFirestoreDocument {
-    return this.getList(list).doc(gameid);
+  getGameFromList(gameid: string, list: string, userid?: string): AngularFirestoreDocument {
+    return this.getList(list, userid).doc(gameid);
   }
 
   async RemoveGame(selectedList: string, id: string) {
@@ -55,9 +55,9 @@ export class UserCollectionService {
     this.getGameFromList(id, selectedList).delete();
   }
 
-  async CheckUniqueList(id: string): Promise<boolean> {
+  async CheckUniqueList(id: string, userid?: string): Promise<boolean> {
     for (let l of userlist)
-      if ((await this.getGameDataFromList(id, l.code)).exists)
+      if ((await this.getGameDataFromList(id, l.code, userid)).exists)
         return false;
 
     return true;

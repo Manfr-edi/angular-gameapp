@@ -15,7 +15,7 @@
 
 <nav class="navbar navbar-expand-sm bg-light sticky-top ">
 	<!-- Links -->
-	<ul class="nav nav-tabs" role="tablist" id="myTab">
+	<ul class="nav" role="tablist" id="myTab">
 
 		<li class="nav-item">
 			<button mat-icon-button aria-label="Example icon button with a home icon" [routerLink]="'/'">
@@ -40,11 +40,19 @@
 		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
 			<button mat-button (click)="authService.signOut()">Logout</button>
 		</li>
+	
 
-
-
-
+		<!--
+				<li class="nav-item">
+					<mat-form-field class="example-full-width" appearance="fill">
+						<mat-label>Inserisci Titolo</mat-label>
+						<input matInput placeholder="es. Zelda" (keyup)="onKey($event)">
+					</mat-form-field>
+				</li>
+			-->
 	</ul>
+
+	
 
 </nav>
 	<router-outlet></router-outlet>
@@ -52,3 +60,5 @@
 <!--<div class="container">
 	<router-outlet></router-outlet>
 </div>-->
+
+

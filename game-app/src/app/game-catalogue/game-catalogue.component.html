@@ -7,11 +7,13 @@
 <div *ngIf="games$ | async; let games; else loading">
   <ul>
     <div *ngFor="let game of games">
+      <img [src]="util.getImgUrl(game.payload.doc.data().title)">
+
       <a [routerLink]="['/games', game.payload.doc.id]">
         {{ util.capitalize(game.payload.doc.data().title) }}
       </a>
       <p *ngIf="game.payload.doc.data().completedtimeavg">
-      Tempo medio: {{game.payload.doc.data().completedtimeavg}}
+        Tempo medio: {{game.payload.doc.data().completedtimeavg}}
       </p>
     </div>
   </ul>
@@ -19,5 +21,3 @@
 </div>
 
 <ng-template #loading>Loading&hellip;</ng-template>
-
-

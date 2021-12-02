@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Md5 } from "md5-typescript";
 
 @Injectable({
   providedIn: 'root'
@@ -35,8 +36,12 @@ export class UtilService {
   }
 
   isValidPswFormat(password: string) {
-     return password.length > 6;
+    return password.length > 6;
   }
 
+  getImgUrl(title: string) : string
+  {
+    return "assets/" + Md5.init(title) + '.jpg';
+  }
 
 }

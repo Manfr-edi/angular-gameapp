@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { Routes, RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { GameCatalogueComponent } from './game-catalogue/game-catalogue.component';
@@ -11,6 +11,7 @@ import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from "@angular/fire/auth";
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireStorageModule } from '@angular/fire/storage';
 
 
 
@@ -41,15 +42,16 @@ import { UserComponent } from './user/user.component';
 import { FriendTabComponent } from './dashboard/friend-tab/friend-tab.component';
 import { ChatComponent } from './dashboard/chat/chat.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-
-//Import di Material design
-import {MatButtonModule} from '@angular/material/button'; 
-import {MatIconModule} from '@angular/material/icon'
-import {MatMenuModule} from '@angular/material/menu';
+import { MatInputModule } from '@angular/material/input';
 import { ResetPasswordComponent } from './authentication/reset-password/reset-password.component';
 import { InsertNewPasswordComponent } from './authentication/insert-new-password/insert-new-password.component';
 
+//Import di Material design
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon'
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatSelectModule } from '@angular/material/select'
 
 
 const routes: Routes = [
@@ -57,13 +59,13 @@ const routes: Routes = [
   { path: 'games/:id', component: GameDetailsComponent },
   { path: 'login', component: SignInComponent },
   { path: 'register-user', component: SignUpComponent },
-  { path: 'user/:userid', component: UserComponent},
-  { path: 'gametab', component: GameTabComponent},
-  { path: 'friendtab', component: FriendTabComponent},
-  { path: 'chat', component: ChatComponent},
-  { path: 'settings', component: SettingsTabComponent},
-  { path: 'resetpassword', component: ResetPasswordComponent},
-  { path: 'newpassword', component: InsertNewPasswordComponent}
+  { path: 'user/:userid', component: UserComponent },
+  { path: 'gametab', component: GameTabComponent },
+  { path: 'friendtab', component: FriendTabComponent },
+  { path: 'chat', component: ChatComponent },
+  { path: 'settings', component: SettingsTabComponent },
+  { path: 'resetpassword', component: ResetPasswordComponent },
+  { path: 'newpassword', component: InsertNewPasswordComponent }
 ];
 
 @NgModule({
@@ -75,13 +77,18 @@ const routes: Routes = [
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFirestoreModule.enablePersistence(),
+    AngularFireStorageModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatIconModule,
-    MatMenuModule
-
+    MatMenuModule,
+    MatInputModule,
+    MatButtonToggleModule,
+    MatSelectModule,
+    ReactiveFormsModule
   ],
-  exports: [RouterModule],
+  exports: [RouterModule, FormsModule,
+    ReactiveFormsModule],
 
   declarations: [
     AppComponent,

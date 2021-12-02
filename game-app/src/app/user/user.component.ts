@@ -63,11 +63,11 @@ export class UserComponent implements OnInit {
       this.userCollectionService.getList(u.code).get().forEach(games =>
         games.forEach(async game => {
           for (let u1 of userlist) {
-            let g = await (this.userCollectionService.getGameFromList(game.id, u1.code).ref.get());
+            let g = await (this.userCollectionService.getGameFromList(game.id, u1.code,this.userid).ref.get());
             if (g.exists) {
               this.common$.push({
-                title: g.get("title"), mytime: g.get("completetime"),
-                usertime: game.get("completetime"), myprice: g.get("price"), userprice: game.get("price")
+                title: g.get("title"), mytime: game.get("completetime"),
+                usertime: g.get("completetime"), myprice: game.get("price"), userprice: g.get("price")
               });
               break;
             }

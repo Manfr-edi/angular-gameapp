@@ -1,12 +1,19 @@
 <app-check-user-verified></app-check-user-verified>
 
-<div *ngIf="game$ | async; let game">
+
+<div *ngIf="game$ | async; let game; ">
 	{{ util.capitalize(game.title) }} <br>
 	{{ util.capitalize(game.platform[0]) }} <br>
 	{{ util.capitalize(game.developer) }} <br>
 	{{ game.price }}<br>
 </div>
 
-<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-	<app-insertgamelist *ngIf="gameid" [gameid]="gameid"></app-insertgamelist>
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && !isinlist">
+	<button *ngIf="!show" (click)="show=!show">Aggiungi gioco</button>
+	<button *ngIf="show" (click)="show=!show">Chiudi gioco</button>
+	<app-insertgamelist *ngIf="show && gameid" [gameid]="gameid"></app-insertgamelist>
+</div>
+
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isinlist">
+	Il gioco e' gia' in una tua lista
 </div>

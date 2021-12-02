@@ -1,0 +1,86 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.btnDiv {
+  display: table;
+  margin: 0 auto;
+}
+
+#filtersDiv{
+	display: table;
+	margin: 0 auto;
+}
+
+#gameDiv {
+  padding-top: 10px;
+  background-color: red;
+  width: 55%;
+  display: inline-block;
+  margin-left: 2.5%;
+  min-height: 100vh;
+}
+
+#statsDiv {
+  background-color: blue;
+  height: 380px;
+  width: 35%;
+  display: inline-block;
+  position: fixed;
+  right: 2.5%;
+  padding: 10px;
+}
+
+#timeDiv{
+	background-color: white;
+	padding:20px;
+	margin-bottom: 5px;
+  	margin-top: 10px;
+	
+}
+
+
+#shoppingDiv{
+	
+	background-color: white;
+	padding:20px;
+	margin-bottom: 5px;
+  	margin-top: 10px;
+}
+
+.game {
+  padding: 10px;
+  background-color: yellow;
+  width: 90%;
+  white-space: nowrap;
+  border-block: solid;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.gameStatsDiv {
+  background-color: green;
+  width: 70%;
+  display: inline-block;
+  vertical-align: middle;
+  margin: auto 2.5% auto 2.5%;
+}
+
+.gameIco {
+  width: 15%;
+  height: auto;
+  display: inline-block;
+}
+
+.menuBtn {
+  display: inline-block;
+  width: 10%;
+}

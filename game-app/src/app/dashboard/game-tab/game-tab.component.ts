@@ -56,12 +56,14 @@ export class GameTabComponent implements OnInit {
   }
 
   UpdateList(actualList: string): void {
-    this.viewlist = actualList;
-    this.games$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
+    if (this.viewlist != actualList) {
+      this.viewlist = actualList;
+      this.games$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
+    }
   }
 
   async onChangeFilter() {
-    this.games$ = this.userCollectionService.getGamesWithEqualFilterNotEmpty(this.viewlist, 
-      [{par:"platform", val:this.platformSelected}, {par:"genre", val:this.genreSelected}]).snapshotChanges();
+    this.games$ = this.userCollectionService.getGamesWithEqualFilterNotEmpty(this.viewlist,
+      [{ par: "platform", val: this.platformSelected }, { par: "genre", val: this.genreSelected }]).snapshotChanges();
   }
 }

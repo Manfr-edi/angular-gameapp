@@ -1,0 +1,32 @@
+#a
+{
+	background-color: blue;
+	padding: 20px;
+}
+
+.gameIco {
+  width: 90%;
+  height: auto;
+}
+
+#gameInfo{
+	display: inline-block;
+	width: 30%;
+	background-color: gray;
+	text-align: center;
+	font-family: Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 18;
+}
+
+#updateForm{
+	display: inline-block;
+	width: 60%;
+	vertical-align: middle;
+	background-color: yellow;
+	margin-left: 5%;
+}
+.mat-form-field
+{
+	width: 240px;
+}
