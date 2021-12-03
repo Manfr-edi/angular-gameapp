@@ -53,7 +53,7 @@ body {
 	margin-bottom: 5px;
   	margin-top: 10px;
 }
-
+/*
 .game {
   padding: 10px;
   background-color: yellow;
@@ -79,8 +79,35 @@ body {
   height: auto;
   display: inline-block;
 }
-
 .menuBtn {
   display: inline-block;
   width: 10%;
+}
+*/
+#title {  
+  display: inline-block;
+  margin-left: 10px;
+}
+mat-card content {
+  margin-left: 10px;
+  display : block;
+  margin: auto ;
+}
+#gameIco{
+  /*object-fit: cover; this makes the image in src fit to the size specified below*/
+  width: 20%; /* Here you can use wherever you want to specify the width and also the height of the <img>*/
+  margin:auto;
+}
+
+#card {
+	padding : 10px;
+	white-space: nowrap;
+  margin-bottom: 5px;
+  margin-top: 5px;
+  margin-left: auto;
+  margin-right: auto;
+  width : 90%;
+}
+#menuBtn {
+  float :right;
 }

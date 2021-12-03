@@ -48,10 +48,13 @@ import { InsertNewPasswordComponent } from './authentication/insert-new-password
 
 //Import di Material design
 import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon'
+import { MatIconModule } from '@angular/material/icon';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatSelectModule } from '@angular/material/select'
+import { MatSelectModule } from '@angular/material/select';
+import { MatCardModule } from '@angular/material/card';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+
 
 
 const routes: Routes = [
@@ -85,7 +88,10 @@ const routes: Routes = [
     MatInputModule,
     MatButtonToggleModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatCardModule,
+    MatProgressSpinnerModule,
+  
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],

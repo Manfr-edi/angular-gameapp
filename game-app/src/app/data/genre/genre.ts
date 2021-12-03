@@ -11,6 +11,7 @@ export const genreList =
 	"Racing",
 	"Arcade",
 	"RPG",
-	"Adventure"
+	"Adventure",
+	"Puzzle"
 ]
 	
