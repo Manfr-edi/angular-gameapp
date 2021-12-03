@@ -8,16 +8,16 @@
 <div *ngIf="games$ | async; let games; else loading">
   <ul class="flexp">   
       <div *ngFor="let game of games"> 
-          <mat-card id="card" [routerLink]="['/games', game.payload.doc.id]">
+          <mat-card id="card" >
             <img mat-card-md-image [src]="util.getImgUrl(game.payload.doc.data().title)">
-            <mat-card-title id="title">
+            <mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
               {{ util.capitalize(game.payload.doc.data().title) }}
               <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
                 Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
               </mat-card-content>
              
             </mat-card-title>
-            <button mat-fab id="btn" color="primary">Apri</button>
+            <button mat-fab id="btn" color="primary" [routerLink]="['/games', game.payload.doc.id]">Apri</button>
           </mat-card>
         
       </div>

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 import { UserCollectionService } from '../services/user-collection.service';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -14,10 +14,14 @@ import { FormControl, FormGroup, FormBuilder, ReactiveFormsModule } from '@angul
 })
 export class InsertgamelistComponent implements OnChanges {
 
-  //L'input gameid è obbligatorio ed indica l'id del gioco da aggiornare o da inserire
-  //L'input updateList è facoltativo ed indica in quale lista spostare il gioco, quindi risulta obbligatorio in caso di Update 
+  //L'input gameid ï¿½ obbligatorio ed indica l'id del gioco da aggiornare o da inserire
+  //L'input updateList ï¿½ facoltativo ed indica in quale lista spostare il gioco, quindi risulta obbligatorio in caso di Update 
   @Input() gameid: string = "";
   @Input() updateList: string = "";
+
+  @Output() completed: EventEmitter<boolean> = new EventEmitter<boolean>();
+
+  result: boolean = false;
 
   //Data
   userlists = userlist;
@@ -56,7 +60,7 @@ export class InsertgamelistComponent implements OnChanges {
     //Dati del gioco nel catalogo
     let game = await this.gameCollectionService.getDataGame(this.gameid);
 
-    //Piattaforme sulle quali è disponibile un gioco
+    //Piattaforme sulle quali ï¿½ disponibile un gioco
     this.platformsGame = game.get('platform');
     //Titolo del gioco
     this.gametitle = game.get("title");
@@ -100,5 +104,11 @@ export class InsertgamelistComponent implements OnChanges {
     }
   }
 
+  async Update(){
+    
+   this.completed.emit(await this.userCollectionService.UpdateGame(this.selectedList.value, this.updateList, this.gameid,
+      this.gametitle, this.note.value, this.time.value, this.vote.value, this.selectedPlatform.value, this.gamegenre, this.price.value));
+      
+   }
 
 }

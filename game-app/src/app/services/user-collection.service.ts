@@ -64,7 +64,7 @@ export class UserCollectionService {
   }
 
   async UpdateGame(selectedList: string, previousList: string, gameid: string, gametitle: string, note: string, time: number,
-    vote: number, selectedPlatform: string, genre: string, price: number) {
+    vote: number, selectedPlatform: string, genre: string, price: number): Promise<boolean> {
 
     //Genero il documento base per inserire un gioco in una lista
     let doc = new Map<String, any>([
@@ -78,7 +78,7 @@ export class UserCollectionService {
     if (selectedList === this.userlists[0].code) {
       if (time <= 0 || time > 9999) {
         window.alert("Non hai inserito un tempo di completamento valido");
-        return;
+        return false;
       }
 
       //Nel caso il tempo di completamento sia valido
@@ -96,7 +96,7 @@ export class UserCollectionService {
     if (selectedList !== this.userlists[2].code) {
       if (price <= 0 && price >= 9999) {
         window.alert("Non hai inserito prezzo di acquisto valido");
-        return;
+        return false;
       }
 
       doc.set("price", price);
@@ -122,6 +122,7 @@ export class UserCollectionService {
     }
 
     window.alert("e' stato modificato il gioco");
+    return true;
   }
 
 

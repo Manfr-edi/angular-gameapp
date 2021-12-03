@@ -101,7 +101,7 @@
 			</div>
 
 			<div *ngIf="updateForm">
-				<app-insertgamelist *ngIf="gameid && viewlist" [gameid]="gameid" [updateList]="viewlist">
+				<app-insertgamelist *ngIf="gameid && viewlist" [gameid]="gameid" [updateList]="viewlist" (completed)="completed($event)">
 				</app-insertgamelist>
 				<button (click)="updateForm=false">Annulla</button>
 			</div>

@@ -45,5 +45,7 @@ export class GameDetailsComponent implements OnInit {
   async ngOnInit() {
    this.isinlist= !(await this.userCollectionService.CheckUniqueList(this.gameid, this.userid))
   }
-
+  completed(event: boolean){
+      this.isinlist= event;
+  }
 }

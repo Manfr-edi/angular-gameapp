@@ -55,8 +55,7 @@
 			<textarea matInput [formControl]="note"></textarea>
 		</mat-form-field>
 		<br>
-		<button mat-button (click)="userCollectionService.UpdateGame(selectedList.value, updateList, gameid,
-		 gametitle, note.value, time.value, vote.value, selectedPlatform.value, gamegenre, price.value)"
+		<button mat-button (click)=" Update(); "
 			color="primary">Update List</button>
 
 	</form>

@@ -46,7 +46,7 @@ export class GameTabComponent implements OnInit {
 
   constructor(public authService: AuthService, public userCollectionService: UserCollectionService, public db: AngularFirestore,
     public userLoggedService: UserLoggedService, public util: UtilService) {
-    //La lista di default è Completed
+    //La lista di default ï¿½ Completed
     this.selectedList = this.userlists[0].code;
     //Carico la lista dei giochi da visualizzare di default
     this.UpdateList(this.selectedList);
@@ -65,5 +65,9 @@ export class GameTabComponent implements OnInit {
   async onChangeFilter() {
     this.games$ = this.userCollectionService.getGamesWithEqualFilterNotEmpty(this.viewlist,
       [{ par: "platform", val: this.platformSelected }, { par: "genre", val: this.genreSelected }]).snapshotChanges();
+  }
+
+  completed(event: boolean) {
+    this.updateForm = !event;
   }
 }

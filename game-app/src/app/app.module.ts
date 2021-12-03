@@ -24,7 +24,7 @@ import { CheckUserVerifiedComponent } from './authentication/check-user-verified
 
 // Auth service
 import { AuthService } from "./services/auth.service";
-// UserCollection service
+// UserCollection servicen
 import { UserCollectionService } from "./services/user-collection.service";
 // GameCollection service
 import { GameCollectionService } from "./services/game-collection.service";

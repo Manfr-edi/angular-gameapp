@@ -11,7 +11,7 @@
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && !isinlist">
 	<button *ngIf="!show" (click)="show=!show">Aggiungi gioco</button>
 	<button *ngIf="show" (click)="show=!show">Chiudi gioco</button>
-	<app-insertgamelist *ngIf="show && gameid" [gameid]="gameid"></app-insertgamelist>
+	<app-insertgamelist *ngIf="show && gameid"  [gameid]="gameid" (completed)="completed($event)"></app-insertgamelist>
 </div>
 
 <div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isinlist">
