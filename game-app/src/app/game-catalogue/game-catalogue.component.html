@@ -6,23 +6,37 @@
 </div><br>
 
 <div *ngIf="games$ | async; let games; else loading">
-  <ul class="flexp">   
-      <div *ngFor="let game of games"> 
-          <mat-card id="card" >
-            <img mat-card-md-image [src]="util.getImgUrl(game.payload.doc.data().title)">
-            <mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
-              {{ util.capitalize(game.payload.doc.data().title) }}
-              <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
-                Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
-              </mat-card-content>
-             
-            </mat-card-title>
-            <button mat-fab id="btn" color="primary" [routerLink]="['/games', game.payload.doc.id]">Apri</button>
-          </mat-card>
-        
-      </div>
+  <ul class="flexp">
+    <div *ngFor="let game of games">
+      <mat-card id="card">
+
+        <img mat-card-lg-image [src]="util.getImgUrl(game.payload.doc.data().title)"
+          [routerLink]="['/games', game.payload.doc.id]">
+
+        <div id="gamedata">
+          <mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
+            {{ util.capitalize(game.payload.doc.data().title) }}
+          </mat-card-title>
+
+          <mat-card-content>
+            Sviluppatore: {{game.payload.doc.data().developer}}
+          </mat-card-content>
+          <mat-card-content>
+            Genere: {{game.payload.doc.data().genre}}
+          </mat-card-content>
+          <mat-card-content>
+            Data d'uscita: {{game.payload.doc.data().release}}
+          </mat-card-content>
+          <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
+            Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
+          </mat-card-content>
+        </div>
+        <button mat-fab id="btn" color="primary" [routerLink]="['/games', game.payload.doc.id]">Apri</button> 
+      </mat-card>
+
+    </div>
   </ul>
-  
+
   <div *ngIf="games.length === 0">Nessun gioco trovato</div>
 </div>
 

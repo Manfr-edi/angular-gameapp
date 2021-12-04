@@ -43,10 +43,10 @@ export class InsertgamelistComponent implements OnChanges {
 
     this.gameForm = fb.group({
       destinationList: ['', Validators.required],
-      time: [0, [Validators.required, Validators.min(1)]],
+      time: [0, [Validators.required, Validators.min(1), Validators.max(9999)]],
       vote: [0],
       platform: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(1)]],
+      price: [0, [Validators.required, Validators.min(1), Validators.max(9999)]],
       note: ['']
     });
   }
@@ -141,8 +141,11 @@ export class InsertgamelistComponent implements OnChanges {
     if (this.gameForm.get(field)?.hasError('min'))
       msg = name + " deve essere almeno maggiore di 0!"
     else
-      if (this.gameForm.get(field)?.hasError('required'))
-        msg = name + " è obbligatorio!";
+      if (this.gameForm.get(field)?.hasError('max'))
+        msg = name + "non può essere maggiore di 9999!"
+      else
+        if (this.gameForm.get(field)?.hasError('required'))
+          msg = name + " è obbligatorio!";
 
     if (msg !== "")
       this._snackBar.open(msg, 'Ok', { duration: 2000 });

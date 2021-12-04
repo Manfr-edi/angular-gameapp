@@ -18,7 +18,9 @@ import { AngularFireStorage } from '@angular/fire/storage';
 })
 
 
+
 export class GameDetailsComponent implements OnInit {
+
 
   //Game
   game$: Observable<any>;
@@ -27,6 +29,8 @@ export class GameDetailsComponent implements OnInit {
   userid = '';
   show = false;
   isinlist= true;
+
+  isLoading = true;
 
   constructor(private route: ActivatedRoute, public util: UtilService, public authService: AuthService, public db: AngularFirestore,
     public gameCollectionService: GameCollectionService, public userCollectionService: UserCollectionService, public angularStorage: AngularFireStorage) {
@@ -44,6 +48,7 @@ export class GameDetailsComponent implements OnInit {
 
   async ngOnInit() {
    this.isinlist= !(await this.userCollectionService.CheckUniqueList(this.gameid, this.userid))
+   this.isLoading= false;
   }
   completed(event: boolean){
       this.isinlist= event;

@@ -1,19 +1,36 @@
 <app-check-user-verified></app-check-user-verified>
+<div *ngIf="!isLoading; else loading">
 
 
-<div *ngIf="game$ | async; let game; ">
-	{{ util.capitalize(game.title) }} <br>
-	{{ util.capitalize(game.platform[0]) }} <br>
-	{{ util.capitalize(game.developer) }} <br>
-	{{ game.price }}<br>
+	<div class="tab" *ngIf="game$ | async; let game; ">
+
+	<div id ="image"><img  [src]="util.getImgUrl(game.title)"></div>
+		<div id = "title" >{{ util.capitalize(game.title) }} </div>
+		<div id = "content">
+			{{ util.capitalize(game.platform[0]) }} <br>
+			{{ util.capitalize(game.developer) }} <br>
+			{{ game.price }}<br>
+		</div>
+		<div id = "biodesc">
+			{{ game.bio }}
+		</div>
+		
+	</div>
+
+
+	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && !isinlist">
+		<button *ngIf="!show" (click)="show=!show">Aggiungi gioco</button>
+		<button *ngIf="show" (click)="show=!show">Chiudi gioco</button>
+		<app-insertgamelist *ngIf="show && gameid" [gameid]="gameid" (completed)="completed($event)">
+		</app-insertgamelist>
+	</div>
+
+	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isinlist">
+		Il gioco e' gia' in una tua lista
+	</div>
+
 </div>
 
-<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && !isinlist">
-	<button *ngIf="!show" (click)="show=!show">Aggiungi gioco</button>
-	<button *ngIf="show" (click)="show=!show">Chiudi gioco</button>
-	<app-insertgamelist *ngIf="show && gameid"  [gameid]="gameid" (completed)="completed($event)"></app-insertgamelist>
-</div>
-
-<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isinlist">
-	Il gioco e' gia' in una tua lista
-</div>
+<ng-template #loading>
+	<mat-spinner id="spinner"></mat-spinner>
+</ng-template>

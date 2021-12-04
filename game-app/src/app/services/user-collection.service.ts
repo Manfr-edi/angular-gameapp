@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentData, Query, DocumentSnapshot, CollectionReference } from '@angular/fire/firestore';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 import { userlist } from '../data/userlist/userlist';
 import { AuthService } from '../services/auth.service';
@@ -21,7 +22,7 @@ export class UserCollectionService {
   userlists = userlist;
 
   constructor(public authService: AuthService, public db: AngularFirestore, public gameCatalogueService: GameCollectionService,
-    public userLoggedService: UserLoggedService) {
+    public userLoggedService: UserLoggedService,  private _snackBar: MatSnackBar) {
   }
 
   getList(list: string, userid?: string): AngularFirestoreCollection {
@@ -76,10 +77,10 @@ export class UserCollectionService {
 
     //Controlli per l'inserimento in lista completati
     if (selectedList === this.userlists[0].code) {
-      if (time <= 0 || time > 9999) {
+      /*if (time <= 0 || time > 9999) {
         window.alert("Non hai inserito un tempo di completamento valido");
         return false;
-      }
+      }*/
 
       //Nel caso il tempo di completamento sia valido
       doc.set("completetime", time);
@@ -94,10 +95,10 @@ export class UserCollectionService {
 
     //Nel caso la lista completati o in gioco
     if (selectedList !== this.userlists[2].code) {
-      if (price <= 0 && price >= 9999) {
+    /*  if (price <= 0 && price >= 9999) {
         window.alert("Non hai inserito prezzo di acquisto valido");
         return false;
-      }
+      }*/
 
       doc.set("price", price);
       //Viene inserita la piattaforma
@@ -121,7 +122,7 @@ export class UserCollectionService {
         this.gameCatalogueService.updateCompletedAvg(gameid, 0, time);
     }
 
-    window.alert("e' stato modificato il gioco");
+    this._snackBar.open("Il gioco è stato modificato", 'Ok', { duration: 5000 });
     return true;
   }
 

@@ -1,7 +1,15 @@
-#title {
+
+
+#gamedata{
   margin-left: 10px;
   margin-top: auto;
   margin-bottom: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+mat-card-title:hover{
+  cursor: pointer;
 }
 
 mat-card content {
@@ -11,13 +19,21 @@ mat-card content {
 }
 
 mat-card img {
-
-  width: 15%;
+  width: 20%;
   margin-left: 0;
+
+}
+
+mat-card img:hover{
+  cursor: pointer;
 }
 
 #btn {
-  margin: auto 0 auto auto;
+  margin: auto 30 auto auto;
+  width: 75px;
+  height: 75px;
+  font-size: large;
+
 
 }
 
@@ -40,7 +56,7 @@ mat-card img {
 }
 
 .flexp {
-  background-color: red;
+  /*background-color: red;*/
   padding: 10px;
   display: flex;
   flex-wrap: wrap;

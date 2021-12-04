@@ -1,0 +1,44 @@
+.tab{
+    display: grid;
+    background-color:violet;
+    grid-template-areas:
+    'image title   title'
+    'image content  content'
+    'image bio bio ';
+    grid-gap: 30 px;
+    padding: 10 px;
+
+    
+}
+
+.tab >div{
+text-align: start;
+grid-gap: 30 px;
+padding: 20px 0;
+font-size: 30px;
+}
+
+#image{
+    grid-area: image;
+    margin-left: 30;
+}
+
+#title{
+    grid-area: title;
+    background-color: crimson;
+    font-size: 36; 
+    font-family: 'Helvetica', Arial , Sans-Serif;
+    font-weight: bold; 
+    
+}
+#content{
+    background-color: gold;
+    grid-area: content;
+    font-size: 14;
+}
+
+#biodesc{
+    background-color: rgb(255, 0, 0);
+    grid-area: bio;
+    font-size: 14;
+}
