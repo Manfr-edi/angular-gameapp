@@ -54,7 +54,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 const routes: Routes = [
@@ -91,7 +91,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     MatCardModule,
     MatProgressSpinnerModule,
-  
+    MatSnackBarModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],

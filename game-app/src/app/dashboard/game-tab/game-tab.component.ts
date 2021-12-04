@@ -44,22 +44,22 @@ export class GameTabComponent implements OnInit {
   //Piattaforme per un determinato gioco
   platformsGame: string[] = [];
 
+  actualList: string = userlist[0].code;
+
   constructor(public authService: AuthService, public userCollectionService: UserCollectionService, public db: AngularFirestore,
     public userLoggedService: UserLoggedService, public util: UtilService) {
     //La lista di default � Completed
     this.selectedList = this.userlists[0].code;
     //Carico la lista dei giochi da visualizzare di default
-    this.UpdateList(this.selectedList);
+    this.UpdateList(userlist[0].code);
   }
 
   ngOnInit(): void {
   }
 
-  UpdateList(actualList: string): void {
-    if (this.viewlist != actualList) {
-      this.viewlist = actualList;
+  UpdateList(list: string): void {
+      this.viewlist = list;
       this.games$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
-    }
   }
 
   async onChangeFilter() {

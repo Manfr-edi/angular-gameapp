@@ -4,13 +4,10 @@
 	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 		<div id="gamediv">
 			<div class="btnDiv">
-				<mat-button-toggle-group>
-					<mat-button-toggle (click)="UpdateList(userlists[0].code); updateForm=false">Completed Games
-					</mat-button-toggle>
-					<mat-button-toggle (click)="UpdateList(userlists[1].code); updateForm=false">Playing Games
-					</mat-button-toggle>
-					<mat-button-toggle (click)="UpdateList(userlists[2].code); updateForm=false">Desired Games
-					</mat-button-toggle>
+				<mat-button-toggle-group (change)="UpdateList($event.value); updateForm=false" [value]="userlists[0].code"> 
+					<mat-button-toggle [value]="userlists[0].code">Completed Games</mat-button-toggle>
+					<mat-button-toggle [value]="userlists[1].code">Playing Games</mat-button-toggle>
+					<mat-button-toggle [value]="userlists[2].code">Desired Games</mat-button-toggle>
 				</mat-button-toggle-group>
 			</div>
 
@@ -40,7 +37,7 @@
 			<div *ngIf="!updateForm">
 				<div *ngIf="games$ | async as games">
 					<div *ngFor="let game of games">
-						
+
 						<!--<div class="game">
 							<img class="gameico" [src] = "util.getImgUrl(game.payload.doc.data().title)">
 
@@ -76,7 +73,7 @@
 									Prezzo : {{game.payload.doc.data().price}} <span matSuffix>&euro;</span>
 								</mat-card-content>
 							</mat-card-title>
-							
+
 							<mat-card-content id="menuBtn">
 								<button mat-icon-button [matMenuTriggerFor]="menu">
 									<mat-icon>more_vert</mat-icon>
@@ -101,7 +98,8 @@
 			</div>
 
 			<div *ngIf="updateForm">
-				<app-insertgamelist *ngIf="gameid && viewlist" [gameid]="gameid" [updateList]="viewlist" (completed)="completed($event)">
+				<app-insertgamelist *ngIf="gameid && viewlist" [gameid]="gameid" [updateList]="viewlist"
+					(completed)="completed($event)">
 				</app-insertgamelist>
 				<button (click)="updateForm=false">Annulla</button>
 			</div>
@@ -125,4 +123,3 @@
 		</div>
 	</div>
 </body>
-

@@ -1,4 +1,4 @@
-#a
+#container
 {
 	background-color: blue;
 	padding: 20px;
@@ -20,13 +20,24 @@
 }
 
 #updateForm{
+	display: flex;
+	flex-direction: column;
+}
+
+#form{
 	display: inline-block;
 	width: 60%;
 	vertical-align: middle;
 	background-color: yellow;
 	margin-left: 5%;
 }
+
 .mat-form-field
 {
 	width: 240px;
 }
+
+#spinner {
+	margin: auto;
+  }
+  
