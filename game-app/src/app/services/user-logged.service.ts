@@ -25,7 +25,7 @@ export class UserLoggedService {
 		this.userDoc = db.doc('Users/' + this.authService.currentUserId);
 	}
 
-	//Questo metodo restituisce il documento relativo all'utente per il quale si è indicato l'id
+	//Questo metodo restituisce il documento relativo all'utente per il quale si ï¿½ indicato l'id
 	//nel caso in cui l'id non viene passato, viene restituito il documento relativo
 	//all'utente attualmente loggato
 	getUserDoc(userid?: string) {
@@ -63,12 +63,27 @@ export class UserLoggedService {
 		return username === "" ? null : this.getUserDoc(userid).collection("Friends", ref => this.searchByUsername(ref, username!));
 	}
 
-	addFriend(id: string, username: string, userid?: string): void {
-		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
+	sendRequest(id: string, username:string, userid: string){
+		this.getUserDoc(id).collection("Requests").doc(userid).set({username : username});
 	}
 
-	removeFriend(id: string, userid?: string): void {
+	getRequests(userid?:string){
+		return this.getUserDoc(userid).collection("Requests");
+	}
+
+	acceptRequest(id: string, username: string, userid: string) {
+		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
+		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
+		this.removeRequest(id,userid);
+	}
+
+	removeRequest(id: string, userid?: string){
+		this.getUserDoc(userid).collection("Requests").doc(id).delete();
+	}
+
+	removeFriend(id: string, userid: string) {
 		this.getUserDoc(userid).collection("Friends").doc(id).delete();
+		this.getUserDoc(id).collection("Friends").doc(userid).delete();
 	}
 
 	async checkIsFriend(userid: string, curUserId?: string) : Promise<boolean>
@@ -76,7 +91,12 @@ export class UserLoggedService {
 		return (await this.getUserDoc(curUserId).collection("Friends").doc(userid).ref.get()).exists;
 	}
 
-	//Funzionalità di chat
+	async checkRequest(userid: string, curUserId: string) : Promise<boolean>
+	{
+		return (await this.getUserDoc(userid).collection("Requests").doc(curUserId).ref.get()).exists;
+	}
+
+	//Funzionalitï¿½ di chat
 
 	getChatID(user1: string, user2?: string) {
 		let u2 = user2 ? user2 : this.getID();
@@ -88,7 +108,7 @@ export class UserLoggedService {
 	}
 
 	//Questo metodo restituisce il documento relativo alla chat tra due utenti
-	//Il secondo utente può essere omesso, nel caso viene considerato l'utente loggato
+	//Il secondo utente puï¿½ essere omesso, nel caso viene considerato l'utente loggato
 	getChatByUsers(user1: string, user2?: string) {
 		return this.getChat(this.getChatID(user1, user2));
 	}
@@ -98,7 +118,7 @@ export class UserLoggedService {
 		let chatId = this.getChatID(user1, user2);
 		//Cerco l'id nell'utente 1
 		let chats = (await this.getDataParam("chats", user1) as string[]);
-		//Se chats esiste e in esso è presente la chat, restituisce true
+		//Se chats esiste e in esso ï¿½ presente la chat, restituisce true
 		return chats && chats.findIndex(v => v === chatId) != -1;
 	}
 
@@ -125,7 +145,7 @@ export class UserLoggedService {
 		{ text: message, time: firebase.default.firestore.FieldValue.serverTimestamp(), sender: username });
 	}
 
-	//Questo metodo restituisce l'ultimo messaggio presente nella chat, se quest'ultima è vuota restituisce null.
+	//Questo metodo restituisce l'ultimo messaggio presente nella chat, se quest'ultima ï¿½ vuota restituisce null.
 	async getLastMessageInfo(idChat: string): Promise<MessageInfo | undefined> {
 
 		let m: MessageInfo | undefined;

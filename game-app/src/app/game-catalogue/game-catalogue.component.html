@@ -18,15 +18,11 @@
             {{ util.capitalize(game.payload.doc.data().title) }}
           </mat-card-title>
 
-          <mat-card-content>
-            Sviluppatore: {{game.payload.doc.data().developer}}
-          </mat-card-content>
+          
           <mat-card-content>
             Genere: {{game.payload.doc.data().genre}}
           </mat-card-content>
-          <mat-card-content>
-            Data d'uscita: {{game.payload.doc.data().release}}
-          </mat-card-content>
+          
           <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
             Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
           </mat-card-content>

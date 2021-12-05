@@ -49,6 +49,8 @@ export class GameCollectionService {
 
   }
 
+  
+
   async getDataGame(gameid: string) {
     return await this.db.doc('Games/' + gameid).ref.get();
   }

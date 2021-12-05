@@ -18,6 +18,7 @@ export class UserComponent implements OnInit {
   userlists = userlist;
   viewlist = this.userlists[0].code;
   isFriend?: boolean = undefined;
+  hasRequest?: boolean = undefined;
 
   username = '';
   userid: string;
@@ -45,8 +46,8 @@ export class UserComponent implements OnInit {
   async ngOnInit() {
     this.userSpese = await this.userCollectionService.getSpese("", "", this.userid);
     this.mySpese = await this.userCollectionService.getSpese("", "");
-
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
+    this.hasRequest = await this.userLoggedService.checkRequest(this.userid,this.authService.currentUserId);
   }
 
   UpdateList(actualList: string): void {
@@ -54,7 +55,6 @@ export class UserComponent implements OnInit {
     this.gameList$ = this.userCollectionService.getList(this.viewlist, this.userid).snapshotChanges();
     this.myGameList$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
   }
-
 
   async CommonGames() {
 

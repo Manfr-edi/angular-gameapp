@@ -24,11 +24,28 @@
 					{{ friend.payload.doc.data().username }}
 				</a>
 				<button class="btn btn-outline-primary"
-					(click)="userLoggedService.removeFriend(friend.payload.doc.id)">Rimuovi Amico
+					(click)="userLoggedService.removeFriend(friend.payload.doc.id, authService.currentUserId)">Rimuovi Amico
 				</button>
 
 			</div>
 		</ul>
 		<div *ngIf="friends.length === 0">Nessun amico</div>
+	</div>
+
+	<div *ngIf="requests$ | async; let requests">
+		<ul>
+		<div *ngFor="let request of requests">
+
+			<a [routerLink]="['/user', request.payload.doc.data().username]">
+				{{  request.payload.doc.data().username }}
+			</a>
+			<button class="btn btn-outline-primary"
+				(click)="userLoggedService.acceptRequest(request.payload.doc.id, request.payload.doc.data().username, authService.currentUserId)">Accetta Amico
+			</button>
+			<button class="btn btn-outline-primary"
+				(click)="userLoggedService.removeRequest(request.payload.doc.id)">Rifiuta Amico
+			</button>
+		</div>
+		</ul>
 	</div>
 </div>

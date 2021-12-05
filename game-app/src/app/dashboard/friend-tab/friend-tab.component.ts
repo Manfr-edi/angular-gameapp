@@ -14,16 +14,20 @@ export class FriendTabComponent implements OnInit {
   //Dati visualizzati
   users$?: Observable<any[]>;
   friends$: Observable<any[]>;
+  requests$: Observable<any[]> = new Observable;
 
   constructor(public db: AngularFirestore, public authService: AuthService, public userLoggedService: UserLoggedService) {
     this.users$ = new Observable();
     this.friends$ = userLoggedService.getFriends().snapshotChanges();
   }
 
-  ngOnInit(): void {
+  ngOnInit(): void {    
+    this.requests$ = this.userLoggedService.getRequests().snapshotChanges();
   }
 
   onKey(event: any) {
     this.users$ = this.userLoggedService.search(event.target.value.toLowerCase())?.snapshotChanges();
   }
+
+
 }

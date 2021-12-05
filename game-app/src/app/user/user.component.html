@@ -3,14 +3,19 @@
 
 		{{userInfo.username}}
 
-		<div *ngIf="!isFriend">
+		<div *ngIf="!isFriend && !hasRequest">
 			<button class="btn btn-outline-primary"
-				(click)="userLoggedService.addFriend(userid,userInfo.username);">Aggiungi Amico
+				(click)="userLoggedService.sendRequest(userid,authService.currentUserName,authService.currentUserId); hasRequest=true">Aggiungi Amico
+			</button>
+		</div>
+		
+		<div *ngIf="isFriend">
+			<button class="btn btn-outline-primary" (click)="userLoggedService.removeFriend(userid,authService.currentUserId);">Rimuovi Amico
 			</button>
 		</div>
 
-		<div *ngIf="isFriend">
-			<button class="btn btn-outline-primary" (click)="userLoggedService.removeFriend(userid);">Rimuovi Amico
+		<div *ngIf="hasRequest">
+			<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia inviata
 			</button>
 		</div>
 
@@ -47,7 +52,6 @@
 			Media spese utente: {{userSpese.avgPrice}}
 			Numero giochi acquistati utente: {{userSpese.countBoughtGame}}
 		</div>
-
 
 	</div>
 

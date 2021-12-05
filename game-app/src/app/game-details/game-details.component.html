@@ -1,32 +1,60 @@
 <app-check-user-verified></app-check-user-verified>
 <div *ngIf="!isLoading; else loading">
 
-
+	<div *ngIf="!show">	
 	<div class="tab" *ngIf="game$ | async; let game; ">
 
-	<div id ="image"><img  [src]="util.getImgUrl(game.title)"></div>
-		<div id = "title" >{{ util.capitalize(game.title) }} </div>
-		<div id = "content">
-			{{ util.capitalize(game.platform[0]) }} <br>
-			{{ util.capitalize(game.developer) }} <br>
-			{{ game.price }}<br>
+		<img id="image" [src]="util.getImgUrl(game.title)">
+		<div id="title">{{ util.capitalize(game.title) }} </div>
+		<div id="content">
+			<mat-card id="one">
+				<mat-card-title>Piattaforma</mat-card-title>
+				<mat-card-content>
+					<div *ngFor="let platform of game.platform">
+						{{ util.capitalize(platform) }}</div>
+				</mat-card-content>
+			</mat-card>
+			<mat-card id="two">
+				<mat-card-title>Sviluppatore</mat-card-title>
+				<mat-card-content>{{ util.capitalize(game.developer) }}</mat-card-content>
+			</mat-card>
+			<mat-card id="three">
+				<mat-card-title>Prezzo d'uscita</mat-card-title>
+				<mat-card-content>{{ util.capitalize(game.price) }}<span matSuffix>&euro;</span></mat-card-content>
+			</mat-card>
+			<mat-card id="four">
+				<mat-card-title>Data d'uscita</mat-card-title>
+				<mat-card-content>{{ util.capitalize(game.release) }}</mat-card-content>
+			</mat-card>
+			<mat-card id="five">
+				<mat-card-title>Publisher</mat-card-title>
+				<mat-card-content>{{ util.capitalize(game.publisher) }}</mat-card-content>
+			</mat-card>
 		</div>
-		<div id = "biodesc">
+		<div id="biodesc">
+			<h4>Descrizione : </h4>
 			{{ game.bio }}
 		</div>
-		
+		<div id="stat">
+			Il tempo medio di completamento e' {{game.completedtimeavg}} <br>
+			Il numero di utenti che hanno completato il gioco e' {{game.completedtimecount}}
+		</div>
+
 	</div>
+</div>
 
 
 	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && !isinlist">
-		<button *ngIf="!show" (click)="show=!show">Aggiungi gioco</button>
-		<button *ngIf="show" (click)="show=!show">Chiudi gioco</button>
 		<app-insertgamelist *ngIf="show && gameid" [gameid]="gameid" (completed)="completed($event)">
 		</app-insertgamelist>
+		<button id="btn1" mat-raised-button color="primary" *ngIf="!show" (click)="show=!show">Aggiungi gioco</button>
+		<button id="btn2" mat-raised-button color="primary" *ngIf="show" (click)="show=!show">Chiudi gioco</button>
+		
 	</div>
 
-	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isinlist">
+	<div id="tick" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isinlist">
 		Il gioco e' gia' in una tua lista
+		<mat-icon>check_circle_outline</mat-icon>
 	</div>
 
 </div>
