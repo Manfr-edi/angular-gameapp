@@ -2,6 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { UtilService } from 'src/app/services/util.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-signin',
@@ -9,75 +11,42 @@ import { UtilService } from 'src/app/services/util.service';
   styleUrls: ['./signin.component.css']
 })
 export class SignInComponent implements OnInit {
+  loginForm: FormGroup;
 
-  isNewUser = true;
-  email = '';
-  password = '';
-  errorMessage = '';
-  error: { name: string, message: string } = { name: '', message: '' };
-
-  resetPassword = false;
-
-  constructor(public authService: AuthService, private router: Router, public util: UtilService) { }
+  constructor(public authService: AuthService, private router: Router, public util: UtilService,
+    public _snackBar: MatSnackBar, fb: FormBuilder) {
+    this.loginForm = fb.group({
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required]
+    });
+  }
 
   ngOnInit() { }
 
-  checkUserInfo() {
+  checkLoggedIn() {
     if (this.authService.isUserEmailLoggedIn) {
-      this.router.navigate(['/user/'+this.authService.currentUserId])
+      this.router.navigate(['/user/' + this.authService.currentUserId])
     }
-  }
-
-  clearErrorMessage() {
-    this.errorMessage = '';
-    this.error = { name: '', message: '' };
-  }
-
-  changeForm() {
-    this.isNewUser = !this.isNewUser
   }
 
   onLoginEmail(): void {
-    this.clearErrorMessage()
-
-    if (this.validateForm(this.email, this.password)) {
-      this.authService.loginWithEmail(this.email, this.password)
-        .then(() => this.router.navigate(['/gametab']))
-        .catch(_error => {
-          this.error = _error
-          window.alert(this.error.message)
-          //this.router.navigate(['/'])
-        })
-    }
-  }
-
-  validateForm(email: string, password: string): boolean {
-    if (email.length === 0) {
-      this.errorMessage = 'Please enter Email!'
-      return false
-    }
-
-    if (password.length === 0) {
-      this.errorMessage = 'Please enter Password!'
-      return false;
-    }
-
-    if (!this.util.isValidMailFormat(this.email)) {
-      this.errorMessage = 'Please enter valid Mail format!'
-      return false
-    }
-
-    this.errorMessage = ''
-    return true;
-  }
-
-  sendResetEmail() {
-    this.clearErrorMessage()
-
-    this.authService.ResetPassword(this.email)
-      .then(() => this.resetPassword = true)
+    this.authService.loginWithEmail(this.loginForm.controls['email']?.value, this.loginForm.controls['password']?.value)
+      .then(() => this.router.navigate(['/gametab']))
       .catch(_error => {
-        this.error = _error
+      
+        //window.alert(this.error.message)
+        this._snackBar.open(_error.message);
+        //this.router.navigate(['/'])
       })
+  }
+
+  checkRequired(field: string, name: string) {
+    if (this.loginForm.get(field)?.hasError('required'))
+      this._snackBar.open(name + " è obbligatorio!", 'Ok', { duration: 2000 });
+  }
+
+  checkEmail() {
+    if (this.loginForm.get("email")?.hasError('email'))
+      this._snackBar.open("Fornisci un'email corretta", 'Ok', { duration: 2000 });
   }
 }

@@ -1,33 +1,28 @@
 {{checkUserInfo()}}
-<div *ngIf="!authService.isUserEmailLoggedIn">
-	<div style="width: 350px;">
 
-		<p *ngIf="errorMessage.length > 0" class="text-danger">
-			{{errorMessage}}</p>
+<div id="content">
+	<form id="registerForm" (ngSubmit)="onRegister()" [formGroup]="registerForm">
+		<mat-form-field appearance="fill">
+			<mat-label>Username</mat-label>
+			<input (focusout)="checkRequired('username', 'Username'); checkUsername()" matInput type="text"
+				placeholder="username" required formControlName="username">
+		</mat-form-field>
 
-		<p *ngIf="error.message.length > 0" class="text-danger">
-			{{error.message}}</p>
+		<mat-form-field appearance="fill">
+			<mat-label>Email</mat-label>
+			<input (focusout)="checkRequired('email', 'Email'); checkEmail()" matInput type="email" placeholder="email"
+				required formControlName="email">
+		</mat-form-field>
 
-		<form (ngSubmit)="onSignUp()">
-			<div class="form-group">
-				<label for="username">Username</label>
-				<input type="username" class="form-control" id="username" name="username" required [(ngModel)]="username">
-			</div>
-			<div class="form-group">
-				<label for="email">Email</label>
-				<input type="email" class="form-control" id="email" name="email" required [(ngModel)]="email">
-			</div>
+		<mat-form-field appearance="fill">
+			<mat-label>Password</mat-label>
+			<input (focusout)="checkRequired('password', 'Password')" matInput type="password" placeholder="password"
+				required formControlName="password">
+		</mat-form-field>
 
-			<div class="form-group">
-				<label for="password">Password</label>
-				<input type="password" class="form-control" id="password" name="password" required [(ngModel)]="password">
-			</div>
+		<button type="submit" [disabled]="!registerForm.valid" mat-button color="primary">Register</button>
+	</form>
 
-			<button type="submit" class="btn btn-success">Register</button>
-		</form>
-
-		<h4 class="text-primary" >Already have an Account?</h4>
-		<button [routerLink]= "'/login'" class="btn btn-success">Log In </button>
-	</div>
-
+	<h4 class="text-primary">Already have an Account?</h4>
+	<button [routerLink]="'/login'" mat-button color="primary">Login</button>
 </div>

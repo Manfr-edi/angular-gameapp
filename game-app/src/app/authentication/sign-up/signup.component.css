@@ -1,0 +1,18 @@
+
+#content{
+	width: 30%;
+	margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#registerForm{
+	display: flex;
+	flex-direction: column;
+}
+
+.mat-form-field
+{
+	width: 240px;
+    margin: auto;
+}
