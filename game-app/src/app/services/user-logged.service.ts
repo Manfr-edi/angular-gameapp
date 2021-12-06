@@ -63,22 +63,22 @@ export class UserLoggedService {
 		return username === "" ? null : this.getUserDoc(userid).collection("Friends", ref => this.searchByUsername(ref, username!));
 	}
 
-	sendRequest(id: string, username:string, userid: string){
-		this.getUserDoc(id).collection("Requests").doc(userid).set({username : username});
+	sendRequest(id: string, username: string, userid: string) {
+		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username, type: "request", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
 	}
 
-	getRequests(userid?:string){
-		return this.getUserDoc(userid).collection("Requests");
+	getRequests(userid?: string) {
+		return this.getUserDoc(userid).collection("Notification", ref => ref.where('type', '==', "request"));
 	}
 
 	acceptRequest(id: string, username: string, userid: string) {
 		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
 		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
-		this.removeRequest(id,userid);
+		this.removeRequest(id, userid);
 	}
 
-	removeRequest(id: string, userid?: string){
-		this.getUserDoc(userid).collection("Requests").doc(id).delete();
+	removeRequest(id: string, userid?: string) {
+		this.getUserDoc(userid).collection("Notification").doc(id).delete();
 	}
 
 	removeFriend(id: string, userid: string) {
@@ -86,14 +86,12 @@ export class UserLoggedService {
 		this.getUserDoc(id).collection("Friends").doc(userid).delete();
 	}
 
-	async checkIsFriend(userid: string, curUserId?: string) : Promise<boolean>
-	{
+	async checkIsFriend(userid: string, curUserId?: string): Promise<boolean> {
 		return (await this.getUserDoc(curUserId).collection("Friends").doc(userid).ref.get()).exists;
 	}
 
-	async checkRequest(userid: string, curUserId: string) : Promise<boolean>
-	{
-		return (await this.getUserDoc(userid).collection("Requests").doc(curUserId).ref.get()).exists;
+	async checkRequest(userid: string, curUserId: string): Promise<boolean> {
+		return (await this.getUserDoc(userid).collection("Notification").doc(curUserId).ref.get()).exists;
 	}
 
 	//Funzionalit� di chat
@@ -142,7 +140,11 @@ export class UserLoggedService {
 
 		let username = await this.getDataParam("username", s);
 		this.getChat(idChat).collection("messages").doc().set(
-		{ text: message, time: firebase.default.firestore.FieldValue.serverTimestamp(), sender: username });
+			{ text: message, time: firebase.default.firestore.FieldValue.serverTimestamp(), sender: username });
+
+			var user = idChat.substring(0,28) === s ? idChat.substring(28) : idChat.substring(0,28);
+
+			this.getUserDoc(user).collection("Notification").doc().set({ userid: s,username: username, type: "message", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false })
 	}
 
 	//Questo metodo restituisce l'ultimo messaggio presente nella chat, se quest'ultima � vuota restituisce null.
@@ -155,5 +157,20 @@ export class UserLoggedService {
 		return m;
 	}
 
+
+	getNotification(userid?: string) {
+		return this.getUserDoc(userid).collection("Notification", ref => ref.orderBy('time'))
+
+
+	}
+
+	getUnseenNotification(userid?: string) {
+		return this.getUserDoc(userid).collection("Notification", ref => ref.where('seen', '==', false).orderBy('time'))
+	}
+
+
+	setNotificationSeen(notificationid: string, userid?: string){
+		this.getUserDoc(userid).collection("Notification").doc(notificationid).update({ seen: true });
+	}
 
 }

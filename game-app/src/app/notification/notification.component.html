@@ -1,0 +1,28 @@
+<div *ngIf="notifications$ | async; let notifications">
+    <button mat-icon-button [matMenuTriggerFor]="menu_notification">
+        <mat-icon *ngIf="countNotification > 0" matBadge="{{countNotification}}" matBadgeColor="warn"
+            matBadgeSize="small">notifications_active</mat-icon>
+        <mat-icon *ngIf="countNotification == 0">notifications</mat-icon>
+    </button>
+
+    <mat-menu #menu_notification="matMenu">
+        <div *ngIf="countNotification >0">
+            <mat-card *ngFor="let n of notifications">
+                <div *ngIf="n.payload.doc.data().type == 'message'">
+                    Messaggio da parte di {{n.username}}
+                </div>
+                <div *ngIf="n.payload.doc.data().type == 'request'">Richiesta di amicizia da parte di {{n.payload.doc.data().username}}
+
+                </div>
+
+                <button mat-icon-button *ngIf="!(n.payload.doc.data().seen)" (click)="userLoggedService.setNotificationSeen(n.payload.doc.id)">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </mat-card>
+        </div>
+        <div *ngIf="countNotification == 0">
+            <mat-card disabled>Non sono presenti notifiche</mat-card>
+        </div>
+    </mat-menu>
+
+</div>

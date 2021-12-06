@@ -24,7 +24,7 @@
 		</li>
 
 		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
-			<button mat-button [matMenuTriggerFor]="menu">User</button>
+			<button mat-button [matMenuTriggerFor]="menu">{{authService.currentUserName}}</button>
 			<mat-menu #menu="matMenu">
 				<button mat-menu-item [routerLink]="['/gametab']">Games</button>
 				<button mat-menu-item [routerLink]="['/settings']">Settings</button>
@@ -38,9 +38,13 @@
 		</li>
 
 		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
+			<app-notification></app-notification>
+		</li>
+
+		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
 			<button mat-button (click)="authService.signOut()">Logout</button>
 		</li>
-	
+
 
 		<!--
 				<li class="nav-item">
@@ -52,13 +56,11 @@
 			-->
 	</ul>
 
-	
+
 
 </nav>
-	<router-outlet></router-outlet>
+<router-outlet></router-outlet>
 
 <!--<div class="container">
 	<router-outlet></router-outlet>
 </div>-->
-
-

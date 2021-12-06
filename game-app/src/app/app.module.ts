@@ -56,6 +56,8 @@ import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatGridListModule} from '@angular/material/grid-list';
+import {MatBadgeModule} from '@angular/material/badge';
+import { NotificationComponent } from './notification/notification.component';
 
 
 const routes: Routes = [
@@ -93,7 +95,8 @@ const routes: Routes = [
     MatCardModule,
     MatProgressSpinnerModule,
     MatSnackBarModule,
-    MatGridListModule
+    MatGridListModule,
+    MatBadgeModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],
@@ -113,7 +116,8 @@ const routes: Routes = [
     FriendTabComponent,
     ChatComponent,
     ResetPasswordComponent,
-    InsertNewPasswordComponent
+    InsertNewPasswordComponent,
+    NotificationComponent
   ],
   providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
   bootstrap: [AppComponent]
