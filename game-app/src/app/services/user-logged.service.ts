@@ -64,21 +64,28 @@ export class UserLoggedService {
 	}
 
 	sendRequest(id: string, username: string, userid: string) {
+		this.getUserDoc(id).collection("Requests").doc(userid).set({ username: username, time: firebase.default.firestore.FieldValue.serverTimestamp() });
 		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username, type: "request", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
 	}
 
 	getRequests(userid?: string) {
-		return this.getUserDoc(userid).collection("Notification", ref => ref.where('type', '==', "request"));
+		return this.getUserDoc(userid).collection("Requests");
 	}
 
 	acceptRequest(id: string, username: string, userid: string) {
 		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
 		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
 		this.removeRequest(id, userid);
+		
 	}
 
 	removeRequest(id: string, userid?: string) {
-		this.getUserDoc(userid).collection("Notification").doc(id).delete();
+		//this.getUserDoc(userid).collection("Notification").doc(id).delete();
+		this.getUserDoc(userid).collection("Requests").doc(id).delete();
+		
+		this.getUserDoc(userid).collection("Notification", ref => ref.where("type", "==", "request").where("userid", "==", id)).get().forEach(
+			docs => docs.forEach(
+				d => this.deleteNotification(d.id)));
 	}
 
 	removeFriend(id: string, userid: string) {
@@ -91,7 +98,7 @@ export class UserLoggedService {
 	}
 
 	async checkRequest(userid: string, curUserId: string): Promise<boolean> {
-		return (await this.getUserDoc(userid).collection("Notification").doc(curUserId).ref.get()).exists;
+		return (await this.getUserDoc(userid).collection("Requets").doc(curUserId).ref.get()).exists;
 	}
 
 	//Funzionalit� di chat
@@ -142,9 +149,9 @@ export class UserLoggedService {
 		this.getChat(idChat).collection("messages").doc().set(
 			{ text: message, time: firebase.default.firestore.FieldValue.serverTimestamp(), sender: username });
 
-			var user = idChat.substring(0,28) === s ? idChat.substring(28) : idChat.substring(0,28);
+		var user = idChat.substring(0, 28) === s ? idChat.substring(28) : idChat.substring(0, 28);
 
-			this.getUserDoc(user).collection("Notification").doc().set({ userid: s,username: username, type: "message", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false })
+		this.getUserDoc(user).collection("Notification").doc().set({ userid: s, username: username, type: "message", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false })
 	}
 
 	//Questo metodo restituisce l'ultimo messaggio presente nella chat, se quest'ultima � vuota restituisce null.
@@ -169,8 +176,11 @@ export class UserLoggedService {
 	}
 
 
-	setNotificationSeen(notificationid: string, userid?: string){
+	setNotificationSeen(notificationid: string, userid?: string) {
 		this.getUserDoc(userid).collection("Notification").doc(notificationid).update({ seen: true });
 	}
 
+	deleteNotification(notificationid: string, userid?: string) {
+		this.getUserDoc(userid).collection("Notification").doc(notificationid).delete();
+	}
 }
