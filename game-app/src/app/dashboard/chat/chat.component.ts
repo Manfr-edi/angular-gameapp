@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
@@ -26,7 +26,6 @@ export class ChatComponent implements OnInit {
   idFriend: string = "";
 
   constructor(public db: AngularFirestore, public authService: AuthService, public userLoggedService: UserLoggedService) {
-
   }
 
   async ngOnInit() {

@@ -76,7 +76,8 @@ export class UserLoggedService {
 		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
 		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
 		this.removeRequest(id, userid);
-		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username, 
+		let username1 = this.getDataParam("username", userid);
+		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username1, 
 			type: "accepted", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
 	}
 
@@ -183,5 +184,23 @@ export class UserLoggedService {
 
 	deleteNotification(notificationid: string, userid?: string) {
 		this.getUserDoc(userid).collection("Notification").doc(notificationid).delete();
+	}
+
+	seenAllNotification(userid?: string)
+	{
+		this.getUnseenNotification(userid).get().forEach(
+			docs => docs.forEach(
+				d => d.ref.update({seen: true})
+			)
+		)
+	}
+
+	deleteAllNotification(userid?: string)
+	{
+		this.getUserDoc(userid).collection("Notification").get().forEach(
+			docs => docs.forEach(
+				d => d.ref.delete()
+			)
+		)
 	}
 }

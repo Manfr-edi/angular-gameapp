@@ -11,7 +11,7 @@ import { UserLoggedService } from '../services/user-logged.service';
 export class NotificationComponent implements OnInit {
 
   countNotification = 0;
-
+  countUnseenNotification = 0;
   notifications$: Observable<any>;
 
   constructor(public authService: AuthService, public userLoggedService: UserLoggedService) { 
@@ -19,7 +19,8 @@ export class NotificationComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.userLoggedService.getUnseenNotification().valueChanges().subscribe(p => this.countNotification = p.length);
+    this.userLoggedService.getNotification().valueChanges().subscribe(p => this.countNotification = p.length);
+    this.userLoggedService.getUnseenNotification().valueChanges().subscribe(p => this.countUnseenNotification = p.length);
   }
 
 }
