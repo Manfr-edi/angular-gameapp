@@ -15,6 +15,10 @@
 
                 </div>
 
+                <div *ngIf="n.payload.doc.data().type == 'accepted'">
+                    Richiesta accettata da {{n.username}}
+                </div>
+
                 <button mat-icon-button *ngIf="!(n.payload.doc.data().seen)" (click)="userLoggedService.setNotificationSeen(n.payload.doc.id)">
                     <mat-icon>delete_outline</mat-icon>
                 </button>

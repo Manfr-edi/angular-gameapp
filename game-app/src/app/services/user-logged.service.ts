@@ -76,13 +76,14 @@ export class UserLoggedService {
 		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
 		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
 		this.removeRequest(id, userid);
-		
+		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username, 
+			type: "accepted", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
 	}
 
 	removeRequest(id: string, userid?: string) {
 		//this.getUserDoc(userid).collection("Notification").doc(id).delete();
 		this.getUserDoc(userid).collection("Requests").doc(id).delete();
-		
+
 		this.getUserDoc(userid).collection("Notification", ref => ref.where("type", "==", "request").where("userid", "==", id)).get().forEach(
 			docs => docs.forEach(
 				d => this.deleteNotification(d.id)));
@@ -98,7 +99,7 @@ export class UserLoggedService {
 	}
 
 	async checkRequest(userid: string, curUserId: string): Promise<boolean> {
-		return (await this.getUserDoc(userid).collection("Requets").doc(curUserId).ref.get()).exists;
+		return (await this.getUserDoc(userid).collection("Requests").doc(curUserId).ref.get()).exists;
 	}
 
 	//Funzionalit� di chat
