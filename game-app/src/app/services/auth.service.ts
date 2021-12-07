@@ -92,8 +92,6 @@ export class AuthService {
   async ResetPassword(passwordResetEmail: string) {
     return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
       .then(() => {
-        //TOGLIERE
-        window.alert('Password reset email sent, check your inbox.');
       }).catch((error) => {
         window.alert(error)
       })
@@ -102,5 +100,10 @@ export class AuthService {
   changePassword(code: string, new_psw: string)
   {
     this.afAuth.confirmPasswordReset(code, new_psw);
+  }
+
+  verifyEmail(code: string)
+  {
+    return this.afAuth.applyActionCode(code);
   }
 }

@@ -58,6 +58,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatBadgeModule} from '@angular/material/badge';
 import { NotificationComponent } from './notification/notification.component';
+import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
 
 
 const routes: Routes = [
@@ -71,7 +72,8 @@ const routes: Routes = [
   { path: 'chat', component: ChatComponent },
   { path: 'settings', component: SettingsTabComponent },
   { path: 'resetpassword', component: ResetPasswordComponent },
-  { path: 'newpassword', component: InsertNewPasswordComponent }
+  { path: 'newpassword', component: InsertNewPasswordComponent },
+  { path: 'redirect', component: RedirectPageComponent}
 ];
 
 @NgModule({
@@ -117,7 +119,8 @@ const routes: Routes = [
     ChatComponent,
     ResetPasswordComponent,
     InsertNewPasswordComponent,
-    NotificationComponent
+    NotificationComponent,
+    RedirectPageComponent
   ],
   providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
   bootstrap: [AppComponent]

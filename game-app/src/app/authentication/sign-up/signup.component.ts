@@ -64,7 +64,9 @@ export class SignUpComponent implements OnInit {
 
   onRegister() {
     this.authService.signUpWithEmail(this.registerForm.controls['username'].value,
-      this.registerForm.controls['email'].value, this.registerForm.controls['password'].value)
+      this.registerForm.controls['email'].value, this.registerForm.controls['password'].value).then(
+        r =>  this.snackBar.open("Email di verifica inviata", 'OK', {duration: 4000})
+      )
       .catch(_error => {
         this.snackBar.open(_error, "OK", { duration: 2000 });
       }).finally(() => this.router.navigate(['/']))
