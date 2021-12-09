@@ -1,0 +1,75 @@
+::ng-deep.mat-menu-panel {
+    max-width:fit-content !important;
+  }
+
+  .notification
+  {
+      display: inline-block;
+      width: 93%;
+      padding: 0;
+      vertical-align: middle;
+  }
+
+  .flexContainer
+  {
+      display: flex;
+  }
+
+.logo
+{
+    width: 50px;
+    font-size: 45px;
+}
+
+.text
+{
+    padding: 0 2.5%;
+}
+
+.deleteNotification
+{
+    width:7%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/*
+    RICHIESTA AMICIZIA
+*/
+
+.accettazione
+{
+    width:30%;
+    padding: 0 2%;
+}
+
+.accettazione .acceptReqBtn
+{
+    float: left;
+    width: 49%;
+}
+
+.accettazione .declineReqBtn
+{
+    float: right;
+    width: 49%;
+}
+
+/*
+    FINE RICHIESTA AMICIZIA
+*/
+
+
+/*
+    MESSAGGIO
+*/
+
+.openChatBtn
+{
+   width: 20%;
+}
+
+/*
+    FINE MESSAGGIO
+*/
+

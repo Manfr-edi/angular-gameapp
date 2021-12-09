@@ -72,11 +72,11 @@ export class UserLoggedService {
 		return this.getUserDoc(userid).collection("Requests");
 	}
 
-	acceptRequest(id: string, username: string, userid: string) {
+	async acceptRequest(id: string, username: string, userid: string) {
 		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
 		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
 		this.removeRequest(id, userid);
-		let username1 = this.getDataParam("username", userid);
+		let username1 = await this.getDataParam("username", userid);
 		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username1, 
 			type: "accepted", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
 	}
