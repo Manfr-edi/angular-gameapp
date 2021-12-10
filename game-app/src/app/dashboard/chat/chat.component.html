@@ -1,40 +1,42 @@
-<app-check-user-verified></app-check-user-verified>
-<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+<!--
+    <div *ngIf="messages$ | async; let message">
+    <div *ngFor="let m of message">
+        <p *ngIf="authService.currentUserName === m.sender" align="right">
+            {{m.text}} - {{util.getMsgTime(m.time)}}</p>
+        <p *ngIf="authService.currentUserName !== m.sender" align="left">
+            {{m.text}} - {{util.getMsgTime(m.time)}}</p>
+    </div>
+</div>
+<input type="text" [(ngModel)]="messageTxt" placeholder="Inserisci messaggio">
+<button (click)="sendMessage()" [disabled]="messageTxt==''">Invia</button>
+-->
 
-	<button (click)="searchFriendToggle=!searchFriendToggle; idCurChat=''">Nuova Chat</button>
+<div id="container" *ngIf="messages$ | async; let message">
+    <div id="containerChat" *ngFor="let m of message">
+        <mat-card *ngIf="authService.currentUserName === m.sender" class="meCard">
+            <mat-card-title class="msg">
+                {{m.text}}
+            </mat-card-title>
+            <mat-card-content class="time">
+                {{util.getMsgTime(m.time)}}
+            </mat-card-content>
+        </mat-card>
 
-	<div *ngIf="searchFriendToggle">
-		Amico: <input (keyup)="searchFriend($event)" type="text">
+        <mat-card *ngIf="authService.currentUserName !== m.sender" class="friendCard">
+            <mat-card-title class="msg">
+                {{m.text}}
+            </mat-card-title>
+            <mat-card-content class="time">
+                {{util.getMsgTime(m.time)}}
+            </mat-card-content>
+        </mat-card>
+    </div>
 
-		<div *ngIf="users$ | async; let users">
-			<ul>
-				<div *ngFor="let user of users">
-					<div *ngIf="authService.currentUserId !== user.payload.doc.id">
-						<a (click)="createChat(user.payload.doc.id)">
-							{{ user.payload.doc.data().username }}
-						</a>
-					</div>
-				</div>
-			</ul>
-			<div *ngIf="users?.length === 0">Nessun utente trovato</div>
-		</div>
-	</div>
+    <div id="sendMessage">
+        <input id="messageTxt" matInput placeholder="messaggio">
+        <button id="messageSendBtn" mat-icon-button >
+            <mat-icon>send</mat-icon>
+        </button>
+    </div>
 
-	<p *ngFor="let chat of chats" (click)="newChat=false; idCurChat = ''; openChat(chat.chatID);">
-		{{chat.lastMessage?.text }} - {{ chat.lastMessage?.sender }} - {{chat.lastMessage?.time }}
-	</p>
-
-	<div *ngIf="idCurChat !== ''">
-		Stai guardando la chat: {{idCurChat}}
-		<div *ngIf="messages$ | async; let message">
-			<div *ngFor="let m of message">
-				<p *ngIf="authService.currentUserName === m.payload.doc.data().sender" align="right">
-					{{m.payload.doc.data().text}} : {{m.payload.doc.data().sender}} : {{m.payload.doc.data().time}} </p>
-				<p *ngIf="authService.currentUserName !== m.payload.doc.data().sender" align="left">
-					{{m.payload.doc.data().text}} : {{m.payload.doc.data().sender}} : {{m.payload.doc.data().time}} </p>
-			</div>
-		</div>
-		<input type="text" [(ngModel)]="message" placeholder="Inserisci messaggio">
-		<button (click)="sendMessage()">Invia</button>
-	</div>
 </div>

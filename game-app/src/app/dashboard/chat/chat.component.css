@@ -1,0 +1,59 @@
+#container
+{
+    padding: 0 5%;
+    display: flex;
+    flex-direction: column;
+}
+
+#containerChat
+{
+    display: flex;
+    flex-direction: vertical;
+}
+
+#container mat-card
+{
+    max-width: 30%;
+}
+
+.meCard
+{
+    float:right;
+    margin-left: auto;
+}
+
+.friendCard
+{
+    float:left;
+}
+
+.msg
+{
+    font-size: 14;
+}
+
+.time
+{
+    text-align: right;
+    font-size: 11;
+}
+
+#sendMessage
+{
+    width:80%;
+    float:right;
+    margin-left: auto;
+}
+
+#messageTxt
+{
+    width: 90%;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#messageSendBtn
+{
+    display: inline-block;
+    vertical-align: middle;
+}

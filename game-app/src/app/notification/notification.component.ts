@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { UserLoggedService } from '../services/user-logged.service';
+import { UtilService } from '../services/util.service';
 
 @Component({
   selector: 'app-notification',
@@ -14,7 +15,8 @@ export class NotificationComponent implements OnInit {
   countUnseenNotification = 0;
   notifications$: Observable<any>;
 
-  constructor(public authService: AuthService, public userLoggedService: UserLoggedService) { 
+  constructor(public authService: AuthService, public userLoggedService: UserLoggedService,
+    public util: UtilService) { 
     this.notifications$= userLoggedService.getNotification().snapshotChanges();
   }
 

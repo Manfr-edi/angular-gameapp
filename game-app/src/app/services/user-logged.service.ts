@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, DocumentData, CollectionReference } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, DocumentData, CollectionReference, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AuthService } from './auth.service';
 import { userlist } from 'src/app/data/userlist/userlist';
 import * as firebase from 'firebase'
@@ -45,7 +45,7 @@ export class UserLoggedService {
 	}
 
 	search(username: string) {
-		return username === "" ? null : this.db.collection('Users', ref => this.searchByUsername(ref, username));
+		return this.db.collection('Users', ref => this.searchByUsername(ref, username));
 	}
 
 	//Questa funzione effettua la ricerca mediante l'username
@@ -60,7 +60,7 @@ export class UserLoggedService {
 	}
 
 	searchFriends(username: string, userid?: string) {
-		return username === "" ? null : this.getUserDoc(userid).collection("Friends", ref => this.searchByUsername(ref, username!));
+		return this.getUserDoc(userid).collection("Friends", ref => this.searchByUsername(ref, username));
 	}
 
 	sendRequest(id: string, username: string, userid: string) {
@@ -77,8 +77,10 @@ export class UserLoggedService {
 		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
 		this.removeRequest(id, userid);
 		let username1 = await this.getDataParam("username", userid);
-		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username1, 
-			type: "accepted", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
+		this.getUserDoc(id).collection("Notification").doc().set({
+			userid: userid, username: username1,
+			type: "accepted", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false
+		});
 	}
 
 	removeRequest(id: string, userid?: string) {
@@ -120,7 +122,7 @@ export class UserLoggedService {
 		return this.getChat(this.getChatID(user1, user2));
 	}
 
-	async chatExist(user1: string, user2?: string): Promise<boolean> {
+	async chatExists(user1: string, user2?: string): Promise<boolean> {
 		//Computo il chat id
 		let chatId = this.getChatID(user1, user2);
 		//Cerco l'id nell'utente 1
@@ -129,12 +131,38 @@ export class UserLoggedService {
 		return chats && chats.findIndex(v => v === chatId) != -1;
 	}
 
+	async chatExistsByID(chatID: string): Promise<boolean> {
+		return (await this.db.collection("Chats").doc(chatID).ref.get()).exists;
+	}
+
+	async getFriendsWithChat(withChat: boolean, userid?: string): Promise<AngularFirestoreCollection | undefined> {
+		let id = userid ? userid : this.getID();
+
+		let doc = this.getUserDoc(userid);
+		let chats = await this.getDataParam("chats", userid) as string[];
+		if (chats != undefined && chats.length > 0) {
+			let idFriends: string[] = new Array;
+
+			chats.map(d => {
+				let s = d.substr(0, 28);
+				idFriends.push(s == id ? d.substr(28) : s);
+			}
+			)
+
+			return doc.collection("Friends",
+				ref => ref.where(firebase.default.firestore.FieldPath.documentId(),
+					withChat ? "in" : "not-in", idFriends));
+		}
+
+		return undefined;
+	}
+
 	async createChat(user1: string, user2?: string) {
 		//Genero l'id
 		let id = this.getChatID(user1, user2);
 
 		//Controllo che la chat non esista gia
-		if (!(await this.chatExist(user1, user2))) {
+		if (!(await this.chatExists(user1, user2))) {
 			this.update({ chats: firebase.default.firestore.FieldValue.arrayUnion(id) }, user1);
 			this.update({ chats: firebase.default.firestore.FieldValue.arrayUnion(id) }, user2);
 		}
@@ -186,17 +214,15 @@ export class UserLoggedService {
 		this.getUserDoc(userid).collection("Notification").doc(notificationid).delete();
 	}
 
-	seenAllNotification(userid?: string)
-	{
+	seenAllNotification(userid?: string) {
 		this.getUnseenNotification(userid).get().forEach(
 			docs => docs.forEach(
-				d => d.ref.update({seen: true})
+				d => d.ref.update({ seen: true })
 			)
 		)
 	}
 
-	deleteAllNotification(userid?: string)
-	{
+	deleteAllNotification(userid?: string) {
 		this.getUserDoc(userid).collection("Notification").get().forEach(
 			docs => docs.forEach(
 				d => d.ref.delete()

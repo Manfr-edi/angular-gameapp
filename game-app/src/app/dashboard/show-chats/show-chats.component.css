@@ -1,0 +1,23 @@
+*{
+    padding: 0;
+}
+
+#container
+{
+    display: flex;
+}
+
+#friendsDiv
+{
+    height: 90vh;
+    width: 15%;
+}
+
+#chatDiv
+{
+    height: 90vh;
+    width: 60%;
+    float: right;
+    margin-left: auto;
+    margin-right: 15%;
+}

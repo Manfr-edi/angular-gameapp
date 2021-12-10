@@ -9,49 +9,54 @@
         <div *ngIf="countNotification >0">
             <mat-card *ngFor="let n of notifications">
                 <div class="notification">
-                        <div id="requestDiv" class="flexContainer" *ngIf="n.payload.doc.data().type == 'request'">
+                    <div id="requestDiv" class="flexContainer" *ngIf="n.payload.doc.data().type == 'request'">
 
-                            <mat-icon class="logo">supervisor_account</mat-icon>
+                        <mat-icon class="logo">supervisor_account</mat-icon>
 
-                            <div class="text">
-                                Richiesta di amicizia da <a
-                                    [routerLink]="['/user', n.payload.doc.data().userid]">{{n.payload.doc.data().username}}</a>
-                            </div>
-
-                            <div class="accettazione">
-                                <button class="acceptReqBtn" mat-icon-button title="Accetta">
-                                    <mat-icon>done</mat-icon>
-                                </button>
-
-                                <button class="declineReqBtn" mat-icon-button title="Rifiuta">
-                                    <mat-icon>block</mat-icon>
-                                </button>
-                            </div>
+                        <div class="text">
+                            Richiesta di amicizia da <a
+                                [routerLink]="['/user', n.payload.doc.data().userid]">{{n.payload.doc.data().username}}</a>
                         </div>
 
-                        <div id="messageDiv" class="flexContainer" *ngIf="n.payload.doc.data().type == 'message'">
-                            <mat-icon class="logo">message</mat-icon>
-                            <div class="text">
-                                Messaggio da <a
-                                    [routerLink]="['/user', n.payload.doc.data().userid]">{{n.payload.doc.data().username}}</a>
-                            </div>
-
-                            <button class="openChatBtn" mat-icon-button title="Apri la chat">
-                                <mat-icon>open_in_new</mat-icon>
+                        <div class="accettazione">
+                            <button class="acceptReqBtn" mat-icon-button title="Accetta Richiesta"
+                                (click)="userLoggedService.acceptRequest(n.payload.doc.data().userid, n.payload.doc.data().username, authService.currentUserId)">
+                                <mat-icon>done</mat-icon>
                             </button>
-                        </div>
 
-                        <div id="acceptedRequestDiv" class="flexContainer" *ngIf="n.payload.doc.data().type == 'accepted'">
-
-                            <mat-icon class="logo">supervisor_account</mat-icon>
-
-                            <div class="text">
-                                Richiesta di amicizia accettata da <a
-                                    [routerLink]="['/user', n.payload.doc.data().userid]">{{n.payload.doc.data().username}}</a>
-                            </div>
+                            <button class="declineReqBtn" mat-icon-button title="Rifiuta Richiesta"
+                            (click)="userLoggedService.removeRequest(n.payload.doc.data().userid, authService.currentUserId)">
+                                <mat-icon>block</mat-icon>
+                            </button>
                         </div>
                     </div>
 
+                    <div id="messageDiv" [routerLink]="['/chats', userLoggedService.getChatID(n.payload.doc.data().userid)]" class="flexContainer" *ngIf="n.payload.doc.data().type == 'message'">
+                        <mat-icon class="logo">message</mat-icon>
+                        <div class="text">
+                            Messaggio da <a
+                                [routerLink]="['/user', n.payload.doc.data().userid]">{{n.payload.doc.data().username}}</a>
+                        </div>
+
+                        <button class="openChatBtn" mat-icon-button title="Apri la chat">
+                            <mat-icon>open_in_new</mat-icon>
+                        </button>
+                    </div>
+
+                    <div id="acceptedRequestDiv" class="flexContainer" *ngIf="n.payload.doc.data().type == 'accepted'">
+
+                        <mat-icon class="logo">supervisor_account</mat-icon>
+
+                        <div class="text">
+                            Richiesta di amicizia accettata da <a
+                                [routerLink]="['/user', n.payload.doc.data().userid]">{{n.payload.doc.data().username}}</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time">
+                        {{util.getMsgTime(n.payload.doc.data().time)}}
+                </div>
                 <button class="deleteNotification" mat-icon-button title="Elimina Notifica"
                     (click)="userLoggedService.deleteNotification(n.payload.doc.id)">
                     <mat-icon>delete_outline</mat-icon>

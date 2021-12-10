@@ -26,7 +26,12 @@ export class FriendTabComponent implements OnInit {
   }
 
   onKey(event: any) {
-    this.users$ = this.userLoggedService.search(event.target.value.toLowerCase())?.snapshotChanges();
+    let s = event.target.value as string;
+
+    if (s == null || s.length == 0)
+      this.users$ = new Observable();
+    else
+      this.users$ = this.userLoggedService.search(s.toLowerCase()).snapshotChanges();
   }
 
 

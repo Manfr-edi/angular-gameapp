@@ -5,7 +5,7 @@
   .notification
   {
       display: inline-block;
-      width: 93%;
+      width: 80%;
       padding: 0;
       vertical-align: middle;
   }
@@ -26,12 +26,20 @@
     padding: 0 2.5%;
 }
 
+.time
+{
+    display: inline-block;
+    width: 15%;
+    text-align: center;
+}
+
 .deleteNotification
 {
-    width:7%;
+    width:5%;
     display: inline-block;
     vertical-align: middle;
 }
+
 
 /*
     RICHIESTA AMICIZIA

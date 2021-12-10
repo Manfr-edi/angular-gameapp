@@ -59,7 +59,8 @@ import {MatGridListModule} from '@angular/material/grid-list';
 import {MatBadgeModule} from '@angular/material/badge';
 import { NotificationComponent } from './notification/notification.component';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
-
+import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component';
+import {MatListModule} from '@angular/material/list';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -69,7 +70,8 @@ const routes: Routes = [
   { path: 'user/:userid', component: UserComponent },
   { path: 'gametab', component: GameTabComponent },
   { path: 'friendtab', component: FriendTabComponent },
-  { path: 'chat', component: ChatComponent },
+  { path: 'chats', component: ShowChatsComponent },
+  { path: 'chats/:id', component: ShowChatsComponent },
   { path: 'settings', component: SettingsTabComponent },
   { path: 'resetpassword', component: ResetPasswordComponent },
   { path: 'newpassword', component: InsertNewPasswordComponent },
@@ -98,7 +100,8 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatGridListModule,
-    MatBadgeModule
+    MatBadgeModule, 
+    MatListModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],
@@ -120,7 +123,8 @@ const routes: Routes = [
     ResetPasswordComponent,
     InsertNewPasswordComponent,
     NotificationComponent,
-    RedirectPageComponent
+    RedirectPageComponent,
+    ShowChatsComponent
   ],
   providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
   bootstrap: [AppComponent]
