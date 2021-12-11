@@ -51,6 +51,7 @@
 			Somma spese utente: {{userSpese.sumPrice}}
 			Media spese utente: {{userSpese.avgPrice}}
 			Numero giochi acquistati utente: {{userSpese.countBoughtGame}}
+
 		</div>
 
 	</div>
@@ -61,14 +62,26 @@
 
 	<div *ngIf="isCommonGames && common$; let common">
 		<p>Giochi Comuni</p>
-		<div *ngFor="let u of common">
-			<a>
-				Titolo: {{ util.capitalize(u.title) }}
-				Tempo di completamento mio: {{u.mytime }}
-				Tempo di completamento: {{u.usertime }}
+		<div id= cards *ngFor="let u of common">
+			<mat-card id="my">
+				<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
+				<mat-card-content>
+				Tempo di completamento mio: {{u.mytime }}<br>				
 				Spese del gioco mie: {{u.myprice }}
+				Lista : {{u.mylist}}
+			
+			</mat-card-content>
+			</mat-card>
+
+			<mat-card id="friend">
+				<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
+				<mat-card-content>
+				Tempo di completamento: {{u.usertime }}<br>				
 				Spese del gioco: {{u.userprice }}
-			</a>
+				Lista : {{u.friendlist}}
+				
+				</mat-card-content>
+			</mat-card>
 
 		</div>
 

@@ -67,7 +67,9 @@ export class UserComponent implements OnInit {
             if (g.exists) {
               this.common$.push({
                 title: g.get("title"), mytime: game.get("completetime"),
-                usertime: g.get("completetime"), myprice: game.get("price"), userprice: g.get("price")
+                usertime: g.get("completetime"), myprice: game.get("price"), userprice: g.get("price"),
+                mylist: u.name,
+                friendlist: u1.name
               });
               break;
             }

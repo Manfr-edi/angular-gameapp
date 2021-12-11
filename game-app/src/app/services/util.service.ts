@@ -21,6 +21,9 @@ export class UtilService {
   }
 
   avgTime(games: any[]) {
+    if (!games || games.length==0){
+      return 0;
+    }
     let sumTime = 0;
     for (let game of games)
       sumTime += game.payload.doc.data().completetime;

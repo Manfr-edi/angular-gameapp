@@ -2,24 +2,35 @@
 {
     padding: 0 5%;
     display: flex;
-    flex-direction: column;
+    flex-direction: column-reverse;
+    background-color: blueviolet;
+    height: 90vh;
+    
 }
 
 #containerChat
 {
+    background-color: burlywood;
+    order:2;
     display: flex;
-    flex-direction: vertical;
+    flex-direction: column;
+    gap:10px;
+    padding:5px;
+    overflow-y: scroll;
+   
 }
 
 #container mat-card
 {
     max-width: 30%;
+    
 }
 
 .meCard
 {
     float:right;
     margin-left: auto;
+    
 }
 
 .friendCard
@@ -30,6 +41,7 @@
 .msg
 {
     font-size: 14;
+    word-wrap: break-word;
 }
 
 .time
@@ -40,9 +52,13 @@
 
 #sendMessage
 {
-    width:80%;
-    float:right;
+    background-color: chartreuse;
+    width:100%;
+    
     margin-left: auto;
+    order:1;
+
+    
 }
 
 #messageTxt

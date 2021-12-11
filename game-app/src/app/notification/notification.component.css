@@ -1,5 +1,10 @@
 ::ng-deep.mat-menu-panel {
-    max-width:fit-content !important;
+    max-width:none !important;
+  }
+
+  #notext{
+     padding:20px;
+     
   }
 
   .notification
@@ -13,6 +18,7 @@
   .flexContainer
   {
       display: flex;
+     
   }
 
 .logo

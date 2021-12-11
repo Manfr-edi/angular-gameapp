@@ -12,7 +12,9 @@
 -->
 
 <div id="container" *ngIf="messages$ | async; let message">
-    <div id="containerChat" *ngFor="let m of message">
+    <div id="containerChat" >
+
+    <div *ngFor="let m of message">
         <mat-card *ngIf="authService.currentUserName === m.sender" class="meCard">
             <mat-card-title class="msg">
                 {{m.text}}
@@ -31,10 +33,10 @@
             </mat-card-content>
         </mat-card>
     </div>
-
+</div>
     <div id="sendMessage">
-        <input id="messageTxt" matInput placeholder="messaggio">
-        <button id="messageSendBtn" mat-icon-button >
+        <input id="messageTxt" matInput [(ngModel)]="messageTxt" placeholder="messaggio">
+        <button id="messageSendBtn" (click)="sendMessage()" mat-icon-button >
             <mat-icon>send</mat-icon>
         </button>
     </div>

@@ -14,18 +14,22 @@ export class InsertNewPasswordComponent implements OnInit {
   password: string = '';
   confirm_password: string = '';
 
-  constructor(private route: ActivatedRoute, public router: Router, public authService: AuthService, public util: UtilService) {
+  constructor(public route: ActivatedRoute, public router: Router, public authService: AuthService, public util: UtilService) {
     this.oobCode = route.snapshot.queryParams['oobCode'];
+   
   }
 
   ngOnInit(): void {
+    this.route.queryParams
+      .subscribe(params => {
+        this.oobCode = params['oobCode']
+      });
   }
 
   setPassword() {
-    if( this.util.isValidPswFormat(this.password) )
-    {
-      if( this.confirm_password === this.password )
-      {
+    if (this.util.isValidPswFormat(this.password)) {
+      if (this.confirm_password === this.password) {
+        console.log("sono OOBCODE" + this.oobCode)
         this.authService.changePassword(this.oobCode, this.password);
         window.alert("Password cambiata!");
         this.router.navigate(['/login']);

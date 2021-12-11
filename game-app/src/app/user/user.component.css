@@ -1,0 +1,19 @@
+#cards {
+    width: 80%;
+    margin: auto;
+    display:flex;
+    justify-content: space-between;
+}
+
+#my{
+    display: inline-block;
+    margin:auto;
+    width:500px;
+}
+
+
+#friend{
+    display: inline-block;
+    width:500px;
+    margin:auto;
+}

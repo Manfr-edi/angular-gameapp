@@ -16,10 +16,11 @@ export class RedirectPageComponent implements OnInit {
       .subscribe(params => {
         let mode = params['mode'];
         let oobCode = params['oobCode'];
-
+        console.log("oobCode e' "+ oobCode);
         if (oobCode !== null) {
-          if (mode === 'resetPassword')
-            router.navigateByUrl("newpassword?oobCode=" + oobCode);
+          if (mode === 'resetPassword'){
+
+            router.navigateByUrl('newpassword?oobCode='+ oobCode);}
           else
           {
             
@@ -29,9 +30,14 @@ export class RedirectPageComponent implements OnInit {
                 snackBar.open("Email Verificata", 'OK', {duration: 2000})
               )
             }
+            else{
+              router.navigateByUrl("/");
+            }
           }
         }
-        router.navigateByUrl("/");
+        else{
+          router.navigateByUrl("/");
+        }
       });
   }
 

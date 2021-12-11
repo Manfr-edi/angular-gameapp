@@ -25,7 +25,7 @@ export class SignInComponent implements OnInit {
 
   checkLoggedIn() {
     if (this.authService.isUserEmailLoggedIn) {
-      this.router.navigate(['/user/' + this.authService.currentUserId])
+      this.router.navigate(['/gametab'])
     }
   }
 
