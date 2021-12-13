@@ -55,6 +55,11 @@ export class GameTabComponent {
       [{ par: "platform", val: this.platformSelected }, { par: "genre", val: this.genreSelected }]).snapshotChanges();
   }
 
+  async onChangeFilterGenre() {
+    this.games$ = this.userCollectionService.getGamesWithEqualGenre(this.viewlist,
+      this.genreSelected).snapshotChanges();
+  }
+
   completed(event: boolean) {
     this.updateForm = !event;
   }

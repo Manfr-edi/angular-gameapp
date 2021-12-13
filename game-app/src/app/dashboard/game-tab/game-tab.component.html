@@ -13,7 +13,7 @@
 			</div>
 
 			<div id="filtersDiv">
-				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()"
+				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilterGenre()"
 					[(ngModel)]="genreSelected">
 					<option value=""> Tutti i generi </option>
 					<option *ngFor="let g of genreList"> {{g}} </option>

@@ -27,6 +27,12 @@
 				<mat-card-title>Publisher</mat-card-title>
 				<mat-card-content>{{ util.capitalize(game.publisher) }}</mat-card-content>
 			</mat-card>
+			<mat-card id="six">
+				<mat-card-title>Genre</mat-card-title>
+				<mat-card-content>
+					<div *ngFor="let genre of game.genre">{{ genre }}</div>
+				</mat-card-content>
+			</mat-card>
 		</div>
 		<div id="biodesc">
 			<h4>Descrizione : </h4>

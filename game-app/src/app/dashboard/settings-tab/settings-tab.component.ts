@@ -28,8 +28,8 @@ export class SettingsTabComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.initList("Platforms", this.platformList, this.platforms);
-    this.initList("Genres", this.genreList, this.genres);
+    this.initList("platform", this.platformList, this.platforms);
+    this.initList("genre", this.genreList, this.genres);
   }
 
   updateData(colDB: string, list: string[], selected: boolean[]) {

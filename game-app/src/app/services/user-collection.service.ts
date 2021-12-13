@@ -155,6 +155,20 @@ export class UserCollectionService {
 		});
 	}
 
+
+		//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente attualmente loggato
+	//che rispetta dei filtri presentati in ingresso, in particare i filtri sono di uguaglianza e i valori non devono essere nulli.
+	getGamesWithEqualGenre(list: string, val: string, userid?: string): AngularFirestoreCollection {
+		return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
+			let a = (ref as Query<DocumentData>);
+			if (val !== '')
+						a = a.where("genre", "array-contains", val)
+						
+			return a;
+		});
+	}
+
+
   
  
 }
