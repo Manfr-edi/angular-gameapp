@@ -3,13 +3,13 @@
 	<form id="loginForm" (ngSubmit)="onLoginEmail()" [formGroup]="loginForm">
 		<mat-form-field appearance="fill">
 			<mat-label>Email</mat-label>
-			<input (focusout)="checkRequired('email', 'Email'); checkEmail()" matInput type="email" placeholder="email"
+			<input (focusout)="checkField('email', 'Email')" matInput type="email" placeholder="email"
 				required formControlName="email">
 		</mat-form-field>
 
 		<mat-form-field appearance="fill">
 			<mat-label>Password</mat-label>
-			<input (focusout)="checkRequired('password', 'Password')" matInput type="password" placeholder="password"
+			<input (focusout)="checkField('password', 'Password')" matInput type="password" placeholder="password"
 				required formControlName="password">
 		</mat-form-field>
 

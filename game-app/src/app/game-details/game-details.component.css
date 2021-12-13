@@ -49,27 +49,13 @@ text-align: start;
     
 }
 
-#btn1{
-    margin-top: 30px;
-    margin-bottom: 30px;
-    margin-left: 130px;
-}
 
-#btn2{
-    margin-top: 30px;
-    margin-bottom: 30px;
-    margin-left: 130px;
-}
 
 #spinner{
     margin:0 auto;
 }
 
-#tick{
-    width: 25%;
-    align-content: center;
-    background-color: chartreuse;
-}
+
 
 #stat {
     grid-area: stat;

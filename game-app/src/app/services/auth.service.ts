@@ -5,6 +5,13 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import 'firebase/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
 
+enum AuthError {
+  CodeError,
+  GeneralError,
+  EmailError,
+  WrongPsw
+}
+
 @Injectable()
 export class AuthService {
 
@@ -15,7 +22,7 @@ export class AuthService {
     this.afAuth.authState.subscribe((auth) => {
       if (auth != null) {
         this.authState = auth;
-       this.db.doc("Users/" + this.currentUserId).ref.get().then(data => {
+        this.db.doc("Users/" + this.currentUserId).ref.get().then(data => {
           this.username = data.get("username");
         });
       }
@@ -56,30 +63,28 @@ export class AuthService {
     this.authState?.sendEmailVerification();
   }
 
-  async signUpWithEmail(username: string, email: string, password: string) {
+  async signUpWithEmail(username: string, email: string, password: string): Promise<AuthError | undefined> {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((data) => {
         this.authState = data.user;
-        this.db.collection("Users").doc(data.user?.uid).set({
+        return this.db.collection("Users").doc(data.user?.uid).set({
           username: username,
           email: email
-        });
-        data.user?.sendEmailVerification();
+        }).then(() => { data.user?.sendEmailVerification(); return undefined; }).catch(
+          err => undefined)
+          .catch(err => AuthError.GeneralError);
       })
-      .catch(error => {
-        throw error
-      });
+      .catch(err => this.getError(err.code));
   }
 
 
-  async loginWithEmail(email: string, password: string) {
+  async loginWithEmail(email: string, password: string): Promise<AuthError | undefined> {
     return this.afAuth.signInWithEmailAndPassword(email, password)
       .then((data) => {
         this.authState = data.user;
+        return undefined;
       })
-      .catch(error => {
-        throw error
-      });
+      .catch(err => this.getError(err.code));
   }
 
   signOut(): void {
@@ -87,23 +92,45 @@ export class AuthService {
     this.router.navigate(['/'])
   }
 
-
-
-  async ResetPassword(passwordResetEmail: string) {
+  async ResetPassword(passwordResetEmail: string): Promise<AuthError | undefined> {
     return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
-      .then(() => {
-      }).catch((error) => {
-        window.alert(error)
-      })
+      .then(() => undefined)
+      .catch(err => this.getError(err.code));
   }
 
-  changePassword(code: string, new_psw: string)
-  {
-    this.afAuth.confirmPasswordReset(code, new_psw);
+  async changePassword(code: string, new_psw: string): Promise<AuthError | undefined> {
+    return this.afAuth.confirmPasswordReset(code, new_psw).then(() => undefined)
+      .catch(e => this.getError(e.code));
   }
 
-  verifyEmail(code: string)
-  {
-    return this.afAuth.applyActionCode(code);
+  verifyEmail(code: string) {
+    return this.afAuth.applyActionCode(code).then(() => undefined)
+      .catch(err => this.getError(err.code));;
+  }
+
+  private getError(code: string): AuthError {
+    console.log("ErroreCode: " + code);
+    switch (code) {
+      case "auth/expired-action-code":
+      case "auth/invalid-action-code":
+        return AuthError.CodeError;
+
+      case "auth/user-disabled":
+      case "auth/user-not-found":
+      case "auth/operation-not-allowed":
+      case "auth/weak-password":
+        return AuthError.GeneralError;
+
+      //signUpWithEmail
+      case "auth/email-already-in-use":
+      case "auth/invalid-email":
+        return AuthError.EmailError;
+
+      case "auth/wrong-password":
+        return AuthError.WrongPsw;
+
+      default:
+        return AuthError.GeneralError;
+    }
   }
 }

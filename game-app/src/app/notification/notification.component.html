@@ -1,11 +1,11 @@
 <div *ngIf="notifications$ | async; let notifications">
-    <button mat-icon-button [matMenuTriggerFor]="menu_notification">
+    <button (click)="menuToggle()" mat-icon-button [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">
         <mat-icon *ngIf="countUnseenNotification > 0" matBadge="{{countUnseenNotification}}" matBadgeColor="warn"
             matBadgeSize="small">notifications_active</mat-icon>
         <mat-icon *ngIf="countUnseenNotification == 0">notifications</mat-icon>
     </button>
 
-    <mat-menu class="notificationsMenu" #menu_notification="matMenu">
+    <mat-menu class="notificationsMenu" #menu="matMenu">
         <div *ngIf="countNotification >0">
             <mat-card *ngFor="let n of notifications">
                 <div class="notification">
@@ -20,25 +20,26 @@
 
                         <div class="accettazione">
                             <button class="acceptReqBtn" mat-icon-button title="Accetta Richiesta"
-                                (click)="userLoggedService.acceptRequest(n.payload.doc.data().userid, n.payload.doc.data().username, authService.currentUserId)">
+                                (click)="userLoggedService.acceptRequest(n.payload.doc.data().userid, n.payload.doc.data().username, authService.currentUserId); $event.stopPropagation()">
                                 <mat-icon>done</mat-icon>
                             </button>
 
                             <button class="declineReqBtn" mat-icon-button title="Rifiuta Richiesta"
-                            (click)="userLoggedService.removeRequest(n.payload.doc.data().userid, authService.currentUserId)">
+                                (click)="userLoggedService.removeRequest(n.payload.doc.data().userid, authService.currentUserId); $event.stopPropagation()">
                                 <mat-icon>block</mat-icon>
                             </button>
                         </div>
                     </div>
 
-                    <div id="messageDiv" [routerLink]="['/chats', userLoggedService.getChatID(n.payload.doc.data().userid)]" class="flexContainer" *ngIf="n.payload.doc.data().type == 'message'">
+                    <div id="messageDiv" class="flexContainer" *ngIf="n.payload.doc.data().type == 'message'">
                         <mat-icon class="logo">message</mat-icon>
                         <div class="text">
                             Messaggio da <a
                                 [routerLink]="['/user', n.payload.doc.data().userid]">{{n.payload.doc.data().username}}</a>
                         </div>
 
-                        <button class="openChatBtn" mat-icon-button title="Apri la chat">
+                        <button [routerLink]="['/chats', userLoggedService.getChatID(n.payload.doc.data().userid)]"
+                            class="openChatBtn" mat-icon-button title="Apri la chat">
                             <mat-icon>open_in_new</mat-icon>
                         </button>
                     </div>
@@ -55,28 +56,26 @@
                 </div>
 
                 <div class="time">
-                        {{util.getMsgTime(n.payload.doc.data().time)}}
+                    {{util.getMsgTime(n.payload.doc.data().time)}}
                 </div>
                 <button class="deleteNotification" mat-icon-button title="Elimina Notifica"
-                    (click)="userLoggedService.deleteNotification(n.payload.doc.id)">
+                    (click)="userLoggedService.deleteNotification(n.payload.doc.id); $event.stopPropagation()">
                     <mat-icon>delete_outline</mat-icon>
                 </button>
             </mat-card>
 
-            <mat-card>
-                <button mat-icon-button (click)="userLoggedService.seenAllNotification()">
+            <mat-card id="allCard">
+                <button mat-icon-button (click)="userLoggedService.seenAllNotifications(); $event.stopPropagation()">
                     <mat-icon>check</mat-icon>
                 </button>
-                <button mat-icon-button (click)="userLoggedService.deleteAllNotification()">
+                <button mat-icon-button (click)="userLoggedService.deleteAllNotifications(); $event.stopPropagation()">
                     <mat-icon>delete_outline</mat-icon>
                 </button>
             </mat-card>
         </div>
 
         <div id="notext" *ngIf="countNotification == 0">
-            <p >
-                Non ci sono notifiche
-            </p>
+            Non ci sono notifiche
         </div>
     </mat-menu>
 

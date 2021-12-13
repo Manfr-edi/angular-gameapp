@@ -4,7 +4,8 @@
 	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 		<div id="gamediv">
 			<div class="btnDiv">
-				<mat-button-toggle-group (change)="UpdateList($event.value); updateForm=false" [value]="userlists[0].code"> 
+				<mat-button-toggle-group (change)="UpdateList($event.value); updateForm=false"
+					[value]="userlists[0].code">
 					<mat-button-toggle [value]="userlists[0].code">Completed Games</mat-button-toggle>
 					<mat-button-toggle [value]="userlists[1].code">Playing Games</mat-button-toggle>
 					<mat-button-toggle [value]="userlists[2].code">Desired Games</mat-button-toggle>
@@ -14,14 +15,9 @@
 			<div id="filtersDiv">
 				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()"
 					[(ngModel)]="genreSelected">
-					<option value="">
-						Tutti i generi
-					</option>
-					<option *ngFor="let g of genreList">
-						{{g}}
-					</option>
+					<option value=""> Tutti i generi </option>
+					<option *ngFor="let g of genreList"> {{g}} </option>
 				</select>
-
 
 				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()"
 					[(ngModel)]="platformSelected">
@@ -37,34 +33,8 @@
 			<div *ngIf="!updateForm">
 				<div *ngIf="games$ | async as games">
 					<div *ngFor="let game of games">
-
-						<!--<div class="game">
-							<img class="gameico" [src] = "util.getImgUrl(game.payload.doc.data().title)">
-
-							<div class="gameStatsDiv">
-								<h3><a [routerLink]="['/games', game.payload.doc.id]">
-										{{ util.capitalize(game.payload.doc.data().title) }}
-									</a></h3>
-								<h5 *ngIf="viewlist === userlists[0].code">Ore giocate:
-									{{game.payload.doc.data().completetime}}</h5>
-							</div>
-
-							<div class="menuBtn">
-								<button mat-mini-fab color="primary" [matMenuTriggerFor]="menu">
-									<mat-icon>menu</mat-icon>
-								</button>
-								<mat-menu #menu="matMenu">
-									<button mat-menu-item
-										(click)="updateForm=true; gameid=game.payload.doc.id">Update</button>
-									<button mat-menu-item
-										(click)="userCollectionService.RemoveGame(viewlist, game.payload.doc.id)">Delete</button>
-								</mat-menu>
-							</div>
-						</div>-->
-
 						<mat-card id="card">
 							<img mat-card-image id="gameico" [src]="util.getImgUrl(game.payload.doc.data().title)">
-
 							<mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
 								{{ util.capitalize(game.payload.doc.data().title) }}
 								<mat-card-content *ngIf="viewlist === userlists[0].code">
@@ -89,12 +59,8 @@
 						</mat-card>
 
 					</div>
-
-
 					<div *ngIf="games.length === 0">Nessun gioco trovato</div>
 				</div>
-
-
 			</div>
 
 			<div *ngIf="updateForm">

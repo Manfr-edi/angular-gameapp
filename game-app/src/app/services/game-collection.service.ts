@@ -25,7 +25,7 @@ export class GameCollectionService {
   //completedTime_old DEVE essere pari a 0
   //Nel caso in cui sto rimuovendo il tempo di completamento
   //completedTime DEVE essere pari a 0
-  async updateCompletedAvg(gameid: string, completedTime_old: number, completedTime: number) {
+  async updateCompletedAvg(gameid: string, completedTime_old: number, completedTime: number): Promise<boolean> {
     let gameDoc = this.catalogue.doc(gameid);
 
     //Tempo medio memorizzato nel database
@@ -45,11 +45,8 @@ export class GameCollectionService {
         par.completedtimeavg = 0;
     }
 
-    gameDoc.update(par);
-
+    return gameDoc.update(par).then(() => true).catch(err => false);
   }
-
-  
 
   async getDataGame(gameid: string) {
     return await this.db.doc('Games/' + gameid).ref.get();

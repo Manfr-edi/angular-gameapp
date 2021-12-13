@@ -6,7 +6,7 @@
 		<ul>
 			<div *ngFor="let user of users">
 
-				<a *ngIf="user.payload.doc.id !== userLoggedService.getID() "
+				<a *ngIf="user.payload.doc.id !== userLoggedService.getUserID() "
 					[routerLink]="['/user', user.payload.doc.id]">
 					{{ user.payload.doc.data().username }}
 				</a>

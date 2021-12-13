@@ -4,19 +4,19 @@
 	<form id="registerForm" (ngSubmit)="onRegister()" [formGroup]="registerForm">
 		<mat-form-field appearance="fill">
 			<mat-label>Username</mat-label>
-			<input (focusout)="checkRequired('username', 'Username'); checkUsername()" matInput type="text"
+			<input (focusout)="checkField('username', 'Username', util.usernameFieldErrorParameters()); checkUsernameField()" matInput type="text"
 				placeholder="username" required formControlName="username">
 		</mat-form-field>
 
 		<mat-form-field appearance="fill">
 			<mat-label>Email</mat-label>
-			<input (focusout)="checkRequired('email', 'Email'); checkEmail()" matInput type="email" placeholder="email"
+			<input (focusout)="checkField('email', 'Email'); checkEmailField()" matInput type="email" placeholder="email"
 				required formControlName="email">
 		</mat-form-field>
 
 		<mat-form-field appearance="fill">
 			<mat-label>Password</mat-label>
-			<input (focusout)="checkRequired('password', 'Password')" matInput type="password" placeholder="password"
+			<input (focusout)="checkField('password', 'Password', util.passwordFieldErrorParameters())" matInput type="password" placeholder="password"
 				required formControlName="password">
 		</mat-form-field>
 

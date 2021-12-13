@@ -1,15 +1,29 @@
 import { Injectable } from '@angular/core';
-import { SelectMultipleControlValueAccessor } from '@angular/forms';
 import { Md5 } from "md5-typescript";
 import firebase from 'firebase/app';
 import Timestamp = firebase.firestore.Timestamp;
+import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
+import { AngularFirestore, CollectionReference, DocumentData } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UtilService {
 
-  constructor() { }
+  constructor(public db: AngularFirestore) { }
+
+  searchUserByEmail(email: string) {
+    return this.db.collection('Users', ref => this.searchByField(ref, "email", email));
+  }
+
+  searchUser(username: string) {
+    return this.db.collection('Users', ref => this.searchByField(ref, "username", username));
+  }
+
+  //Questa funzione effettua la ricerca mediante un campo
+  searchByField(ref: CollectionReference<DocumentData>, fieldname:string, fieldval: string) {
+    return ref.where(fieldname, '>=', fieldval).where(fieldname, '<=', fieldval + '\uf8ff');
+  }
 
   capitalize(str: string) {
     var cap = "";
@@ -21,7 +35,7 @@ export class UtilService {
   }
 
   avgTime(games: any[]) {
-    if (!games || games.length==0){
+    if (!games || games.length == 0) {
       return 0;
     }
     let sumTime = 0;
@@ -29,20 +43,6 @@ export class UtilService {
       sumTime += game.payload.doc.data().completetime;
 
     return sumTime / games.length;
-  }
-
-  isValidMailFormat(email: string) {
-    const EMAIL_REGEXP = /^[a-z0-9!#$%&'*+\/=?^_`{|}~.-]+@[a-z0-9]([a-z0-9-]*[a-z0-9])?(\.[a-z0-9]([a-z0-9-]*[a-z0-9])?)*$/i;
-
-    if ((email.length === 0) || (!EMAIL_REGEXP.test(email))) {
-      return false;
-    }
-
-    return true;
-  }
-
-  isValidPswFormat(password: string) {
-    return password.length > 6;
   }
 
   getImgUrl(title: string): string {
@@ -53,7 +53,7 @@ export class UtilService {
 
     if (timestamp != null) {
       let diff = (new Date().getTime() / 1000) - timestamp.seconds; //Tempo trascorso in secondi
-
+      
       function calculate(div: number, t: string) {
         let m = diff / div;
         let o = Math.round(m) + t + " fa";
@@ -84,4 +84,53 @@ export class UtilService {
 
     return "";
   }
+
+  /*
+    Questo metodo restituisce i Validators necessari a controllare la struttura della password
+  */
+  getPasswordValidators() {
+    return Validators.compose([Validators.minLength(6)]);
+  }
+
+  passwordFieldErrorParameters() : Map<string,string> {
+    return new Map([["minLength", "6"]]);
+  }
+
+  /*
+    Questo metodo restituisce i Validators necessari a controllare la struttura dell'username
+  */
+  getUsernameValidators() {
+    return Validators.compose([Validators.minLength(6)]);
+  }
+
+  usernameFieldErrorParameters() : Map<string,string> {
+    return new Map([["minLength", "6"]]);
+  }
+
+  getFieldMsgError(field: AbstractControl, name: string, parameter?: Map<string, string>): string | undefined {
+
+    if (field.hasError('required'))
+      return name + " è obbligatorio!";
+    else
+      if (field.hasError('min'))
+        return name + " deve essere almeno maggiore di " + parameter?.get('min');
+      else
+        if (field.hasError('max'))
+          return name + " non può essere maggiore di " + parameter?.get('max');
+        else
+          if (field.hasError("minlength"))
+            return name + " deve essere lungo almeno " + parameter?.get('minLength');
+          else
+            if (field.hasError("maxlength"))
+              return name + " deve eserre lungo al massimo " + parameter?.get('maxLength');
+            else
+              if( field.hasError("email") )
+                return name + " non è un'email valida!";
+
+    return undefined;
+  }
+
 }
+
+
+

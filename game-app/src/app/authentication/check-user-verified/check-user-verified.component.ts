@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -6,17 +7,14 @@ import { AuthService } from '../../services/auth.service';
   templateUrl: './check-user-verified.component.html',
   styleUrls: ['./check-user-verified.component.css']
 })
-export class CheckUserVerifiedComponent implements OnInit {
+export class CheckUserVerifiedComponent {
 
-  constructor(public authService: AuthService) { }
-
-  ngOnInit(): void {
-  }
+  constructor(public authService: AuthService, public snackBar: MatSnackBar) { }
 
   resendVerificationEmail()
   {
     this.authService.sendEmailVerification();
-    window.alert("Email di verifica inviata!");
+    this.snackBar.open("Email di verifica inviata!", 'Ok', {duration: 2000});
   }
 
 }

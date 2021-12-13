@@ -4,7 +4,6 @@
 
   #notext{
      padding:20px;
-     
   }
 
   .notification
@@ -18,7 +17,6 @@
   .flexContainer
   {
       display: flex;
-     
   }
 
 .logo
@@ -46,6 +44,11 @@
     vertical-align: middle;
 }
 
+#allCard
+{
+    display: flex;
+    justify-content: center;
+}
 
 /*
     RICHIESTA AMICIZIA

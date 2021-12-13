@@ -10,17 +10,15 @@ import { ActivatedRoute, Router } from '@angular/router';
   templateUrl: './show-chats.component.html',
   styleUrls: ['./show-chats.component.css']
 })
-export class ShowChatsComponent implements OnInit {
+export class ShowChatsComponent {
 
   friendsChat$?: Observable<any>;
   friendsNoChat$?: Observable<any>;
   curChatID: string = "";
-  curFriendID: string = "";
 
   friendsSearched$?: Observable<any>;
 
-  constructor(public db: AngularFirestore, public authService: AuthService,
-    public userLoggedService: UserLoggedService, private route: ActivatedRoute) {
+  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, private route: ActivatedRoute) {
 
     let id = this.route.snapshot.paramMap.get('id');
     if (id)
@@ -32,11 +30,6 @@ export class ShowChatsComponent implements OnInit {
       data => this.friendsNoChat$ = data ? data.snapshotChanges() : new Observable);
   }
 
-  ngOnInit()
-  {
-
-  }
-  
   searchFriends(txt: string) {
     this.friendsSearched$ = txt != null && txt.length > 0 ?
       this.userLoggedService.searchFriends(txt.toLowerCase()).snapshotChanges() : undefined;
@@ -44,6 +37,5 @@ export class ShowChatsComponent implements OnInit {
 
   friendSelected(idFriend: string) {
     this.curChatID = this.userLoggedService.getChatID(idFriend);
-    this.curFriendID = idFriend;
   }
 }

@@ -3,6 +3,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-friend-tab',
@@ -16,7 +17,7 @@ export class FriendTabComponent implements OnInit {
   friends$: Observable<any[]>;
   requests$: Observable<any[]> = new Observable;
 
-  constructor(public db: AngularFirestore, public authService: AuthService, public userLoggedService: UserLoggedService) {
+  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, public util: UtilService) {
     this.users$ = new Observable();
     this.friends$ = userLoggedService.getFriends().snapshotChanges();
   }
@@ -31,7 +32,8 @@ export class FriendTabComponent implements OnInit {
     if (s == null || s.length == 0)
       this.users$ = new Observable();
     else
-      this.users$ = this.userLoggedService.search(s.toLowerCase()).snapshotChanges();
+     // this.users$ = this.userLoggedService.searchUser(s.toLowerCase()).snapshotChanges();
+     this.users$ = this.util.searchUser(s.toLowerCase()).snapshotChanges();
   }
 
 

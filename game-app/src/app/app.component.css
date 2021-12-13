@@ -1,3 +1,8 @@
 p {
   font-family: Lato;
 }
+
+.navbar-custom
+{
+  height: 10vh;
+}

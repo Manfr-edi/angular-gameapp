@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
 import { UtilService } from 'src/app/services/util.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { userlist } from 'src/app/data/userlist/userlist';
 import { UserCollectionService, Spese } from '../services/user-collection.service';
@@ -33,19 +33,24 @@ export class UserComponent implements OnInit {
   userSpese: Spese = {} as Spese;
   mySpese: Spese = {} as Spese;
 
-  constructor(private route: ActivatedRoute, public db: AngularFirestore, public authService: AuthService,
-    public userCollectionService: UserCollectionService, public userLoggedService: UserLoggedService, public util: UtilService) {
+  constructor(private route: ActivatedRoute, public authService: AuthService, public userCollectionService: UserCollectionService,
+     public userLoggedService: UserLoggedService, public util: UtilService, router: Router) {
 
     const routeParams = this.route.snapshot.paramMap;
     this.userid = String(routeParams.get('userid'));
+
+    //Non permette all'utente di andare sulla propria pagina
+    if( this.userid === authService.currentUserId )
+      router.navigateByUrl("/");
+
     this.userInfo$ = this.userLoggedService.getUserDoc(this.userid).valueChanges();
 
     this.UpdateList(this.userlists[0].code);
   }
 
   async ngOnInit() {
-    this.userSpese = await this.userCollectionService.getSpese("", "", this.userid);
-    this.mySpese = await this.userCollectionService.getSpese("", "");
+    this.userSpese = await this.userCollectionService.GetSpese("", "", this.userid);
+    this.mySpese = await this.userCollectionService.GetSpese("", "");
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
     this.hasRequest = await this.userLoggedService.checkRequest(this.userid,this.authService.currentUserId);
   }

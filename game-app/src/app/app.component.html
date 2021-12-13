@@ -11,10 +11,7 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
-
-
-<nav class="navbar navbar-expand-sm bg-light sticky-top ">
-	<!-- Links -->
+<nav class="navbar navbar-expand-sm bg-light sticky-top navbar-custom ">
 	<ul class="nav" role="tablist" id="myTab">
 
 		<li class="nav-item">
@@ -24,7 +21,7 @@
 		</li>
 
 		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
-			<button mat-button [matMenuTriggerFor]="menu">{{authService.currentUserName}}</button>
+			<button mat-button (menuOpened)="menuOpened=true" (menuClosed)="menuOpened=false" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">{{authService.currentUserName}}</button>
 			<mat-menu #menu="matMenu">
 				<button mat-menu-item [routerLink]="['/gametab']">Games</button>
 				<button mat-menu-item [routerLink]="['/settings']">Settings</button>
@@ -38,29 +35,13 @@
 		</li>
 
 		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
-			<app-notification></app-notification>
+			<app-notification [menuOpened]="menuOpened"
+			 (notificationMenuOpened)="onNotificationMenuChanges($event)"></app-notification>
 		</li>
 
 		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
 			<button mat-button (click)="authService.signOut()">Logout</button>
 		</li>
-
-
-		<!--
-				<li class="nav-item">
-					<mat-form-field class="example-full-width" appearance="fill">
-						<mat-label>Inserisci Titolo</mat-label>
-						<input matInput placeholder="es. Zelda" (keyup)="onKey($event)">
-					</mat-form-field>
-				</li>
-			-->
 	</ul>
-
-
-
 </nav>
 <router-outlet></router-outlet>
-
-<!--<div class="container">
-	<router-outlet></router-outlet>
-</div>-->

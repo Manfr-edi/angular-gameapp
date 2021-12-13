@@ -39,46 +39,6 @@
 		</div>
 	</div>
 	<div id="chatDiv">
-		<app-chat *ngIf="curChatID && curFriendID" [chatID]="curChatID" [friendID]="curFriendID"></app-chat>
-		<!--<app-chat *ngIf="curChatID && curFriendID" [chatID]="curChatID" [friendID]="curFriendID"></app-chat>-->
+		<app-chat *ngIf="curChatID" [chatID]="curChatID"></app-chat>
 	</div>
-
-	<!--
-	<button (click)="searchFriendToggle=!searchFriendToggle; idCurChat=''">Nuova Chat</button>
-
-	<div *ngIf="searchFriendToggle">
-		Amico: <input (keyup)="searchFriend($event)" type="text">
-
-		<div *ngIf="users$ | async; let users">
-			<ul>
-				<div *ngFor="let user of users">
-					<div *ngIf="authService.currentUserId !== user.payload.doc.id">
-						<a (click)="createChat(user.payload.doc.id)">
-							{{ user.payload.doc.data().username }}
-						</a>
-					</div>
-				</div>
-			</ul>
-			<div *ngIf="users?.length === 0">Nessun utente trovato</div>
-		</div>
-	</div>
-
-	<p *ngFor="let chat of chats" (click)="newChat=false; idCurChat = ''; openChat(chat.chatID);">
-		{{chat.lastMessage?.text }} - {{ chat.lastMessage?.sender }} - {{chat.lastMessage?.time }}
-	</p>
-
-	<div *ngIf="idCurChat !== ''">
-		Stai guardando la chat: {{idCurChat}}
-		<div *ngIf="messages$ | async; let message">
-			<div *ngFor="let m of message">
-				<p *ngIf="authService.currentUserName === m.payload.doc.data().sender" align="right">
-					{{m.payload.doc.data().text}} : {{m.payload.doc.data().sender}} : {{m.payload.doc.data().time}} </p>
-				<p *ngIf="authService.currentUserName !== m.payload.doc.data().sender" align="left">
-					{{m.payload.doc.data().text}} : {{m.payload.doc.data().sender}} : {{m.payload.doc.data().time}} </p>
-			</div>
-		</div>
-		<input type="text" [(ngModel)]="message" placeholder="Inserisci messaggio">
-		<button (click)="sendMessage()">Invia</button>
-	</div>
-	-->
 </div>

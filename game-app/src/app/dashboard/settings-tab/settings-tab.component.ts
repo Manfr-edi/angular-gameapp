@@ -24,7 +24,7 @@ export class SettingsTabComponent implements OnInit {
   genres: boolean[] = [];
   platforms: boolean[] = [];
 
-  constructor(public authService: AuthService, public db: AngularFirestore, public userLoggedService: UserLoggedService) {
+  constructor(public authService: AuthService, public userLoggedService: UserLoggedService) {
   }
 
   async ngOnInit() {
@@ -39,12 +39,12 @@ export class SettingsTabComponent implements OnInit {
       if (selected[i])
         dataSelected.push(list[i]);
 
-    this.userLoggedService.update({ [colDB]: dataSelected });
+    this.userLoggedService.updateUser({ [colDB]: dataSelected });
   }
 
   async initList(parDB: string, list: string[], selected: boolean[]) {
 
-    let listaDB: string[] = await this.userLoggedService.getDataParam(parDB);
+    let listaDB: string[] = await this.userLoggedService.getUserDataParam(parDB);
 
     let i = 0;
     let f;

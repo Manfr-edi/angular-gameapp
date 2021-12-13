@@ -8,7 +8,7 @@ import { AuthService } from 'src/app/services/auth.service';
   templateUrl: './redirect-page.component.html',
   styleUrls: ['./redirect-page.component.css']
 })
-export class RedirectPageComponent implements OnInit {
+export class RedirectPageComponent {
 
   constructor(private route: ActivatedRoute, router: Router, authService: AuthService, snackBar: MatSnackBar) {
 
@@ -16,33 +16,24 @@ export class RedirectPageComponent implements OnInit {
       .subscribe(params => {
         let mode = params['mode'];
         let oobCode = params['oobCode'];
-        console.log("oobCode e' "+ oobCode);
-        if (oobCode !== null) {
-          if (mode === 'resetPassword'){
 
-            router.navigateByUrl('newpassword?oobCode='+ oobCode);}
-          else
-          {
-            
-            if (mode === 'verifyEmail')
-            {
-              authService.verifyEmail(oobCode).then( r =>
-                snackBar.open("Email Verificata", 'OK', {duration: 2000})
+        if (oobCode !== null) {
+          if (mode === 'resetPassword')
+            router.navigateByUrl('newpassword?oobCode=' + oobCode);
+          else {
+            if (mode === 'verifyEmail') {
+              authService.verifyEmail(oobCode).then(r =>
+                snackBar.open("Email Verificata", 'OK', { duration: 2000 })
               )
             }
-            else{
+            else {
               router.navigateByUrl("/");
             }
           }
         }
-        else{
+        else {
           router.navigateByUrl("/");
         }
       });
   }
-
-  ngOnInit(): void {
-
-  }
-
 }

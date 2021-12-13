@@ -1,42 +1,28 @@
-<!--
-    <div *ngIf="messages$ | async; let message">
-    <div *ngFor="let m of message">
-        <p *ngIf="authService.currentUserName === m.sender" align="right">
-            {{m.text}} - {{util.getMsgTime(m.time)}}</p>
-        <p *ngIf="authService.currentUserName !== m.sender" align="left">
-            {{m.text}} - {{util.getMsgTime(m.time)}}</p>
-    </div>
-</div>
-<input type="text" [(ngModel)]="messageTxt" placeholder="Inserisci messaggio">
-<button (click)="sendMessage()" [disabled]="messageTxt==''">Invia</button>
--->
-
 <div id="container" *ngIf="messages$ | async; let message">
-    <div id="containerChat" >
+    <div id="containerChat">
+        <div *ngFor="let m of message">
+            <mat-card *ngIf="authService.currentUserName === m.sender" class="meCard">
+                <mat-card-title class="msg">
+                    {{m.text}}
+                </mat-card-title>
+                <mat-card-content class="time">
+                    {{util.getMsgTime(m.time)}}
+                </mat-card-content>
+            </mat-card>
 
-    <div *ngFor="let m of message">
-        <mat-card *ngIf="authService.currentUserName === m.sender" class="meCard">
-            <mat-card-title class="msg">
-                {{m.text}}
-            </mat-card-title>
-            <mat-card-content class="time">
-                {{util.getMsgTime(m.time)}}
-            </mat-card-content>
-        </mat-card>
-
-        <mat-card *ngIf="authService.currentUserName !== m.sender" class="friendCard">
-            <mat-card-title class="msg">
-                {{m.text}}
-            </mat-card-title>
-            <mat-card-content class="time">
-                {{util.getMsgTime(m.time)}}
-            </mat-card-content>
-        </mat-card>
+            <mat-card *ngIf="authService.currentUserName !== m.sender" class="friendCard">
+                <mat-card-title class="msg">
+                    {{m.text}}
+                </mat-card-title>
+                <mat-card-content class="time">
+                    {{util.getMsgTime(m.time)}}
+                </mat-card-content>
+            </mat-card>
+        </div>
     </div>
-</div>
     <div id="sendMessage">
-        <input id="messageTxt" matInput [(ngModel)]="messageTxt" placeholder="messaggio">
-        <button id="messageSendBtn" (click)="sendMessage()" mat-icon-button >
+        <input (keyup)="onKeyUpMsg($event)" id="messageTxt" matInput [(ngModel)]="messageTxt" placeholder="messaggio">
+        <button [disabled]="messageTxt===''" id="messageSendBtn" (click)="sendMessage()" mat-icon-button>
             <mat-icon>send</mat-icon>
         </button>
     </div>

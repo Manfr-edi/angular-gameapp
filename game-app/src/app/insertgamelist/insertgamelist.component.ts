@@ -7,6 +7,7 @@ import { GameCollectionService } from '../services/game-collection.service';
 import { UtilService } from '../services/util.service';
 import { FormControl, FormGroup, FormBuilder, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { CustomValidators } from '../custom-validators';
 
 @Component({
   selector: 'app-insertgamelist',
@@ -37,16 +38,16 @@ export class InsertgamelistComponent implements OnChanges {
 
   isLoading: boolean = true;
 
-  constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
-    public gameCollectionService: GameCollectionService, public db: AngularFirestore, public util: UtilService,
-    fb: FormBuilder, private _snackBar: MatSnackBar) {
+  constructor(public authService: AuthService, public userCollectionService: UserCollectionService, 
+    public gameCollectionService: GameCollectionService, public util: UtilService, fb: FormBuilder,
+     private _snackBar: MatSnackBar) {
 
     this.gameForm = fb.group({
       destinationList: ['', Validators.required],
-      time: [0, [Validators.required, Validators.min(1), Validators.max(9999)]],
+      time: [0, [Validators.required, Validators.min(0.01), Validators.max(9999), CustomValidators.max2DecimalValidator()]],
       vote: [0],
       platform: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(1), Validators.max(9999)]],
+      price: [0, [Validators.required, Validators.min(0.01), Validators.max(9999), CustomValidators.max2DecimalValidator()]],
       note: ['']
     });
   }
@@ -57,7 +58,7 @@ export class InsertgamelistComponent implements OnChanges {
     //nel caso in cui sto facendo un add di un gioco non inserito in un'altra lista
     if (this.updateList !== '' || await this.userCollectionService.CheckUniqueList(this.gameid)) {
       this.show = true
-      this.updateForm().then(() => this.isLoading = false);
+      this.updateForm().then(() => {this.onChangeList(); this.isLoading = false});
     }
   }
 
@@ -103,7 +104,7 @@ export class InsertgamelistComponent implements OnChanges {
 
   onChangeList() {
     let list = this.gameForm.get("destinationList")?.value;
-    console.log(list)
+    
     if (list === userlist[0].code) //Completed
     {
       this.gameForm.get("time")?.enable();
@@ -136,18 +137,9 @@ export class InsertgamelistComponent implements OnChanges {
   }
 
   checkField(field: string, name: string) {
-    let msg = "";
+    let msg = this.util.getFieldMsgError(this.gameForm.get(field) as FormControl, name, new Map([['min', "0.01"], ['max', "9999"]]));
 
-    if (this.gameForm.get(field)?.hasError('min'))
-      msg = name + " deve essere almeno maggiore di 0!"
-    else
-      if (this.gameForm.get(field)?.hasError('max'))
-        msg = name + "non può essere maggiore di 9999!"
-      else
-        if (this.gameForm.get(field)?.hasError('required'))
-          msg = name + " è obbligatorio!";
-
-    if (msg !== "")
+    if (msg)
       this._snackBar.open(msg, 'Ok', { duration: 2000 });
   }
 

@@ -28,7 +28,7 @@ export class ShoppingReportComponent implements OnChanges {
   countBougthGame = 0;
 
  
-  constructor(public authService: AuthService, public db: AngularFirestore, public userCollectionService: UserCollectionService) {
+  constructor(public authService: AuthService, public userCollectionService: UserCollectionService) {
    }
 
   ngOnChanges(changes: any){

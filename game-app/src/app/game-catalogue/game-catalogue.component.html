@@ -1,5 +1,3 @@
-<h2> Game Catalogue </h2>
-
 <div>
   <input type="text" id="search" class="form-control form-control-sm" (keyup)="onKey($event)"
     placeholder="Inserisci titolo">
@@ -31,11 +29,8 @@
 
     </div>
   </ul>
-
   <div *ngIf="games.length === 0">Nessun gioco trovato</div>
 </div>
-
-
 
 <ng-template #loading>
   <mat-spinner id="spinner"></mat-spinner>

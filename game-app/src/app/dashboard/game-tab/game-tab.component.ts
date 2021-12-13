@@ -14,7 +14,7 @@ import { UserLoggedService } from 'src/app/services/user-logged.service';
   templateUrl: './game-tab.component.html',
   styleUrls: ['./game-tab.component.css']
 })
-export class GameTabComponent implements OnInit {
+export class GameTabComponent {
 
   //Data
   genreList = genreList;
@@ -31,14 +31,7 @@ export class GameTabComponent implements OnInit {
 
   //Dati per Update Gioco
   gameid: string = '';
-  selectedList: string = '';
-  selectedPlatform: string = '';
-  gametitle: string = '';
-  time: number = 0;
-  note: string = '';
-  vote: number = 0;
-  price: number = 0;
-
+ 
   games$: Observable<any[]> = new Observable;
 
   //Piattaforme per un determinato gioco
@@ -46,15 +39,10 @@ export class GameTabComponent implements OnInit {
 
   actualList: string = userlist[0].code;
 
-  constructor(public authService: AuthService, public userCollectionService: UserCollectionService, public db: AngularFirestore,
+  constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
     public userLoggedService: UserLoggedService, public util: UtilService) {
-    //La lista di default � Completed
-    this.selectedList = this.userlists[0].code;
     //Carico la lista dei giochi da visualizzare di default
-    this.UpdateList(userlist[0].code);
-  }
-
-  ngOnInit(): void {
+    this.UpdateList(this.actualList);
   }
 
   UpdateList(list: string): void {

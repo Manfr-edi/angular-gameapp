@@ -10,18 +10,16 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   templateUrl: './signin.component.html',
   styleUrls: ['./signin.component.css']
 })
-export class SignInComponent implements OnInit {
+export class SignInComponent {
   loginForm: FormGroup;
 
   constructor(public authService: AuthService, private router: Router, public util: UtilService,
-    public _snackBar: MatSnackBar, fb: FormBuilder) {
+    public snackBar: MatSnackBar, fb: FormBuilder) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
   }
-
-  ngOnInit() { }
 
   checkLoggedIn() {
     if (this.authService.isUserEmailLoggedIn) {
@@ -31,22 +29,17 @@ export class SignInComponent implements OnInit {
 
   onLoginEmail(): void {
     this.authService.loginWithEmail(this.loginForm.controls['email']?.value, this.loginForm.controls['password']?.value)
-      .then(() => this.router.navigate(['/gametab']))
-      .catch(_error => {
-      
-        //window.alert(this.error.message)
-        this._snackBar.open(_error.message);
-        //this.router.navigate(['/'])
-      })
+      .then((err) => {
+        if (err)
+          this.snackBar.open("Impossibile effettuare il login!", 'Ok', { duration: 2000 });
+        else
+          this.router.navigate(['/gametab']);
+      });
   }
 
-  checkRequired(field: string, name: string) {
-    if (this.loginForm.get(field)?.hasError('required'))
-      this._snackBar.open(name + " è obbligatorio!", 'Ok', { duration: 2000 });
-  }
-
-  checkEmail() {
-    if (this.loginForm.get("email")?.hasError('email'))
-      this._snackBar.open("Fornisci un'email corretta", 'Ok', { duration: 2000 });
+  checkField(field: string, name: string) {
+    let msg = this.util.getFieldMsgError(this.loginForm.get(field)!, name);
+    if (msg)
+      this.snackBar.open(msg, 'Ok', { duration: 2000 });
   }
 }

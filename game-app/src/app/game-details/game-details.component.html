@@ -1,9 +1,6 @@
 <app-check-user-verified></app-check-user-verified>
-<div *ngIf="!isLoading; else loading">
-
-	<div *ngIf="!show">	
-	<div class="tab" *ngIf="game$ | async; let game; ">
-
+<div *ngIf="show">
+	<div class="tab" *ngIf="game$ | async; let game; else loading">
 		<img id="image" [src]="util.getImgUrl(game.title)">
 		<div id="title">{{ util.capitalize(game.title) }} </div>
 		<div id="content">
@@ -43,20 +40,8 @@
 	</div>
 </div>
 
-
-	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && !isinlist">
-		<app-insertgamelist *ngIf="show && gameid" [gameid]="gameid" (completed)="completed($event)">
-		</app-insertgamelist>
-		<button id="btn1" mat-raised-button color="primary" *ngIf="!show" (click)="show=!show">Aggiungi gioco</button>
-		<button id="btn2" mat-raised-button color="primary" *ngIf="show" (click)="show=!show">Chiudi gioco</button>
-		
-	</div>
-
-	<div id="tick" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified && isinlist">
-		Il gioco e' gia' in una tua lista
-		<mat-icon>check_circle_outline</mat-icon>
-	</div>
-
+<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+	<app-add-to-list *ngIf="gameid" [gameID]="gameid" (showInsertFormChanged)="onShowInsertFormChanged($event)"></app-add-to-list>
 </div>
 
 <ng-template #loading>

@@ -61,6 +61,7 @@ import { NotificationComponent } from './notification/notification.component';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
 import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component';
 import {MatListModule} from '@angular/material/list';
+import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -124,7 +125,8 @@ const routes: Routes = [
     InsertNewPasswordComponent,
     NotificationComponent,
     RedirectPageComponent,
-    ShowChatsComponent
+    ShowChatsComponent,
+    AddToListComponent
   ],
   providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
   bootstrap: [AppComponent]
