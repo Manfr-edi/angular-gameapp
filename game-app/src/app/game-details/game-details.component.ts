@@ -29,7 +29,7 @@ export class GameDetailsComponent {
   show: boolean = true;
 
   constructor(private route: ActivatedRoute, public util: UtilService, public authService: AuthService,
-    public gameCollectionService: GameCollectionService, public userCollectionService: UserCollectionService) {
+    public gameCollectionService: GameCollectionService) {
     //Lettura id del gioco
     const routeParams = this.route.snapshot.paramMap;
     this.gameid = String(routeParams.get('id'));

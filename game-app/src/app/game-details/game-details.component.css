@@ -1,10 +1,17 @@
+body {
+    padding: 20px;
+    background-image: url("../../assets/background.png");
+    background-repeat: repeat-xy;
+    background-size: 150px;
+    height: 93vh;
+  }
+
 .tab{
     display: grid;
-    background-color:violet;
     grid-template-areas:
     'image title title'
     'image content content'
-    'image bio bio '
+    'image desc desc '
     'image stat stat';
     grid-gap: 10px;
     padding: 10px;   
@@ -13,27 +20,33 @@
 
 .tab >div{
 text-align: start;
-
 }
 
-#image{
+#imgCard{
     grid-area: image;
     margin-left: 30;
     width: 400px;
     height: 500px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+#image
+{
+    width: 95%;
+    height: 95%;
+    margin: 2.5%;
 }
 
 #title{
     grid-area: title;
-    background-color: crimson;
     font-size: 36; 
     font-family: 'Helvetica', Arial , Sans-Serif;
     font-weight: bold; 
-       
+    color: white;
+    margin-left: 40px;
 }
 #content{
     padding:40px;
-    background-color: gold;
     grid-area: content;
     font-size: 14;
     row-gap: 50px;
@@ -42,22 +55,18 @@ text-align: start;
     justify-content: space-between;
 }
 
-#biodesc{
-    background-color: rgb(255, 0, 0);
-    grid-area: bio;
+#desc{
+    margin: 0 40px;
+    grid-area: desc;
     font-size: 14;
-    
+    background: rgba(255, 255, 255, 0.7);
 }
-
-
 
 #spinner{
     margin:0 auto;
 }
 
-
-
 #stat {
     grid-area: stat;
-    background-color: cyan;
+    margin: 0 40px;
 }

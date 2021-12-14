@@ -1,6 +1,5 @@
 #container
 {
-	background-color: blue;
 	padding: 20px;
 }
 
@@ -12,7 +11,6 @@
 #gameInfo{
 	display: inline-block;
 	width: 30%;
-	background-color: gray;
 	text-align: center;
 	font-family: Helvetica, Arial, sans-serif;
 	font-weight: bold;
@@ -28,8 +26,12 @@
 	display: inline-block;
 	width: 60%;
 	vertical-align: middle;
-	background-color: yellow;
 	margin-left: 5%;
+}
+
+#formCard
+{
+	width: auto;
 }
 
 .mat-form-field

@@ -11,37 +11,40 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </head>
 
-<nav class="navbar navbar-expand-sm bg-light sticky-top navbar-custom ">
-	<ul class="nav" role="tablist" id="myTab">
+<body>
+	<nav class="navbar navbar-expand-sm bg-light sticky-top navbar-custom ">
+		<ul class="nav" role="tablist" id="myTab">
 
-		<li class="nav-item">
-			<button mat-icon-button aria-label="Example icon button with a home icon" [routerLink]="'/'">
-				<mat-icon>home</mat-icon>
-			</button>
-		</li>
+			<li class="nav-item">
+				<button mat-icon-button aria-label="Example icon button with a home icon" [routerLink]="'/'">
+					<mat-icon>home</mat-icon>
+				</button>
+			</li>
 
-		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
-			<button mat-button (menuOpened)="menuOpened=true" (menuClosed)="menuOpened=false" [matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">{{authService.currentUserName}}</button>
-			<mat-menu #menu="matMenu">
-				<button mat-menu-item [routerLink]="['/gametab']">Games</button>
-				<button mat-menu-item [routerLink]="['/settings']">Settings</button>
-				<button mat-menu-item [routerLink]="['/friendtab']">Friends</button>
-				<button mat-menu-item [routerLink]="['/chats']">Chat</button>
-			</mat-menu>
-		</li>
+			<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
+				<button mat-button (menuOpened)="menuOpened=true" (menuClosed)="menuOpened=false"
+					[matMenuTriggerFor]="menu" #menuTrigger="matMenuTrigger">{{authService.currentUserName}}</button>
+				<mat-menu #menu="matMenu">
+					<button mat-menu-item [routerLink]="['/gametab']">Games</button>
+					<button mat-menu-item [routerLink]="['/settings']">Settings</button>
+					<button mat-menu-item [routerLink]="['/friendtab']">Friends</button>
+					<button mat-menu-item [routerLink]="['/chats']">Chat</button>
+				</mat-menu>
+			</li>
 
-		<li class="nav-item" *ngIf="!authService.isUserEmailLoggedIn">
-			<button mat-button [routerLink]="'/login'">Log In / Register</button>
-		</li>
+			<li class="nav-item" *ngIf="!authService.isUserEmailLoggedIn">
+				<button mat-button [routerLink]="'/login'">Log In / Register</button>
+			</li>
 
-		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
-			<app-notification [menuOpened]="menuOpened"
-			 (notificationMenuOpened)="onNotificationMenuChanges($event)"></app-notification>
-		</li>
+			<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
+				<app-notification [menuOpened]="menuOpened"
+					(notificationMenuOpened)="onNotificationMenuChanges($event)"></app-notification>
+			</li>
 
-		<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
-			<button mat-button (click)="authService.signOut()">Logout</button>
-		</li>
-	</ul>
-</nav>
-<router-outlet></router-outlet>
+			<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
+				<button mat-button (click)="authService.signOut()">Logout</button>
+			</li>
+		</ul>
+	</nav>
+	<router-outlet></router-outlet>
+</body>

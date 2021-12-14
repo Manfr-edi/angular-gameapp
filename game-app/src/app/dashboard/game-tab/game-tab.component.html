@@ -34,7 +34,7 @@
 				<div *ngIf="games$ | async as games">
 					<div *ngFor="let game of games">
 						<mat-card id="card">
-							<img mat-card-image id="gameico" [src]="util.getImgUrl(game.payload.doc.data().title)">
+							<img mat-card-image id="gameico" [src]="util.getGameImgUrl(game.payload.doc.data().title)">
 							<mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
 								{{ util.capitalize(game.payload.doc.data().title) }}
 								<mat-card-content *ngIf="viewlist === userlists[0].code">

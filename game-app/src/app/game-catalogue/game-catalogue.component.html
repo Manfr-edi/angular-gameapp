@@ -1,37 +1,38 @@
-<div>
+<body>
   <input type="text" id="search" class="form-control form-control-sm" (keyup)="onKey($event)"
     placeholder="Inserisci titolo">
-</div><br>
 
-<div *ngIf="games$ | async; let games; else loading">
-  <ul class="flexp">
-    <div *ngFor="let game of games">
-      <mat-card id="card">
+  <div id="gamesDiv" *ngIf="games$ | async; let games; else loading">
+    <ul class="flexp">
+      <div *ngFor="let game of games">
+        <mat-card id="card">
 
-        <img mat-card-lg-image [src]="util.getImgUrl(game.payload.doc.data().title)"
-          [routerLink]="['/games', game.payload.doc.id]">
+          <img mat-card-lg-image [src]="util.getGameImgUrl(game.payload.doc.data().title)"
+            [routerLink]="['/games', game.payload.doc.id]">
 
-        <div id="gamedata">
-          <mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
-            {{ util.capitalize(game.payload.doc.data().title) }}
-          </mat-card-title>
+          <div id="gamedata">
+            <mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
+              {{ util.capitalize(game.payload.doc.data().title) }}
+            </mat-card-title>
 
-          <mat-card-content>
-            Genere: {{game.payload.doc.data().genre}}
-          </mat-card-content>
-          
-          <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
-            Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
-          </mat-card-content>
-        </div>
-        <button mat-fab id="btn" color="primary" [routerLink]="['/games', game.payload.doc.id]">Apri</button> 
-      </mat-card>
+            <mat-card-content>
+              Genere: {{game.payload.doc.data().genre}}
+            </mat-card-content>
 
-    </div>
-  </ul>
-  <div *ngIf="games.length === 0">Nessun gioco trovato</div>
-</div>
+            <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
+              Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
+            </mat-card-content>
+          </div>
+          <button mat-fab id="btn" color="primary" [routerLink]="['/games', game.payload.doc.id]">Apri</button>
+        </mat-card>
 
-<ng-template #loading>
-  <mat-spinner id="spinner"></mat-spinner>
-</ng-template>
+      </div>
+    </ul>
+    <div *ngIf="games.length === 0">Nessun gioco trovato</div>
+  </div>
+
+  <ng-template #loading>
+    <mat-spinner id="spinner"></mat-spinner>
+  </ng-template>
+
+</body>

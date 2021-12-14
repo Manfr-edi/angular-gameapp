@@ -45,8 +45,8 @@ export class UtilService {
     return sumTime / games.length;
   }
 
-  getImgUrl(title: string): string {
-    return "assets/" + Md5.init(title) + '.jpg';
+  getGameImgUrl(title: string): string {
+    return "assets/Games/" + Md5.init(title) + '.jpg';
   }
 
   getMsgTime(timestamp: Timestamp) {

@@ -3,55 +3,57 @@
 		<div id="gameinfo">
 			{{util.capitalize(gametitle)}}
 			<br> <br>
-			<img class="gameico" [src]="util.getImgUrl(gametitle)">
+			<img class="gameico" [src]="util.getGameImgUrl(gametitle)">
 		</div>
 
 		<div id="form">
-			<form id="updateForm" (ngSubmit)="onSubmit()" [formGroup]="gameForm">
-				<mat-form-field appearance="fill">
-					<mat-label>Lista</mat-label>
-					<mat-select (selectionChange)="onChangeList()" formControlName="destinationList">
-						<mat-option *ngFor="let o of userlists" value="{{o.code}}"> {{o.name}} </mat-option>
-					</mat-select>
-				</mat-form-field>
+			<mat-card id="formCard"> 
+				<form id="updateForm" (ngSubmit)="onSubmit()" [formGroup]="gameForm">
+					<mat-form-field appearance="fill">
+						<mat-label>Lista</mat-label>
+						<mat-select (selectionChange)="onChangeList()" formControlName="destinationList">
+							<mat-option *ngFor="let o of userlists" value="{{o.code}}"> {{o.name}} </mat-option>
+						</mat-select>
+					</mat-form-field>
 
-				<mat-form-field *ngIf="gameForm.get('time')?.enabled" appearance="fill">
-					<mat-label>Tempo di completamento</mat-label>
-					<input (focusout)="checkField('time', 'Tempo di completamento')" matInput type="number"
-						placeholder="ore" required formControlName="time">
-					<span matSuffix>h</span>
-				</mat-form-field>
+					<mat-form-field *ngIf="gameForm.get('time')?.enabled" appearance="fill">
+						<mat-label>Tempo di completamento</mat-label>
+						<input (focusout)="checkField('time', 'Tempo di completamento')" matInput type="number"
+							placeholder="ore" required formControlName="time">
+						<span matSuffix>h</span>
+					</mat-form-field>
 
-				<mat-form-field *ngIf="gameForm.get('vote')?.enabled" appearance="fill">
-					<mat-label>Voto</mat-label>
-					<mat-select formControlName="vote">
-						<mat-option></mat-option>
-						<mat-option *ngFor="let number of [1,2,3,4,5,6,7,8,9,10]" [value]="number"> {{number}}
-						</mat-option>
-					</mat-select>
-				</mat-form-field>
+					<mat-form-field *ngIf="gameForm.get('vote')?.enabled" appearance="fill">
+						<mat-label>Voto</mat-label>
+						<mat-select formControlName="vote">
+							<mat-option></mat-option>
+							<mat-option *ngFor="let number of [1,2,3,4,5,6,7,8,9,10]" [value]="number"> {{number}}
+							</mat-option>
+						</mat-select>
+					</mat-form-field>
 
-				<mat-form-field *ngIf="gameForm.get('platform')?.enabled" appearance="fill">
-					<mat-label>Piattaforma</mat-label>
-					<mat-select formControlName="platform">
-						<mat-option *ngFor="let plat of platformsGame" [value]="plat">{{plat}}</mat-option>
-					</mat-select>
-				</mat-form-field>
+					<mat-form-field *ngIf="gameForm.get('platform')?.enabled" appearance="fill">
+						<mat-label>Piattaforma</mat-label>
+						<mat-select formControlName="platform">
+							<mat-option *ngFor="let plat of platformsGame" [value]="plat">{{plat}}</mat-option>
+						</mat-select>
+					</mat-form-field>
 
-				<mat-form-field *ngIf="gameForm.get('price')?.enabled" appearance="fill">
-					<mat-label>Prezzo di acquisto</mat-label>
-					<input (focusout)="checkField('price', 'Prezzo di acquisto')" matInput type="number"
-						placeholder="&euro;" required formControlName="price">
-					<span matSuffix>&euro;</span>
-				</mat-form-field>
+					<mat-form-field *ngIf="gameForm.get('price')?.enabled" appearance="fill">
+						<mat-label>Prezzo di acquisto</mat-label>
+						<input (focusout)="checkField('price', 'Prezzo di acquisto')" matInput type="number"
+							placeholder="&euro;" required formControlName="price">
+						<span matSuffix>&euro;</span>
+					</mat-form-field>
 
-				<mat-form-field appearance="fill">
-					<mat-label>Note Aggiuntive</mat-label>
-					<textarea matInput formControlName="note"></textarea>
-				</mat-form-field>
+					<mat-form-field appearance="fill">
+						<mat-label>Note Aggiuntive</mat-label>
+						<textarea matInput formControlName="note"></textarea>
+					</mat-form-field>
 
-				<button type="submit" [disabled]="!gameForm.valid" mat-button color="primary">Update List</button>
-			</form>
+					<button type="submit" [disabled]="!gameForm.valid" mat-button color="primary">Update List</button>
+				</form>
+			</mat-card>
 		</div>
 	</div>
 

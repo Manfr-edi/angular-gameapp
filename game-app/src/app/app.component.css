@@ -1,8 +1,9 @@
-p {
-  font-family: Lato;
-}
-
 .navbar-custom
 {
-  height: 10vh;
+  height: 7vh;
+}
+
+body
+{
+  overflow-y: hidden;
 }

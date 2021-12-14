@@ -1,55 +1,65 @@
-<app-check-user-verified></app-check-user-verified>
-<div *ngIf="show">
-	<div class="tab" *ngIf="game$ | async; let game; else loading">
-		<img id="image" [src]="util.getImgUrl(game.title)">
-		<div id="title">{{ util.capitalize(game.title) }} </div>
-		<div id="content">
-			<mat-card id="one">
-				<mat-card-title>Piattaforma</mat-card-title>
-				<mat-card-content>
-					<div *ngFor="let platform of game.platform">
-						{{ util.capitalize(platform) }}</div>
-				</mat-card-content>
+<body>
+	<app-check-user-verified></app-check-user-verified>
+	<div *ngIf="show">
+		<div class="tab" *ngIf="game$ | async; let game; else loading">
+			<mat-card id="imgCard">
+				<img mat-card-lg-image id="image" [src]="util.getGameImgUrl(game.title)">
 			</mat-card>
-			<mat-card id="two">
-				<mat-card-title>Sviluppatore</mat-card-title>
-				<mat-card-content>{{ util.capitalize(game.developer) }}</mat-card-content>
-			</mat-card>
-			<mat-card id="three">
-				<mat-card-title>Prezzo d'uscita</mat-card-title>
-				<mat-card-content>{{ util.capitalize(game.price) }}<span matSuffix>&euro;</span></mat-card-content>
-			</mat-card>
-			<mat-card id="four">
-				<mat-card-title>Data d'uscita</mat-card-title>
-				<mat-card-content>{{ util.capitalize(game.release) }}</mat-card-content>
-			</mat-card>
-			<mat-card id="five">
-				<mat-card-title>Publisher</mat-card-title>
-				<mat-card-content>{{ util.capitalize(game.publisher) }}</mat-card-content>
-			</mat-card>
-			<mat-card id="six">
-				<mat-card-title>Genre</mat-card-title>
-				<mat-card-content>
-					<div *ngFor="let genre of game.genre">{{ genre }}</div>
-				</mat-card-content>
-			</mat-card>
-		</div>
-		<div id="biodesc">
-			<h4>Descrizione : </h4>
-			{{ game.bio }}
-		</div>
-		<div id="stat">
-			Il tempo medio di completamento e' {{game.completedtimeavg}} <br>
-			Il numero di utenti che hanno completato il gioco e' {{game.completedtimecount}}
-		</div>
+			<div id="title">{{ util.capitalize(game.title) }} </div>
+			<div id="content">
+				<mat-card id="one">
+					<mat-card-title>Piattaforma</mat-card-title>
+					<mat-card-content>
+						<div *ngFor="let platform of game.platform">
+							{{ util.capitalize(platform) }}</div>
+					</mat-card-content>
+				</mat-card>
+				<mat-card i d="two">
+					<mat-card-title>Sviluppatore</mat-card-title>
+					<mat-card-content>{{ util.capitalize(game.developer) }}</mat-card-content>
+				</mat-card>
+				<mat-card id="three">
+					<mat-card-title>Prezzo d'uscita</mat-card-title>
+					<mat-card-content>{{ util.capitalize(game.price) }}<span matSuffix>&euro;</span></mat-card-content>
+				</mat-card>
+				<mat-card id="four">
+					<mat-card-title>Data d'uscita</mat-card-title>
+					<mat-card-content>{{ util.capitalize(game.release) }}</mat-card-content>
+				</mat-card>
+				<mat-card id="five">
+					<mat-card-title>Publisher</mat-card-title>
+					<mat-card-content>{{ util.capitalize(game.publisher) }}</mat-card-content>
+				</mat-card>
+				<mat-card id="six">
+					<mat-card-title>Genre</mat-card-title>
+					<mat-card-content>
+						<div *ngFor="let genre of game.genre">{{ genre }}</div>
+					</mat-card-content>
+				</mat-card>
+			</div>
+			<div id="desc">
+				<mat-card>
+					<mat-card-title>Descrizione</mat-card-title>
+					<mat-card-content>{{ game.bio }}</mat-card-content>
+				</mat-card>
+			</div>
+			<div id="stat" *ngIf="game.completedtimecount > 0">
+				<mat-card>
+					<mat-card-content>Il tempo medio di completamento e' {{game.completedtimeavg}}</mat-card-content>
+					<mat-card-content>Il numero di utenti che hanno completato il gioco e' {{game.completedtimecount}}
+					</mat-card-content>
+				</mat-card>
+			</div>
 
+		</div>
 	</div>
-</div>
 
-<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-	<app-add-to-list *ngIf="gameid" [gameID]="gameid" (showInsertFormChanged)="onShowInsertFormChanged($event)"></app-add-to-list>
-</div>
+	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+		<app-add-to-list *ngIf="gameid" [gameID]="gameid" (showInsertFormChanged)="onShowInsertFormChanged($event)">
+		</app-add-to-list>
+	</div>
 
-<ng-template #loading>
-	<mat-spinner id="spinner"></mat-spinner>
-</ng-template>
+	<ng-template #loading>
+		<mat-spinner id="spinner"></mat-spinner>
+	</ng-template>
+</body>
