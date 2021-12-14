@@ -12,26 +12,27 @@
 	display: inline-block;
 	width: 30%;
 	text-align: center;
-	font-family: Helvetica, Arial, sans-serif;
-	font-weight: bold;
-	font-size: 18;
+	color: white;
+	font-size: 36; 
+    font-family: 'Helvetica', Arial , Sans-Serif;
+    font-weight: bold; 
 }
 
 #updateForm{
 	display: flex;
+	margin-left: auto;
+	align-items: center;
 	flex-direction: column;
 }
 
-#form{
-	display: inline-block;
-	width: 60%;
-	vertical-align: middle;
-	margin-left: 5%;
-}
 
 #formCard
 {
-	width: auto;
+	display: inline-block;
+	width: 40%;
+	vertical-align: middle;
+	margin: auto;
+	margin-left: 15%;
 }
 
 .mat-form-field
@@ -42,4 +43,10 @@
 #spinner {
 	margin: auto;
   }
+
+.mat-card-content{
+	color:red;
+	font-size: 12;
+	
+}
   

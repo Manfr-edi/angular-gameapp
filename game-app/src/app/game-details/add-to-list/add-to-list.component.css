@@ -1,17 +1,27 @@
 #btn1{
+    background-color: violet;
     margin-top: 30px;
     margin-bottom: 30px;
     margin-left: 130px;
 }
 
 #btn2{
+    background-color: violet;
     margin-top: 30px;
     margin-bottom: 30px;
     margin-left: 130px;
 }
 
 #tick{
-    width: 25%;
-    align-content: center;
-    background-color: chartreuse;
+    color: white;
+    /*background-color: rgba(137, 233, 98, 0.6);*/
+    font-size: 18;
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+}
+
+#icon{
+    color:greenyellow;
+    vertical-align: middle;
 }

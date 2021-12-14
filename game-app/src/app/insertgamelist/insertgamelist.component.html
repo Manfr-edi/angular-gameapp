@@ -6,8 +6,9 @@
 			<img class="gameico" [src]="util.getGameImgUrl(gametitle)">
 		</div>
 
-		<div id="form">
-			<mat-card id="formCard"> 
+
+		<mat-card id="formCard">
+				<mat-card-title> Inserisci i dati</mat-card-title>
 				<form id="updateForm" (ngSubmit)="onSubmit()" [formGroup]="gameForm">
 					<mat-form-field appearance="fill">
 						<mat-label>Lista</mat-label>
@@ -50,11 +51,13 @@
 						<mat-label>Note Aggiuntive</mat-label>
 						<textarea matInput formControlName="note"></textarea>
 					</mat-form-field>
-
+					
 					<button type="submit" [disabled]="!gameForm.valid" mat-button color="primary">Update List</button>
 				</form>
-			</mat-card>
-		</div>
+				<mat-card-content>* Dati obbligatori</mat-card-content>
+			
+		</mat-card>
+
 	</div>
 
 	<ng-template #loading>

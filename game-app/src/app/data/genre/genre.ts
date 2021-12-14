@@ -1,7 +1,6 @@
 
 export const genreList = 
 [
-	"Action RPG",
 	"Platform",
 	"Action",
 	"FPS",

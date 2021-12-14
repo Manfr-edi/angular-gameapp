@@ -4,33 +4,39 @@
 		<div class="tab" *ngIf="game$ | async; let game; else loading">
 			<mat-card id="imgCard">
 				<img mat-card-lg-image id="image" [src]="util.getGameImgUrl(game.title)">
+
+				
+
 			</mat-card>
+
+
+			
 			<div id="title">{{ util.capitalize(game.title) }} </div>
 			<div id="content">
-				<mat-card id="one">
+				<mat-card class="card" id="one">
 					<mat-card-title>Piattaforma</mat-card-title>
 					<mat-card-content>
 						<div *ngFor="let platform of game.platform">
 							{{ util.capitalize(platform) }}</div>
 					</mat-card-content>
 				</mat-card>
-				<mat-card i d="two">
+				<mat-card class="card" id="two">
 					<mat-card-title>Sviluppatore</mat-card-title>
 					<mat-card-content>{{ util.capitalize(game.developer) }}</mat-card-content>
 				</mat-card>
-				<mat-card id="three">
+				<mat-card class="card" id="three">
 					<mat-card-title>Prezzo d'uscita</mat-card-title>
 					<mat-card-content>{{ util.capitalize(game.price) }}<span matSuffix>&euro;</span></mat-card-content>
 				</mat-card>
-				<mat-card id="four">
+				<mat-card class="card" id="four">
 					<mat-card-title>Data d'uscita</mat-card-title>
 					<mat-card-content>{{ util.capitalize(game.release) }}</mat-card-content>
 				</mat-card>
-				<mat-card id="five">
+				<mat-card class="card" id="five">
 					<mat-card-title>Publisher</mat-card-title>
 					<mat-card-content>{{ util.capitalize(game.publisher) }}</mat-card-content>
 				</mat-card>
-				<mat-card id="six">
+				<mat-card class="card" id="six">
 					<mat-card-title>Genre</mat-card-title>
 					<mat-card-content>
 						<div *ngFor="let genre of game.genre">{{ genre }}</div>
@@ -54,10 +60,11 @@
 		</div>
 	</div>
 
-	<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+	<div id="text-list" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 		<app-add-to-list *ngIf="gameid" [gameID]="gameid" (showInsertFormChanged)="onShowInsertFormChanged($event)">
 		</app-add-to-list>
 	</div>
+
 
 	<ng-template #loading>
 		<mat-spinner id="spinner"></mat-spinner>
