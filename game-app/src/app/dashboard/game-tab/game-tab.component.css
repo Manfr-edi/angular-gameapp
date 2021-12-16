@@ -5,6 +5,10 @@
 
 body {
   white-space: nowrap;
+  height: 93vh;  
+  background-image: url("../../../assets/background.png");
+  background-repeat: repeat-xy;
+  background-size: 150px;
 }
 
 .btnDiv {
@@ -13,21 +17,32 @@ body {
 }
 
 #filtersDiv{
-	display: table;
+	display: flex;
+  justify-content: center;
+  gap: 10px;
 	margin: 0 auto;
+}
+#gamescroll{
+  height: 79vh;
+  overflow-y: scroll;
+}
+#gamescroll::-webkit-scrollbar {
+  display: none;
+}
+#gamescroll {
+  scrollbar-width: none;  /* Firefox */
 }
 
 #gameDiv {
   padding-top: 10px;
-  background-color: red;
   width: 55%;
   display: inline-block;
   margin-left: 2.5%;
-  min-height: 100vh;
+  height: 93vh;
+  overflow-y: hidden;
 }
 
 #statsDiv {
-  background-color: blue;
   height: 380px;
   width: 35%;
   display: inline-block;

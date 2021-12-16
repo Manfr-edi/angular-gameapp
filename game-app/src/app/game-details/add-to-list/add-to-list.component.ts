@@ -27,6 +27,7 @@ export class AddToListComponent implements OnChanges {
 
   completed(event: boolean) {
     this.isInList = event;
+    this.toggleInsertForm();
   }
 
   toggleInsertForm() {

@@ -1,43 +1,99 @@
 #container
 {
-	padding: 20px;
+	padding: 10px;
+	overflow-y: scroll;
+	height: 85vh;	
 }
-
-.gameIco {
-  width: 90%;
-  height: auto;
+#container::-webkit-scrollbar {
+	display: none;
 }
-
+#container {
+	scrollbar-width: none; 
+}
+#cont_flex{
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	row-gap: 10px;
+	column-gap: 20px;
+}
+#gameIco {
+  max-width: 25%;
+  max-height: 60%;
+}
 #gameInfo{
-	display: inline-block;
-	width: 30%;
+	
+	width: 100%;
 	text-align: center;
 	color: white;
-	font-size: 36; 
+	font-size: 24; 
     font-family: 'Helvetica', Arial , Sans-Serif;
     font-weight: bold; 
 }
-
 #updateForm{
-	display: flex;
 	margin-left: auto;
-	align-items: center;
-	flex-direction: column;
 }
-
-
 #formCard
 {
-	display: inline-block;
-	width: 40%;
+	width: 100%;
 	vertical-align: middle;
+	justify-items: center;
+	display: grid;
+	grid-template-areas:
+	'title title'
+	'list list'
+	'time price'
+	'vote plat'
+	'note note'
+	'ad sub';
+	column-gap: 10px;
+	padding: 10px;
+}
+#card{
+	max-width: 70%;
+	height: fit-content;
+}
+
+#title{
+    grid-area: title;
+}
+#list{
+	grid-area:list;
+	height: max-content;	
+}
+#time{ 
+	grid-area: time;
+}
+#platform{
+	grid-area: plat;
+}
+#price{
+	grid-area: price;
+}
+#note{
+	grid-area: note;
+	width: 100%;		
+}
+#not{
 	margin: auto;
-	margin-left: 15%;
+	width:100%;
+}
+#vote{
+	grid-area: vote;
+}
+#sub{
+	grid-area: sub;
+	
+}
+#ad{
+	grid-area: ad;
+	
 }
 
 .mat-form-field
 {
-	width: 240px;
+	max-width: 500px;
 }
 
 #spinner {
@@ -47,6 +103,7 @@
 .mat-card-content{
 	color:red;
 	font-size: 12;
+	margin-top: 10px;
 	
 }
   

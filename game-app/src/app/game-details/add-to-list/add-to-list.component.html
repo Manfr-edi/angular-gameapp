@@ -1,9 +1,13 @@
-<div *ngIf="!isInList">
+<div id="cont" *ngIf="!isInList">
+    
     <app-insertgamelist *ngIf="showInsertForm && gameID" [gameid]="gameID" (completed)="completed($event)"></app-insertgamelist>
-    <button id="btn1" mat-raised-button color="primary" *ngIf="!showInsertForm" (click)="toggleInsertForm()">Aggiungi
+    <div id="text" *ngIf="!showInsertForm"> Vuoi inserire il gioco nella tua lista?
+    <button id="btn1" mat-raised-button (click)="toggleInsertForm()">Aggiungi
         gioco</button>
-    <button id="btn2" mat-raised-button color="primary" *ngIf="showInsertForm" (click)="toggleInsertForm()">Chiudi
+    </div>
+    <button id="btn2" mat-raised-button *ngIf="showInsertForm" (click)="toggleInsertForm()">Chiudi
         gioco</button>
+        
 </div>
 
 <div id="tick" *ngIf="isInList">

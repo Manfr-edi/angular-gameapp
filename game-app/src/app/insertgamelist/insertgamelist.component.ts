@@ -134,6 +134,7 @@ export class InsertgamelistComponent implements OnChanges {
       this.gametitle, this.gameForm.get("note")?.value,
       this.gameForm.get("time")?.value, this.gameForm.get("vote")?.value,
       this.gameForm.get("platform")?.value, this.gamegenre, this.gameForm.get("price")?.value));
+     
   }
 
   checkField(field: string, name: string) {
