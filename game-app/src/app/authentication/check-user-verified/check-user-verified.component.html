@@ -1,4 +1,6 @@
-<div *ngIf="authService.isUserEmailLoggedIn && !authService.isUserEmailVerified">
-    <h5>Verifica l'email per sfruttare tutte le funzionalita'. <button (click)="resendVerificationEmail()">Reinvia email di verifica</button>
-</h5>
+<div id="text" *ngIf="authService.isUserEmailLoggedIn && !authService.isUserEmailVerified">
+    <div >
+        Verifica l'email per sfruttare tutte le funzionalita'. <br>
+        <button mat-raised-button (click)="resendVerificationEmail()">Reinvia email di verifica</button>
+    </div>
 </div>

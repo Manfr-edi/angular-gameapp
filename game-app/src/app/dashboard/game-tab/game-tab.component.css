@@ -35,7 +35,7 @@ body {
 
 #gameDiv {
   padding-top: 10px;
-  width: 55%;
+  width: 60%;
   display: inline-block;
   margin-left: 2.5%;
   height: 93vh;
@@ -92,4 +92,13 @@ mat-card content {
 
 #menuBtn {
   float :right;
+}
+
+.rett{
+  margin-top: 10px;
+  background-color: rgba(202, 199, 199, 0.623);
+  height: 40px;
+  text-align: center;
+  padding: 10px;
+  font-size: 15;
 }

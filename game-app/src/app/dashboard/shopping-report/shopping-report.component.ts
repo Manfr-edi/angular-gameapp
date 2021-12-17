@@ -2,7 +2,6 @@ import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
 import { AuthService } from 'src/app/services/auth.service';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { userlist } from 'src/app/data/userlist/userlist';
 import { UserCollectionService } from 'src/app/services/user-collection.service';
 
@@ -52,7 +51,7 @@ export class ShoppingReportComponent implements OnChanges {
       //Calcolo la media e aggiorno i dati
       if (count > 0) {
         this.sumPrice = sum;
-        this.avgPrice = sum / count;
+        this.avgPrice = Math.round((sum / count)*100)/100;
         this.countBougthGame = count;
       }
       else

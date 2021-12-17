@@ -42,7 +42,7 @@ export class UtilService {
     for (let game of games)
       sumTime += game.payload.doc.data().completetime;
 
-    return sumTime / games.length;
+    return Math.round((sumTime / games.length)*100)/100;
   }
 
   getGameImgUrl(title: string): string {

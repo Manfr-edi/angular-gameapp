@@ -1,7 +1,7 @@
 <div *ngIf="countBougthGame > 0">
-	<h4> Spesa totale: </h4> {{sumPrice}} <br>
-	<h4> Spesa media: </h4> {{avgPrice}} <br>
-	<h4> Numero giochi acquistati: </h4> {{countBougthGame}}
+	<div class="rett"> Spesa totale: {{sumPrice}} </div>
+	<div class="rett"> Spesa media: {{avgPrice}} </div>
+	<div class="rett"> Numero giochi acquistati: {{countBougthGame}} </div>
 </div>
 <div *ngIf="countBougthGame == 0">
 	<h4> Non ci sono giochi acquistati che rispettano questi filtri </h4>

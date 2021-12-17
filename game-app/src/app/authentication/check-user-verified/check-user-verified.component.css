@@ -1,0 +1,12 @@
+#text{
+    font-size: 26;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    padding: 30px;
+}
+.mat-raised-button{
+    margin-top: 10px;
+    background-color:violet;
+    color:white
+}

@@ -36,7 +36,7 @@
 				<button mat-button [routerLink]="'/login'">Log In / Register</button>
 			</li>
 
-			<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn">
+			<li class="nav-item" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 				<app-notification [menuOpened]="menuOpened"
 					(notificationMenuOpened)="onNotificationMenuChanges($event)"></app-notification>
 			</li>

@@ -32,37 +32,41 @@
 
 			<div id="gamescroll" *ngIf="!updateForm">
 				<div *ngIf="games$ | async as games">
-						<div *ngFor="let game of games">
-							<mat-card id="card">
-								<img mat-card-image id="gameico"
-									[src]="util.getGameImgUrl(game.payload.doc.data().title)">
-								<mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
-									{{ util.capitalize(game.payload.doc.data().title) }}
-									<mat-card-content *ngIf="viewlist === userlists[0].code">
-										Ore giocate: {{game.payload.doc.data().completetime}} <br>
-										Voto : {{game.payload.doc.data().vote}}<br>
-										Prezzo : {{game.payload.doc.data().price}} <span matSuffix>&euro;</span>
+					<div *ngFor="let game of games">
+						<mat-card id="card">
+							<img mat-card-image id="gameico" [src]="util.getGameImgUrl(game.payload.doc.data().title)">
+							<mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
+								{{ util.capitalize(game.payload.doc.data().title) }}
+								<div *ngIf="viewlist === userlists[0].code">
+									<mat-card-content>Ore giocate: {{game.payload.doc.data().completetime}}
 									</mat-card-content>
-								</mat-card-title>
 
-								<mat-card-content id="menuBtn">
-									<button mat-icon-button [matMenuTriggerFor]="menu">
-										<mat-icon>more_vert</mat-icon>
-									</button>
-									<mat-menu #menu="matMenu">
-										<button mat-menu-item
-											(click)="updateForm=true; gameid=game.payload.doc.id">Update</button>
-										<button mat-menu-item
-											(click)="userCollectionService.RemoveGame(viewlist, game.payload.doc.id)">Delete</button>
-									</mat-menu>
-								</mat-card-content>
+									<mat-card-content>Prezzo : {{game.payload.doc.data().price}} <span
+											matSuffix>&euro;</span>
+									</mat-card-content>
+									<mat-card-content *ngIf="game.payload.doc.data().vote != null">Voto :
+										{{game.payload.doc.data().vote}}</mat-card-content>
+								</div>
+							</mat-card-title>
 
-							</mat-card>
+							<mat-card-content id="menuBtn">
+								<button mat-icon-button [matMenuTriggerFor]="menu">
+									<mat-icon>more_vert</mat-icon>
+								</button>
+								<mat-menu #menu="matMenu">
+									<button mat-menu-item
+										(click)="updateForm=true; gameid=game.payload.doc.id">Update</button>
+									<button mat-menu-item
+										(click)="userCollectionService.RemoveGame(viewlist, game.payload.doc.id)">Delete</button>
+								</mat-menu>
+							</mat-card-content>
 
-						</div>
+						</mat-card>
+
+					</div>
 					<div *ngIf="games.length === 0">Nessun gioco trovato</div>
 				</div>
-				
+
 			</div>
 
 			<div *ngIf="updateForm">
@@ -77,16 +81,18 @@
 		<div id="statsdiv">
 			<div *ngIf="games$ | async; let games">
 
-				<div id="shoppingDiv">
+				<mat-card id="shoppingDiv">
+					<mat-card-title> Report Spese </mat-card-title>
 					<app-shopping-report [genreSelected]="genreSelected" [platformSelected]="platformSelected">
 					</app-shopping-report>
-				</div>
-				
-				<div id="timeDIv" *ngIf="viewlist === userlists[0].code && games.length > 0 && !updateForm">
-					Il numero di giochi e': {{games.length}} <br>
-					Il numero medio di tempi di completamento e': {{util.avgTime(games)}}
-				</div>			
+				</mat-card>
 
+				<mat-card id="timeDIv" *ngIf="viewlist === userlists[0].code && games.length > 0 && !updateForm">
+					<mat-card-title> Media dei tempi di completamento</mat-card-title>
+					<mat-card-content class="rett">Il numero di giochi e': {{games.length}} </mat-card-content>
+					<mat-card-content class="rett">Il numero medio di tempi di completamento e': {{util.avgTime(games)}}
+					</mat-card-content>
+				</mat-card>
 			</div>
 		</div>
 	</div>
