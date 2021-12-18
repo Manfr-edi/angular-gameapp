@@ -24,6 +24,9 @@ export class SettingsTabComponent implements OnInit {
   genres: boolean[] = [];
   platforms: boolean[] = [];
 
+  modifyPlatform = false;
+  modifyGenre = false;
+
   constructor(public authService: AuthService, public userLoggedService: UserLoggedService) {
   }
 
@@ -40,6 +43,12 @@ export class SettingsTabComponent implements OnInit {
         dataSelected.push(list[i]);
 
     this.userLoggedService.updateUser({ [colDB]: dataSelected });
+    if(colDB==="genre"){
+      this.modifyGenre=false;
+    }
+    if(colDB==="platform"){
+      this.modifyPlatform=false;
+    }
   }
 
   async initList(parDB: string, list: string[], selected: boolean[]) {

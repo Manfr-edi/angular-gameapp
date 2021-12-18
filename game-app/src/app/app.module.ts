@@ -55,13 +55,16 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
+
 import { NotificationComponent } from './notification/notification.component';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
 import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component';
-import {MatListModule} from '@angular/material/list';
 import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
+
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -102,7 +105,8 @@ const routes: Routes = [
     MatSnackBarModule,
     MatGridListModule,
     MatBadgeModule, 
-    MatListModule
+    MatListModule,
+    MatCheckboxModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],
