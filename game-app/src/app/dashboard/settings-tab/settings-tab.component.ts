@@ -4,6 +4,8 @@ import { platformList } from 'src/app/data/platform/platform';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from '../../custom-validators';
 
 @Component({
   selector: 'app-settings-tab',
@@ -15,6 +17,14 @@ export class SettingsTabComponent implements OnInit {
   //Data
   genreList = genreList;
   platformList = platformList;
+  bio= "";
+  nicknameps = "";
+  nicknamexb = "";
+  nicknament = "";
+  nicknamest = "";
+  showmodifyDesc = false;
+
+  dataForm: FormGroup;
 
   //Filtri
   selectedGenre = "";
@@ -25,12 +35,24 @@ export class SettingsTabComponent implements OnInit {
   platforms: boolean[] = [];
 
   modifyPlatform = false;
-  modifyGenre = false;
+  modifyGenre = false
 
-  constructor(public authService: AuthService, public userLoggedService: UserLoggedService) {
+  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, public fb: FormBuilder) {
+    this.dataForm = fb.group({
+      bio:[''],
+      nicknameps:[''],
+      nicknamexb:[''],
+      nicknament:[''],
+      nicknamest:['']
+    });
   }
 
   async ngOnInit() {
+    this.bio = await this.userLoggedService.getUserDataParam("bio");
+    this.nicknameps = await this.userLoggedService.getUserDataParam("nicknameps");
+    this.nicknamexb = await this.userLoggedService.getUserDataParam("nicknamexb");
+    this.nicknament = await this.userLoggedService.getUserDataParam("nicknament");
+    this.nicknamest = await this.userLoggedService.getUserDataParam("nicknamest");
     this.initList("platform", this.platformList, this.platforms);
     this.initList("genre", this.genreList, this.genres);
   }
@@ -49,6 +71,15 @@ export class SettingsTabComponent implements OnInit {
     if(colDB==="platform"){
       this.modifyPlatform=false;
     }
+  }
+
+  updateModifyData(colDB: string, list: string) {
+    let dataSelected: string[] = [];
+
+    
+
+    this.userLoggedService.updateUser({ [colDB]: list });
+    this.showmodifyDesc=false;
   }
 
   async initList(parDB: string, list: string[], selected: boolean[]) {

@@ -3,6 +3,7 @@ body{
     background-image: url("../../../assets/background.png");
     background-repeat: repeat-xy;
     background-size: 150px;
+    overflow-y:auto;
 }
 #container{
     width: 70%;
@@ -41,6 +42,22 @@ body{
     margin: 10px auto 5px auto;
 }
 .divider{
+    background-color: white;
+}
+
+#bio{
+    width: 50%; 
+    justify-content: center;
+    background-color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;    
+    border-radius: 10px;
+    display: flex;
+    align-items:baseline;
+}
+
+#biomod{
     background-color: white;
 }
 
