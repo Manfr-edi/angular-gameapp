@@ -32,6 +32,7 @@ export class ModifyGameComponent {
 
   //Forms
   mainDataForm: FormGroup;
+  platGenForm: FormGroup;
   bioForm: FormGroup;
 
   imgUrl: string = "";
@@ -56,7 +57,10 @@ export class ModifyGameComponent {
       developer: ['', Validators.required],
       price: [0, [Validators.required, util.getPriceValidators()]],
       release: [new Date(), Validators.required],
-      publisher: ['', Validators.required],
+      publisher: ['', Validators.required]
+    });
+
+    this.platGenForm = fb.group({
       platform: ['', Validators.required],
       genre: ['', Validators.required]
     });
@@ -74,8 +78,9 @@ export class ModifyGameComponent {
         this.mainDataForm.controls["price"].setValue(game.get("price"));
         this.mainDataForm.controls["release"].setValue(new Date(game.get("release") * 1000));
         this.mainDataForm.controls["publisher"].setValue(game.get("publisher"));
-        this.mainDataForm.controls["platform"].setValue(game.get("platform"));
-        this.mainDataForm.controls["genre"].setValue(game.get("genre"));
+        //PLAT GEN
+        this.platGenForm.controls["platform"].setValue(game.get("platform"));
+        this.platGenForm.controls["genre"].setValue(game.get("genre"));
         //BIO
         this.bioForm.controls['bio'].setValue(game.get('bio'));
         //IMAGE
@@ -101,8 +106,6 @@ export class ModifyGameComponent {
     var reader = new FileReader();
     reader.readAsDataURL(this.img)
     reader.onload = () => { this.imgUrl = reader.result as string; this.imgSetted = true }
-
-    //reader.onprogress = (progress) => { console.log("Pro: " + progress.loaded/ progress.total)}
   }
 
   cancelImage() {
@@ -111,8 +114,9 @@ export class ModifyGameComponent {
     this.imgSetted = false;
   }
 
-  progressUploadImg(perc: number) {
-    console.log(perc);
+  progressUploadImg(perc: number)
+  {
+    console.log("State: " + perc);
   }
 
   updateGame() {
@@ -122,8 +126,8 @@ export class ModifyGameComponent {
       this.mainDataForm.controls["price"].value,
       this.mainDataForm.controls["release"].value,
       this.mainDataForm.controls["publisher"].value,
-      this.mainDataForm.controls["platform"].value,
-      this.mainDataForm.controls["genre"].value,
+      this.platGenForm.controls["platform"].value,
+      this.platGenForm.controls["genre"].value,
       this.bioForm.controls['bio'].value, this.img!, this.progressUploadImg, this.gameid)
       .then(r =>
         this.snackBar.open(r ? "Videogioco modificato con successo!" :

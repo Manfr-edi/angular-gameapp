@@ -1,0 +1,112 @@
+mat-stepper
+{
+    height: 90vh;
+}
+
+.next
+{
+    float: right;
+}
+
+#back
+{
+    float: left;
+}
+
+/*
+    Main Data
+*/
+.container
+{
+    width: 70%;
+    margin: auto 15%;
+    padding: 0 5%;
+}
+
+#title
+{
+    width: 100%;
+}
+
+.leftSide
+{
+    width: 45%;
+}
+
+.rightSide
+{
+    width: 45%;
+    float: right;
+}
+
+/*
+    Bio Data
+*/
+
+#bioField
+{
+     width:100%;
+}
+
+textarea{
+    min-height: 50vh;
+    max-height: 60vh;
+    resize: none;
+}
+
+#nextBio
+{
+    float: right;
+}
+
+/*
+    Img Data
+*/
+
+#image
+{
+    height: 60vh;
+    width: 43vh;
+    background-color: green;
+    display: inline-block;
+}
+
+#image img
+{
+    width:100%;
+    height:100%;
+}
+
+#control
+{
+    display: inline-block;
+    margin-left: 10%;
+}
+
+#flexControl
+{
+    display: flex;
+    flex-direction: column;
+   
+}
+
+#flexControl button
+{
+    width: 30%;
+    align-self: center;
+}
+
+#imgBtn
+{
+    float: right;
+}
+
+.list
+{
+    display: flex;
+    flex-flow: row wrap;
+}
+.mat-list-item.option {
+    display: initial;
+    width: 25%;
+  }

@@ -71,6 +71,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { SelectOptionsComponent } from './modify-game/select-options/select-options.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar'; 
+import {MatExpansionModule} from '@angular/material/expansion'; 
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -117,7 +118,8 @@ const routes: Routes = [
     MatStepperModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatProgressBarModule
+    MatProgressBarModule,
+    MatExpansionModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],
