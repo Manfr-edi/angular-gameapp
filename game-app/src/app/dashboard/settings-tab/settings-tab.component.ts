@@ -53,6 +53,11 @@ export class SettingsTabComponent implements OnInit {
     this.nicknamexb = await this.userLoggedService.getUserDataParam("nicknamexb");
     this.nicknament = await this.userLoggedService.getUserDataParam("nicknament");
     this.nicknamest = await this.userLoggedService.getUserDataParam("nicknamest");
+    this.dataForm.controls['bio'].setValue(this.bio);
+    this.dataForm.controls['nicknameps'].setValue(this.nicknameps);    
+    this.dataForm.controls['nicknamexb'].setValue(this.nicknamexb);
+    this.dataForm.controls['nicknament'].setValue(this.nicknament);
+    this.dataForm.controls['nicknamest'].setValue(this.nicknamest);
     this.initList("platform", this.platformList, this.platforms);
     this.initList("genre", this.genreList, this.genres);
   }
@@ -73,12 +78,14 @@ export class SettingsTabComponent implements OnInit {
     }
   }
 
-  updateModifyData(colDB: string, list: string) {
-    let dataSelected: string[] = [];
-
-    
-
-    this.userLoggedService.updateUser({ [colDB]: list });
+  onSubmit() {
+      this.userLoggedService.updateUser({
+      ["bio"]: this.dataForm.get("bio")?.value,
+      ["nicknameps"]: this.dataForm.get("nicknameps")?.value,
+      ["nicknamexb"]: this.dataForm.get("nicknamexb")?.value,
+      ["nicknament"]: this.dataForm.get("nicknament")?.value,
+      ["nicknamest"]: this.dataForm.get("nicknamest")?.value
+    });
     this.showmodifyDesc=false;
   }
 

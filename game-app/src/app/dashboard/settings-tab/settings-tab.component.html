@@ -2,52 +2,60 @@
 	<!--<a href="https://psnprofiles.com/ikemenzi"> <img src="https://card.psnprofiles.com/2/ikemenzi.png" border="0"></a>-->
 	<app-check-user-verified></app-check-user-verified>
 	<div id="container" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified; else loading">
-		<div class="title">Impostazioni</div>
-
-		<div id="plat">Email: {{ authService.currentEmail }} </div>
-
-		<div *ngIf="!showmodifyDesc">
-			<div id="bio" *ngIf="bio">Bio: {{ bio }}</div>
-			<div id="plat" *ngIf="nicknameps">Nickname Playstation: {{ nicknameps }}</div>
-			<div id="plat" *ngIf="nicknamexb">Nickname Microsoft: {{ nicknameps }}</div>
-			<div id="plat" *ngIf="nicknament">Nickname Nintendo: {{ nicknameps }}</div>
-			<div id="plat" *ngIf="nicknamest">Nickname Steam: {{ nicknameps }}</div>
-
-			<button class="btn" mat-raised-button color="accent" (click)="showmodifyDesc=true">Modifica Dati</button>
-		</div>
-
-		<div *ngIf="showmodifyDesc">
-			<form id="prova" [formGroup]="dataForm">
-			<mat-form-field id="biomod" appearance="fill">
-				<mat-label>Descrizione</mat-label>
-				<textarea matInput placeholder="Bio" formControlName="bio"></textarea>
-			</mat-form-field>
-			<mat-form-field id="biomod" appearance="fill">
-				<mat-label>Nickname Playstation</mat-label>
-				<input matInput type="text" placeholder="nickname" formControlName="nicknameps">
-			</mat-form-field>
-			<mat-form-field id="biomod" appearance="fill">
-				<mat-label>Nickname Microsoft</mat-label>
-				<input matInput type="text" placeholder="nickname">
-			</mat-form-field>
-			<mat-form-field id="biomod" appearance="fill">
-				<mat-label>Nickname Nintendo</mat-label>
-				<input matInput type="text" placeholder="nickname">
-			</mat-form-field>
-			<mat-form-field id="biomod" appearance="fill">
-				<mat-label>Nickname Steam</mat-label>
-				<input matInput type="text" placeholder="nickname">
-			</mat-form-field>
-			<button class="btn" mat-raised-button color="accent" (click)="updateModifyData('bio', bio)">Conferma Modifica</button>
-		</form>
-		</div>
-	
-		Reset Password <button mat-stroked-button color="warn" (click)="resetPsw()">Reset Password</button>
-
-
-		<mat-divider class="divider"></mat-divider>
-		<mat-divider class="divider"></mat-divider>
 		<br>
+		<div class="head">Informazioni</div>
+		<br>
+
+		<div id="grid">
+
+			<div id="img">
+				<img src="../../../assets/User.png">
+				<button mat-raised-button color="accent">Modifica Immagine</button>
+			</div>
+
+			<div id="cont">
+				<div id="name">{{authService.currentUserName}}</div>
+				<div id="rst"> 
+					<div>{{ authService.currentEmail }}</div>
+					<button mat-stroked-button color="accent" (click)="resetPsw()">Reset Password</button>
+				</div>
+			</div>
+
+			<div id="form" *ngIf="!showmodifyDesc">
+				<form (ngSubmit)="onSubmit()" [formGroup]="dataForm">
+					<div id="prova">
+						<mat-form-field id="biomod" appearance="fill">
+							<mat-label>Descrizione</mat-label>
+							<textarea matInput placeholder="Bio" formControlName="bio" value={{bio}}></textarea>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Playstation</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknameps"
+								value={{nicknameps}}>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Microsoft</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknamexb"
+								value={{nicknamexb}}>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Nintendo</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknament"
+								value={{nicknament}}>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Steam</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknamest"
+								value={{nicknamest}}>
+						</mat-form-field>
+					</div>
+					<button id="conf" type="submit" mat-raised-button color="accent">Conferma Modifica</button>
+				</form>
+
+			</div>
+		</div>
+		<br>
+
 
 		<div class="title"> Seleziona le tue piattaforme </div>
 		<div class="single" *ngIf="!modifyPlatform">
@@ -113,3 +121,20 @@
 		<mat-spinner id="spinner"></mat-spinner>
 	</ng-template>
 </body>
+
+<!--
+		<div *ngIf="!showmodifyDesc">
+			<div id="bio" *ngIf="bio">Bio: {{ bio }}</div>
+			<div id="plat" *ngIf="nicknameps">Nickname Playstation: {{ nicknameps }}</div>
+			<div id="plat" *ngIf="nicknamexb">Nickname Microsoft: {{ nicknamexb }}</div>
+			<div id="plat" *ngIf="nicknament">Nickname Nintendo: {{ nicknament }}</div>
+			<div id="plat" *ngIf="nicknamest">Nickname Steam: {{ nicknamest }}</div>
+			<form id="prova" [formGroup]="dataForm">
+			<mat-form-field class="nick" appearance="fill">
+				<mat-label>Nickname Playstation</mat-label>
+				<input matInput type="text" placeholder="nickname" formControlName="nicknameps" value={{nicknameps}}>
+			</mat-form-field>
+		</form>
+			<button class="btn" mat-raised-button color="accent" (click)="showmodifyDesc=true">Modifica Dati</button>
+		</div>
+	-->
