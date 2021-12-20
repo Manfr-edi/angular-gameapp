@@ -22,9 +22,11 @@ export class SignInComponent {
   }
 
   checkLoggedIn() {
-    if (this.authService.isUserEmailLoggedIn) {
+    if (this.authService.isUserEmailLoggedIn)
       this.router.navigate(['/gametab'])
-    }
+    else
+      if (this.authService.isAdmin)
+        this.router.navigate(["/"]);
   }
 
   onLoginEmail(): void {
@@ -33,7 +35,10 @@ export class SignInComponent {
         if (err)
           this.snackBar.open("Impossibile effettuare il login!", 'Ok', { duration: 2000 });
         else
-          this.router.navigate(['/gametab']);
+          if (!this.authService.isadmin)
+            this.router.navigate(['/gametab']);
+          else
+            this.router.navigate(["/"])
       });
   }
 

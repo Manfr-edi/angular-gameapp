@@ -1,0 +1,81 @@
+<mat-stepper linear="false" #stepper>
+    <mat-step [stepControl]="mainDataForm" label="Inserisci i dati principali del gioco">
+        <form [formGroup]="mainDataForm">
+            <ng-template matStepLabel>Dati principali</ng-template>
+            <mat-form-field appearance="fill">
+                <mat-label>Titolo</mat-label>
+                <input matInput placeholder="titolo" formControlName="title" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Sviluppatore</mat-label>
+                <input matInput placeholder="sviluppatore" formControlName="developer" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Prezzo d'uscita</mat-label>
+                <input matInput placeholder="prezzo" formControlName="price" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Data d'uscita</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="release" required>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Publisher</mat-label>
+                <input matInput placeholder="publisher" formControlName="publisher" required>
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Piattaforme</mat-label>
+                <input matInput placeholder="piattaforme" required readonly formControlName="platform"
+                    (click)="openOptionsDialog(allPlatforms,'platform')">
+            </mat-form-field>
+
+            <mat-form-field appearance="fill">
+                <mat-label>Genere</mat-label>
+                <input matInput placeholder="generi" required readonly formControlName="genre"
+                    (click)="openOptionsDialog(allGenre,'genre')">
+            </mat-form-field>
+
+            <div>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+
+    <mat-step [stepControl]="bioForm" label="Inserisci una descrizione del gioco">
+        <form [formGroup]="bioForm">
+            <mat-form-field appearance="fill">
+                <mat-label>Descrizione</mat-label>
+                <textarea matInput formControlName="bio" required placeholder="Descrizione..."></textarea>
+            </mat-form-field>
+            <div>
+                <button mat-button matStepperPrevious>Back</button>
+                <button mat-button matStepperNext>Next</button>
+            </div>
+        </form>
+    </mat-step>
+
+    <!--  <mat-step [stepControl]="imgForm" label="Inserisci la copertina del gioco"> -->
+    <mat-step label="Inserisci la copertina del gioco">
+
+        <input type="file" (change)="loadImage($event)">
+        <button (click)="cancelImage()">Cancel</button>
+
+        <mat-progress-bar *ngIf="uploadStateProgress > 0 && uploadStateProgress < 100" mode="determinate"
+            [value]="uploadStateProgress"></mat-progress-bar>
+        <img *ngIf="imgSetted" [src]="imgUrl">
+
+        <div>
+            <button mat-button matStepperPrevious>Back</button>
+            <button mat-button matStepperNext>Next</button>
+        </div>
+        <button [disabled]="!mainDataForm.valid || !bioForm.valid || !imgSetted" mat-button color="primary"
+            (click)="updateGame()">Update Game</button>
+
+    </mat-step>
+</mat-stepper>

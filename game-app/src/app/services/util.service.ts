@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Md5 } from "md5-typescript";
-import firebase from 'firebase/app';
-import Timestamp = firebase.firestore.Timestamp;
 import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { AngularFirestore, CollectionReference, DocumentData } from '@angular/fire/firestore';
+import { CustomValidators } from '../custom-validators';
+import * as firebase from 'firebase'
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,7 @@ export class UtilService {
   }
 
   //Questa funzione effettua la ricerca mediante un campo
-  searchByField(ref: CollectionReference<DocumentData>, fieldname:string, fieldval: string) {
+  searchByField(ref: CollectionReference<DocumentData>, fieldname: string, fieldval: string) {
     return ref.where(fieldname, '>=', fieldval).where(fieldname, '<=', fieldval + '\uf8ff');
   }
 
@@ -42,18 +42,24 @@ export class UtilService {
     for (let game of games)
       sumTime += game.payload.doc.data().completetime;
 
-    return Math.round((sumTime / games.length)*100)/100;
+    return Math.round((sumTime / games.length) * 100) / 100;
   }
 
-  getGameImgUrl(title: string): string {
-    return "assets/Games/" + Md5.init(title) + '.jpg';
+  getGameImageChild(gameid: string): string {
+    return "Games/" + gameid + '.jpg';
   }
 
-  getMsgTime(timestamp: Timestamp) {
+  getGameImageUrl(gameid: string) : Promise<string>
+  {
+    return firebase.default.storage().ref(this.getGameImageChild(gameid)).getDownloadURL();
+  }
+  
+
+  getMsgTime(timestamp: firebase.default.firestore.Timestamp) {
 
     if (timestamp != null) {
       let diff = (new Date().getTime() / 1000) - timestamp.seconds; //Tempo trascorso in secondi
-      
+
       function calculate(div: number, t: string) {
         let m = diff / div;
         let o = Math.round(m) + t + " fa";
@@ -92,7 +98,7 @@ export class UtilService {
     return Validators.compose([Validators.minLength(6)]);
   }
 
-  passwordFieldErrorParameters() : Map<string,string> {
+  passwordFieldErrorParameters(): Map<string, string> {
     return new Map([["minLength", "6"]]);
   }
 
@@ -103,8 +109,32 @@ export class UtilService {
     return Validators.compose([Validators.minLength(6)]);
   }
 
-  usernameFieldErrorParameters() : Map<string,string> {
+  usernameFieldErrorParameters(): Map<string, string> {
     return new Map([["minLength", "6"]]);
+  }
+
+  /*
+   Questo metodo restituisce i Validators necessari a controllare la struttura del prezzo di un videogioco
+ */
+  getPriceValidators() {
+    return Validators.compose([Validators.min(0.01), Validators.max(9999),
+    CustomValidators.max2DecimalValidator()]);
+  }
+
+  priceFieldErrorParameters(): Map<string, string> {
+    return new Map([['min', "0.01"], ['max', "9999"]]);
+  }
+
+  /*
+   Questo metodo restituisce i Validators necessari a controllare la struttura del tempo di completamento di un videogioco
+ */
+   getCompletedTimeValidators() {
+    return Validators.compose([Validators.min(0.01), Validators.max(9999),
+    CustomValidators.max2DecimalValidator()]);
+  }
+
+  completedTimeFieldErrorParameters(): Map<string, string> {
+    return new Map([['min', "0.01"], ['max', "9999"]]);
   }
 
   getFieldMsgError(field: AbstractControl, name: string, parameter?: Map<string, string>): string | undefined {
@@ -124,12 +154,16 @@ export class UtilService {
             if (field.hasError("maxlength"))
               return name + " deve eserre lungo al massimo " + parameter?.get('maxLength');
             else
-              if( field.hasError("email") )
+              if (field.hasError("email"))
                 return name + " non è un'email valida!";
 
     return undefined;
   }
 
+  getDateFormat(): string
+  {
+    return 'dd/MM/YYYY';
+  }
 }
 
 

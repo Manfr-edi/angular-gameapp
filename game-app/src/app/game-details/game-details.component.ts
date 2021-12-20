@@ -11,6 +11,7 @@ import { GameCollectionService } from '../services/game-collection.service';
 import { AngularFireStorage } from '@angular/fire/storage';
 import { AddToListComponent } from './add-to-list/add-to-list.component';
 
+import * as firebase from 'firebase'
 
 @Component({
   selector: 'app-game-details',
@@ -18,14 +19,13 @@ import { AddToListComponent } from './add-to-list/add-to-list.component';
   styleUrls: ['./game-details.component.css']
 })
 
-
-
 export class GameDetailsComponent {
 
   //Game
-  game$: Observable<any>;
   gameid = '';
-  
+  game$: Observable<any>;
+  imgUrl: string = "";
+
   show: boolean = true;
 
   constructor(private route: ActivatedRoute, public util: UtilService, public authService: AuthService,
@@ -35,11 +35,13 @@ export class GameDetailsComponent {
     this.gameid = String(routeParams.get('id'));
 
     //Lettura dati gioco
-    this.game$ = gameCollectionService.getGame(this.gameid).valueChanges();
+    var game = gameCollectionService.getGameWithImageUrl(this.gameid);
+
+    this.game$ = game.game.valueChanges();
+    game.url.then(url => this.imgUrl = url);
   }
 
-  onShowInsertFormChanged(show: boolean)
-  {
+  onShowInsertFormChanged(show: boolean) {
     this.show = !show;
   }
 

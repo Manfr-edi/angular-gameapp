@@ -62,6 +62,15 @@ import { RedirectPageComponent } from './authentication/redirect-page/redirect-p
 import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component';
 import {MatListModule} from '@angular/material/list';
 import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
+import {MatDialogModule} from '@angular/material/dialog';
+import { DeleteDialogComponent } from './game-catalogue/admin-control/delete-dialog/delete-dialog.component';
+import { ModifyGameComponent } from './modify-game/modify-game.component';
+import { AdminControlComponent } from './game-catalogue/admin-control/admin-control.component'; 
+import {MatStepperModule} from '@angular/material/stepper';
+import {MatDatepickerModule} from '@angular/material/datepicker'; 
+import { MatNativeDateModule } from '@angular/material/core';
+import { SelectOptionsComponent } from './modify-game/select-options/select-options.component';
+import {MatProgressBarModule} from '@angular/material/progress-bar'; 
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -76,7 +85,8 @@ const routes: Routes = [
   { path: 'settings', component: SettingsTabComponent },
   { path: 'resetpassword', component: ResetPasswordComponent },
   { path: 'newpassword', component: InsertNewPasswordComponent },
-  { path: 'redirect', component: RedirectPageComponent}
+  { path: 'redirect', component: RedirectPageComponent},
+  { path: 'modify/:gameid', component: ModifyGameComponent}
 ];
 
 @NgModule({
@@ -102,7 +112,12 @@ const routes: Routes = [
     MatSnackBarModule,
     MatGridListModule,
     MatBadgeModule, 
-    MatListModule
+    MatListModule,
+    MatDialogModule,
+    MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatProgressBarModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],
@@ -126,7 +141,11 @@ const routes: Routes = [
     NotificationComponent,
     RedirectPageComponent,
     ShowChatsComponent,
-    AddToListComponent
+    AddToListComponent,
+    DeleteDialogComponent,
+    ModifyGameComponent,
+    AdminControlComponent,
+    SelectOptionsComponent
   ],
   providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
   bootstrap: [AppComponent]

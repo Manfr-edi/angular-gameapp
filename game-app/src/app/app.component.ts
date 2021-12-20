@@ -1,4 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
+import { DateAdapter } from '@angular/material/core';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { AuthService } from './services/auth.service';
 
@@ -12,8 +13,8 @@ export class AppComponent{
   @ViewChild("menuTrigger") trigger!: MatMenuTrigger;
 
   menuOpened: boolean = false;
-  constructor(public authService: AuthService) {
-   
+  constructor(public authService: AuthService, private dateAdapter: DateAdapter<Date>) {
+    this.dateAdapter.setLocale('en-GB'); //dd-MM-YYYY
   }
 
   onNotificationMenuChanges(opened: boolean) {

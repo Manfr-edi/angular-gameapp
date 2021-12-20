@@ -5,23 +5,22 @@ import { AuthService } from '../services/auth.service';
 import { GameCollectionService } from './game-collection.service';
 import { UserLoggedService } from './user-logged.service';
 
-export interface Spese
-{
-  sumPrice: number;
-  avgPrice: number;
-  countBoughtGame: number;
+export interface Spese {
+	sumPrice: number;
+	avgPrice: number;
+	countBoughtGame: number;
 }
 
 @Injectable({
-  providedIn: 'root'
+	providedIn: 'root'
 })
 export class UserCollectionService {
 
-  userlists = userlist;
+	userlists = userlist;
 
-  constructor(public authService: AuthService, public db: AngularFirestore, 
-    public gameCollectionService: GameCollectionService, public userLoggedService: UserLoggedService) {
-  }
+	constructor(public authService: AuthService, public db: AngularFirestore,
+		public gameCollectionService: GameCollectionService, public userLoggedService: UserLoggedService) {
+	}
 
 	async UpdateGame(selectedList: string, previousList: string, gameid: string, gametitle: string,
 		note: string, time: number, vote: number, selectedPlatform: string, genre: string, price: number): Promise<boolean> {
@@ -134,6 +133,11 @@ export class UserCollectionService {
 		return this.userLoggedService.getUserDoc(userid).collection(list);
 	}
 
+	getListWithImageUrls(list: string, userid?: string): { list: AngularFirestoreCollection, urls: Promise<Map<string, string>> } {
+		let coll = this.userLoggedService.getUserDoc(userid).collection(list);
+		return { list: coll, urls: this.gameCollectionService.getImageUrls(coll) };
+	}
+
 	async getGameDataFromList(gameid: string, list: string, userid?: string): Promise<any> {
 		return (await this.getGameFromList(gameid, list, userid).ref.get());
 	}
@@ -156,19 +160,19 @@ export class UserCollectionService {
 	}
 
 
-		//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente attualmente loggato
+	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente attualmente loggato
 	//che rispetta dei filtri presentati in ingresso, in particare i filtri sono di uguaglianza e i valori non devono essere nulli.
 	getGamesWithEqualGenre(list: string, val: string, userid?: string): AngularFirestoreCollection {
 		return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
 			let a = (ref as Query<DocumentData>);
 			if (val !== '')
-						a = a.where("genre", "array-contains", val)
-						
+				a = a.where("genre", "array-contains", val)
+
 			return a;
 		});
 	}
 
 
-  
- 
+
+
 }

@@ -13,7 +13,7 @@
 			</div>
 
 			<div id="filtersDiv">
-				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilterGenre()"
+				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()"
 					[(ngModel)]="genreSelected">
 					<option value=""> Tutti i generi </option>
 					<option *ngFor="let g of genreList"> {{g}} </option>
@@ -34,7 +34,7 @@
 				<div *ngIf="games$ | async as games">
 					<div *ngFor="let game of games">
 						<mat-card id="card">
-							<img mat-card-image id="gameico" [src]="util.getGameImgUrl(game.payload.doc.data().title)">
+							<img mat-card-image id="gameico" [src]="urls.get(game.payload.doc.id)">
 							<mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
 								{{ util.capitalize(game.payload.doc.data().title) }}
 								<div *ngIf="viewlist === userlists[0].code">

@@ -14,6 +14,7 @@ body {
   margin-bottom: auto;
   display: flex;
   flex-direction: column;
+  width: 50%;
 }
 
 mat-card-title:hover{
@@ -79,4 +80,11 @@ mat-card img:hover{
 ::-webkit-scrollbar {
   width: 0px;
   background: transparent; /* make scrollbar transparent */
+}
+
+/*ADMIN*/
+
+#adminControl
+{
+  width: 30%;
 }

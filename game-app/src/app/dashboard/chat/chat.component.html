@@ -1,7 +1,7 @@
 <div id="container" *ngIf="messages$ | async; let message">
     <div id="containerChat">
         <div *ngFor="let m of message">
-            <mat-card *ngIf="authService.currentUserName === m.sender" class="meCard">
+            <mat-card *ngIf="authService.currentUsername === m.sender" class="meCard">
                 <mat-card-title class="msg">
                     {{m.text}}
                 </mat-card-title>
@@ -10,7 +10,7 @@
                 </mat-card-content>
             </mat-card>
 
-            <mat-card *ngIf="authService.currentUserName !== m.sender" class="friendCard">
+            <mat-card *ngIf="authService.currentUsername !== m.sender" class="friendCard">
                 <mat-card-title class="msg">
                     {{m.text}}
                 </mat-card-title>

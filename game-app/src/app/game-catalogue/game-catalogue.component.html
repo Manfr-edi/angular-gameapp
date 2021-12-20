@@ -7,7 +7,10 @@
       <div *ngFor="let game of games">
         <mat-card id="card">
 
-          <img mat-card-lg-image [src]="util.getGameImgUrl(game.payload.doc.data().title)"
+          <!--  <img mat-card-lg-image [src]="util.getGameImgUrl(game.payload.doc.data().title)"
+            [routerLink]="['/games', game.payload.doc.id]"> -->
+
+          <img mat-card-lg-image  [src] = "urls.get(game.payload.doc.id)"
             [routerLink]="['/games', game.payload.doc.id]">
 
           <div id="gamedata">
@@ -23,7 +26,14 @@
               Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
             </mat-card-content>
           </div>
-          <button mat-fab id="btn" color="primary" [routerLink]="['/games', game.payload.doc.id]">Apri</button>
+
+          <button *ngIf="!authService.isLogged || authService.isUserEmailLoggedIn" mat-fab id="btn" color="primary"
+            [routerLink]="['/games', game.payload.doc.id]">Apri</button>
+
+          <div id="adminControl" *ngIf="authService.isAdmin">
+            <app-admin-control [gameid]="game.payload.doc.id"></app-admin-control>
+          </div>
+
         </mat-card>
 
       </div>

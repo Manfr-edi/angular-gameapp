@@ -1,0 +1,8 @@
+<div id="container" *ngIf="show">
+    <button class="adminBtn" mat-icon-button color="primary" [routerLink]="['/modify', gameid]">
+        <mat-icon>settings</mat-icon>
+    </button>
+    <button class="adminBtn" mat-icon-button color="primary" (click)="deleteGame()">
+        <mat-icon>delete</mat-icon>
+    </button>
+</div>

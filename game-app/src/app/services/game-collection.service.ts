@@ -1,19 +1,32 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class GameCollectionService {
 
-  catalogue: AngularFirestoreCollection<any>;
+  private catalogue: AngularFirestoreCollection<any>;
 
-  constructor(public db: AngularFirestore) {
+  constructor(public db: AngularFirestore, public util: UtilService) {
     this.catalogue = this.db.collection("Games");
   }
 
   getCatalogue() {
     return this.catalogue;
+  }
+
+  getCatalogueWithImageUrls(): { catalogue: AngularFirestoreCollection<any>, urls: Promise<Map<string, string>> } {
+    return { catalogue: this.getCatalogue(), urls: this.getImageUrls(this.getCatalogue()) };
+  }
+
+  getGame(gameid: string) {
+    return this.db.doc('Games/' + gameid);
+  }
+
+  getGameWithImageUrl(gameid: string): { game: AngularFirestoreDocument<any>, url: Promise<string> } {
+    return { game: this.getGame(gameid), url: this.util.getGameImageUrl(gameid) };
   }
 
   getGamesByTitle(title: string) {
@@ -52,8 +65,17 @@ export class GameCollectionService {
     return await this.db.doc('Games/' + gameid).ref.get();
   }
 
-  getGame(gameid: string) {
-    return this.db.doc('Games/' + gameid);
+  async getDataFieldGame(gameid: string, field: string) {
+    return (await this.db.doc('Games/' + gameid).ref.get()).get(field);
+  }
+
+  getImageUrls(games: AngularFirestoreCollection): Promise<Map<string, string>> {
+    return new Promise<Map<string, string>>((resolve, reject) => {
+      let urls: Map<string, string> = new Map;
+      games.get().forEach(games =>
+        games.forEach(game => this.util.getGameImageUrl(game.id).then(url => urls.set(game.id, url)))).then(
+          () => resolve(urls));
+    });
   }
 
 }

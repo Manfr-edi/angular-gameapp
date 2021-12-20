@@ -99,7 +99,7 @@ export class UserLoggedService {
 
 	async acceptRequest(id: string, username: string, userid: string) {
 		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
-		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUserName });
+		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUsername });
 		this.removeRequest(id, userid);
 		let username1 = await this.getUserDataParam("username", userid);
 		this.getUserDoc(id).collection("Notification").doc().set({

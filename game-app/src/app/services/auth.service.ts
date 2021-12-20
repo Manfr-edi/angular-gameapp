@@ -17,22 +17,23 @@ export class AuthService {
 
   authState: any = null;
   username: string = "";
+  isadmin: boolean = false;
+
+  isLoading: boolean = false;
 
   constructor(private afAuth: AngularFireAuth, private router: Router, private db: AngularFirestore) {
-    this.afAuth.authState.subscribe((auth) => {
-      if (auth != null) {
-        this.authState = auth;
-        this.db.doc("Users/" + this.currentUserId).ref.get().then(data => {
-          this.username = data.get("username");
-        });
-      }
+    this.afAuth.authState.subscribe(async auth => {
+      this.isLoading = true;
+      if (auth != null)
+        await this.getDataAdminUser(auth.uid).then(() => this.authState = auth)
       else
         this.authState = null;
+      this.isLoading = false;
     });
   }
 
-  get isUserAnonymousLoggedIn(): boolean {
-    return (this.authState !== null) ? this.authState.isAnonymous : false
+  get isLoadingUserInfo(): boolean {
+    return this.isLoading;
   }
 
   get currentUserId(): string {
@@ -43,20 +44,28 @@ export class AuthService {
     return this.authState['email']
   }
 
-  get currentUserName(): string {
+  get currentUsername(): string {
     return this.username
   }
 
   get currentUser(): any {
-    return (this.authState !== null) ? this.authState : null;
+    return this.authState !== null ? this.authState : null;
+  }
+
+  get isLogged(): boolean {
+    return this.authState != null;
   }
 
   get isUserEmailLoggedIn(): boolean {
-    return ((this.authState !== null) && (!this.isUserAnonymousLoggedIn));
+    return this.authState !== null && !this.isadmin;
   }
 
   get isUserEmailVerified(): boolean {
-    return (this.isUserEmailLoggedIn && this.authState?.emailVerified);
+    return this.isUserEmailLoggedIn && this.authState?.emailVerified;
+  }
+
+  get isAdmin(): boolean {
+    return this.authState !== null && this.isadmin;
   }
 
   public sendEmailVerification(): void {
@@ -77,19 +86,21 @@ export class AuthService {
       .catch(err => this.getError(err.code));
   }
 
-
   async loginWithEmail(email: string, password: string): Promise<AuthError | undefined> {
     return this.afAuth.signInWithEmailAndPassword(email, password)
-      .then((data) => {
-        this.authState = data.user;
+      .then(async (data) => {
+        await this.getDataAdminUser(data.user!.uid).then(() => this.authState = data.user)
         return undefined;
       })
       .catch(err => this.getError(err.code));
   }
 
   signOut(): void {
-    this.afAuth.signOut();
-    this.router.navigate(['/'])
+    this.afAuth.signOut().then(() => {
+      this.authState = null;
+      this.username = "";
+      this.isadmin = false;
+    })
   }
 
   async ResetPassword(passwordResetEmail: string): Promise<AuthError | undefined> {
@@ -109,7 +120,6 @@ export class AuthService {
   }
 
   private getError(code: string): AuthError {
-    console.log("ErroreCode: " + code);
     switch (code) {
       case "auth/expired-action-code":
       case "auth/invalid-action-code":
@@ -132,5 +142,22 @@ export class AuthService {
       default:
         return AuthError.GeneralError;
     }
+
   }
+
+  private async getDataAdminUser(userid: string) {
+    await this.db.doc("Admins/" + userid).ref.get().then(data => {
+
+      if (data.exists) //Admin
+      {
+        this.isadmin = true;
+        this.db.doc("Admins/" + userid).ref.get().then(data => this.username = data.get("username"));
+      }
+      else { //User
+        this.isadmin = false;
+        this.db.doc("Users/" + userid).ref.get().then(data => this.username = data.get("username"));
+      }
+    });
+  }
+
 }

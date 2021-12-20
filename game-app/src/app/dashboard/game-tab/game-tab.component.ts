@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { userlist } from '../../data/userlist/userlist';
 import { UtilService } from '../../services/util.service';
 import { UserCollectionService } from '../../services/user-collection.service';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
+import * as firebase from 'firebase'
 
 @Component({
   selector: 'app-game-tab',
@@ -22,32 +23,30 @@ export class GameTabComponent {
   userlists = userlist;
 
   //Utility
-  viewlist: string = '';
+  viewlist: string = userlist[0].code;
   updateForm = false;
 
   //Filtri
   genreSelected = "";
   platformSelected = "";
-
-  //Dati per Update Gioco
+  
   gameid: string = '';
- 
   games$: Observable<any[]> = new Observable;
-
-  //Piattaforme per un determinato gioco
-  platformsGame: string[] = [];
-
-  actualList: string = userlist[0].code;
+  urls: Map<string, string> = new Map;
 
   constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
     public userLoggedService: UserLoggedService, public util: UtilService) {
     //Carico la lista dei giochi da visualizzare di default
-    this.UpdateList(this.actualList);
+    this.UpdateList(this.viewlist);
   }
 
   UpdateList(list: string): void {
-      this.viewlist = list;
-      this.games$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
+    this.viewlist = list;
+    //Ricalcolo gli urls solo quando cambio la lista, visto che al cambiare di un filtro i nuovi urls
+    //sarebbero solo un sottoinsieme
+    let t = this.userCollectionService.getListWithImageUrls(this.viewlist);
+    this.games$ = t.list.snapshotChanges();
+    t.urls.then(urls => this.urls = urls);
   }
 
   async onChangeFilter() {
@@ -56,11 +55,10 @@ export class GameTabComponent {
   }
 
   async onChangeFilterGenre() {
-    this.games$ = this.userCollectionService.getGamesWithEqualGenre(this.viewlist,
-      this.genreSelected).snapshotChanges();
+    this.games$ = this.userCollectionService.getGamesWithEqualGenre(this.viewlist, this.genreSelected).snapshotChanges();
   }
 
   completed(event: boolean) {
     this.updateForm = !event;
-  }
+  } 
 }

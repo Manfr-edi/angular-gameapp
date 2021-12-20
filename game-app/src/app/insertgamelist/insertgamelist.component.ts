@@ -8,6 +8,7 @@ import { UtilService } from '../services/util.service';
 import { FormControl, FormGroup, FormBuilder, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CustomValidators } from '../custom-validators';
+import * as firebase from 'firebase'
 
 @Component({
   selector: 'app-insertgamelist',
@@ -33,21 +34,22 @@ export class InsertgamelistComponent implements OnChanges {
   gamegenre: string = '';
   show: boolean = false;
   platformsGame: string[] = [];
+  imgUrl: string = "";
 
   gameForm: FormGroup;
 
   isLoading: boolean = true;
 
-  constructor(public authService: AuthService, public userCollectionService: UserCollectionService, 
+  constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
     public gameCollectionService: GameCollectionService, public util: UtilService, fb: FormBuilder,
-     private _snackBar: MatSnackBar) {
+    private _snackBar: MatSnackBar) {
 
     this.gameForm = fb.group({
       destinationList: ['', Validators.required],
-      time: [0, [Validators.required, Validators.min(0.01), Validators.max(9999), CustomValidators.max2DecimalValidator()]],
+      time: [0, [Validators.required, util.getCompletedTimeValidators()]],
       vote: [0],
       platform: ['', Validators.required],
-      price: [0, [Validators.required, Validators.min(0.01), Validators.max(9999), CustomValidators.max2DecimalValidator()]],
+      price: [0, [Validators.required, util.getPriceValidators()]],
       note: ['']
     });
   }
@@ -58,7 +60,10 @@ export class InsertgamelistComponent implements OnChanges {
     //nel caso in cui sto facendo un add di un gioco non inserito in un'altra lista
     if (this.updateList !== '' || await this.userCollectionService.CheckUniqueList(this.gameid)) {
       this.show = true
-      this.updateForm().then(() => {this.onChangeList(); this.isLoading = false});
+      this.updateForm().then(() => {
+        this.onChangeList();
+        this.util.getGameImageUrl(this.gameid).then(url => { this.imgUrl = url; this.isLoading = false; })
+      });
     }
   }
 
@@ -104,7 +109,7 @@ export class InsertgamelistComponent implements OnChanges {
 
   onChangeList() {
     let list = this.gameForm.get("destinationList")?.value;
-    
+
     if (list === userlist[0].code) //Completed
     {
       this.gameForm.get("time")?.enable();
@@ -134,11 +139,11 @@ export class InsertgamelistComponent implements OnChanges {
       this.gametitle, this.gameForm.get("note")?.value,
       this.gameForm.get("time")?.value, this.gameForm.get("vote")?.value,
       this.gameForm.get("platform")?.value, this.gamegenre, this.gameForm.get("price")?.value));
-     
+
   }
 
-  checkField(field: string, name: string) {
-    let msg = this.util.getFieldMsgError(this.gameForm.get(field) as FormControl, name, new Map([['min', "0.01"], ['max', "9999"]]));
+  checkField(field: string, name: string, map: Map<string, string>) {
+    let msg = this.util.getFieldMsgError(this.gameForm.get(field) as FormControl, name, map);
 
     if (msg)
       this._snackBar.open(msg, 'Ok', { duration: 2000 });

@@ -6,7 +6,7 @@
 		<div *ngIf="!isFriend && !hasRequest">
 
 			<button class="btn btn-outline-primary"
-				(click)="userLoggedService.sendRequest(userid,authService.currentUserName,authService.currentUserId); hasRequest=true">Aggiungi
+				(click)="userLoggedService.sendRequest(userid,authService.currentUsername,authService.currentUserId); hasRequest=true">Aggiungi
 				Amico
 				<mat-icon>person_add</mat-icon>
 			</button>

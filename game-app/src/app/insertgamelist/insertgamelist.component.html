@@ -3,18 +3,17 @@
 		<div id="gameinfo">
 			{{util.capitalize(gametitle)}}
 		</div>
-		
-		<img id="gameico" [src]="util.getGameImgUrl(gametitle)">
-		
 
+		<img id="gameico" [src]="imgUrl">
 
 		<mat-card id="card">
-		<form id="updateForm" (ngSubmit)="onSubmit()" [formGroup]="gameForm">
-			
+			<form id="updateForm" (ngSubmit)="onSubmit()" [formGroup]="gameForm">
 				<div id="formCard">
-					<div id="title"> <mat-card-title>Inserisci i dati </mat-card-title></div>
+					<div id="title">
+						<mat-card-title>Inserisci i dati </mat-card-title>
+					</div>
 					<div id="list">
-						<mat-form-field  appearance="fill">
+						<mat-form-field appearance="fill">
 							<mat-label>Lista</mat-label>
 							<mat-select (selectionChange)="onChangeList()" formControlName="destinationList">
 								<mat-option *ngFor="let o of userlists" value="{{o.code}}"> {{o.name}} </mat-option>
@@ -24,16 +23,18 @@
 					<div id="time">
 						<mat-form-field *ngIf="gameForm.get('time')?.enabled" appearance="fill">
 							<mat-label>Tempo di completamento</mat-label>
-							<input (focusout)="checkField('time', 'Tempo di completamento')" matInput type="number"
-								placeholder="ore" required formControlName="time">
+							<input
+								(focusout)="checkField('time', 'Tempo di completamento',util.completedTimeFieldErrorParameters())"
+								matInput type="number" placeholder="ore" required formControlName="time">
 							<span matSuffix>h</span>
 						</mat-form-field>
 					</div>
 					<div id="price">
 						<mat-form-field *ngIf="gameForm.get('price')?.enabled" appearance="fill">
 							<mat-label>Prezzo di acquisto</mat-label>
-							<input (focusout)="checkField('price', 'Prezzo di acquisto')" matInput type="number"
-								placeholder="&euro;" required formControlName="price">
+							<input
+								(focusout)="checkField('price', 'Prezzo di acquisto', util.priceFieldErrorParameters())"
+								matInput type="number" placeholder="&euro;" required formControlName="price">
 							<span matSuffix>&euro;</span>
 						</mat-form-field>
 					</div>
@@ -67,12 +68,12 @@
 							List</button>
 					</div>
 					<div id="ad">
-					<mat-card-content>* Dati obbligatori</mat-card-content>
+						<mat-card-content>* Dati obbligatori</mat-card-content>
 					</div>
 				</div>
-			
-		</form>
-	</mat-card>
+
+			</form>
+		</mat-card>
 
 	</div>
 
