@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { UtilService } from 'src/app/services/util.service';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { UtilService } from 'src/app/services/util.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-signin',
@@ -13,8 +13,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class SignInComponent {
   loginForm: FormGroup;
 
-  constructor(public authService: AuthService, private router: Router, public util: UtilService,
-    public snackBar: MatSnackBar, fb: FormBuilder) {
+  constructor(private authService: AuthService, private router: Router, private util: UtilService,
+    private snackBar: MatSnackBar, private fb: FormBuilder) {
     this.loginForm = fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]

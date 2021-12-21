@@ -17,8 +17,8 @@ export class AdminControlComponent implements OnChanges {
 
   show: boolean = false;
 
-  constructor(public adminService: AdminService, public gameCollectionService: GameCollectionService,
-    public util: UtilService, public dialog: MatDialog, public snackBar: MatSnackBar) { }
+  constructor(private adminService: AdminService, private gameCollectionService: GameCollectionService,
+    private util: UtilService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.gameid != "")

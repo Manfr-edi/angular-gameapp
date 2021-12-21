@@ -1,8 +1,7 @@
-import { Component, Input, OnChanges, OnInit } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Component, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserLoggedService, MessageInfo } from 'src/app/services/user-logged.service';
+import { UserLoggedService } from 'src/app/services/user-logged.service';
 import { UtilService } from 'src/app/services/util.service';
 
 @Component({
@@ -14,13 +13,12 @@ export class ChatComponent implements OnChanges {
 
   @Input() chatID: string = "";
  
-
   messages$: Observable<any> = new Observable;
   messageTxt: string = "";
   curChatExists: boolean = false;
   friendID: string = "";
 
-  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, public util: UtilService) {
+  constructor(public authService: AuthService, private userLoggedService: UserLoggedService, public util: UtilService) {
   }
 
   ngOnChanges(changes: any) {

@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { UtilService } from 'src/app/services/util.service';
-import { AuthService } from 'src/app/services/auth.service';
+import { Component } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-reset-password',
@@ -13,7 +13,7 @@ export class ResetPasswordComponent {
 
   email: FormControl;
 
-  constructor(public authService: AuthService, public util: UtilService, public snackBar: MatSnackBar) {
+  constructor(private authService: AuthService, private util: UtilService, private snackBar: MatSnackBar) {
     this.email = new FormControl("", [Validators.required, Validators.email]);
   }
 

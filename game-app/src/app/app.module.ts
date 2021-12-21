@@ -69,9 +69,9 @@ import { AdminControlComponent } from './game-catalogue/admin-control/admin-cont
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
 import { MatNativeDateModule } from '@angular/material/core';
-import { SelectOptionsComponent } from './update-catalogue/select-options/select-options.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar'; 
-import {MatExpansionModule} from '@angular/material/expansion'; 
+import {MatExpansionModule} from '@angular/material/expansion';
+import { ShowStarVoteComponent } from './show-star-vote/show-star-vote.component'; 
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -148,7 +148,7 @@ const routes: Routes = [
     DeleteDialogComponent,
     UpdateCatalogueComponent,
     AdminControlComponent,
-    SelectOptionsComponent
+    ShowStarVoteComponent
   ],
   providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
   bootstrap: [AppComponent]

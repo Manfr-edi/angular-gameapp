@@ -1,0 +1,13 @@
+#container .info
+{
+    visibility: hidden;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px;
+}
+
+#container:hover .info {
+    visibility: visible;
+}

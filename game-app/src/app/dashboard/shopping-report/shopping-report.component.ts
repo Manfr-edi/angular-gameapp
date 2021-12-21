@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, OnChanges } from '@angular/core';
+import { Component, Input, OnChanges } from '@angular/core';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
-import { AuthService } from 'src/app/services/auth.service';
 import { userlist } from 'src/app/data/userlist/userlist';
+import { AuthService } from 'src/app/services/auth.service';
 import { Spese, UserCollectionService } from 'src/app/services/user-collection.service';
 
 @Component({
@@ -23,7 +23,7 @@ export class ShoppingReportComponent implements OnChanges {
 
   spesa: Spese = {} as Spese;
 
-  constructor(public authService: AuthService, public userCollectionService: UserCollectionService) {
+  constructor(private authService: AuthService, private userCollectionService: UserCollectionService) {
   }
 
   ngOnChanges(changes: any) {

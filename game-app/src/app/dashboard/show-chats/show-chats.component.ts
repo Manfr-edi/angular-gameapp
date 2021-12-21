@@ -1,9 +1,8 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
-import { UserLoggedService, MessageInfo } from 'src/app/services/user-logged.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { UserLoggedService } from 'src/app/services/user-logged.service';
 
 @Component({
   selector: 'app-show-chats',
@@ -18,7 +17,7 @@ export class ShowChatsComponent {
 
   friendsSearched$?: Observable<any>;
 
-  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, private route: ActivatedRoute) {
+  constructor(public authService: AuthService, private userLoggedService: UserLoggedService, private route: ActivatedRoute) {
 
     let id = this.route.snapshot.paramMap.get('id');
     if (id)

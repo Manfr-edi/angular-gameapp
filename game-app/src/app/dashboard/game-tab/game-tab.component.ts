@@ -1,13 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { userlist } from '../../data/userlist/userlist';
-import { UtilService } from '../../services/util.service';
-import { UserCollectionService } from '../../services/user-collection.service';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
+import { userlist } from '../../data/userlist/userlist';
+import { AuthService } from '../../services/auth.service';
+import { UserCollectionService } from '../../services/user-collection.service';
+import { UtilService } from '../../services/util.service';
 
 @Component({
   selector: 'app-game-tab',
@@ -34,7 +33,7 @@ export class GameTabComponent {
   urls: Map<string, string> = new Map;
 
   constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
-    public userLoggedService: UserLoggedService, public util: UtilService) {
+    private userLoggedService: UserLoggedService, public util: UtilService) {
     //Carico la lista dei giochi da visualizzare di default
     this.UpdateList(this.viewlist);
   }

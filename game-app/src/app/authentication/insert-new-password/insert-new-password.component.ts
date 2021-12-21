@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { UtilService } from 'src/app/services/util.service';
-import { AuthService } from 'src/app/services/auth.service';
-import { AbstractControlOptions, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { CustomValidators } from 'src/app/custom-validators';
+import { Component } from '@angular/core';
+import { AbstractControlOptions, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CustomValidators } from 'src/app/custom-validators';
+import { AuthService } from 'src/app/services/auth.service';
+import { UtilService } from 'src/app/services/util.service';
 
 @Component({
   selector: 'app-insert-new-password',
@@ -16,8 +16,8 @@ export class InsertNewPasswordComponent {
   oobCode: string;
   newPswForm: FormGroup;
 
-  constructor(public route: ActivatedRoute, public router: Router, public authService: AuthService,
-    public util: UtilService, fb: FormBuilder, public snackBar: MatSnackBar) {
+  constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService,
+    private util: UtilService, private fb: FormBuilder, private snackBar: MatSnackBar) {
 
     this.oobCode = route.snapshot.queryParams['oobCode'];
 
@@ -45,7 +45,7 @@ export class InsertNewPasswordComponent {
   }
 
   checkPasswordField() {
-    let msg = this.util.getFieldMsgError(this.newPswForm.get("password")!,'Password', this.util.passwordFieldErrorParameters());
+    let msg = this.util.getFieldMsgError(this.newPswForm.get("password")!, 'Password', this.util.passwordFieldErrorParameters());
     if (msg)
       this.snackBar.open(msg, 'Ok', { duration: 2000 });
   }

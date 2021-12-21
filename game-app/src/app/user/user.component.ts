@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument } from '@angular/fire/firestore';
-import { AuthService } from 'src/app/services/auth.service';
-import { UtilService } from 'src/app/services/util.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { userlist } from 'src/app/data/userlist/userlist';
-import { UserCollectionService, Spese } from '../services/user-collection.service';
+import { AuthService } from 'src/app/services/auth.service';
+import { UtilService } from 'src/app/services/util.service';
+import { Spese, UserCollectionService } from '../services/user-collection.service';
 import { UserLoggedService } from '../services/user-logged.service';
 
 @Component({
@@ -33,8 +32,8 @@ export class UserComponent implements OnInit {
   userSpese: Spese = {} as Spese;
   mySpese: Spese = {} as Spese;
 
-  constructor(private route: ActivatedRoute, public authService: AuthService, public userCollectionService: UserCollectionService,
-     public userLoggedService: UserLoggedService, public util: UtilService, router: Router) {
+  constructor(private route: ActivatedRoute, public authService: AuthService, private userCollectionService: UserCollectionService,
+     public userLoggedService: UserLoggedService, public util: UtilService, private router: Router) {
 
     const routeParams = this.route.snapshot.paramMap;
     this.userid = String(routeParams.get('userid'));

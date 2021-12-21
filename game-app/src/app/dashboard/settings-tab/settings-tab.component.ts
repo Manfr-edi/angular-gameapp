@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
 
@@ -24,7 +23,7 @@ export class SettingsTabComponent implements OnInit {
   genres: boolean[] = [];
   platforms: boolean[] = [];
 
-  constructor(public authService: AuthService, public userLoggedService: UserLoggedService) {
+  constructor(public authService: AuthService, private userLoggedService: UserLoggedService) {
   }
 
   async ngOnInit() {

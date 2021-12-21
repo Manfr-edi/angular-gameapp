@@ -1,16 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
-import { AngularFireDatabase, AngularFireObject } from '@angular/fire/database';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { UtilService } from 'src/app/services/util.service';
-import { AbstractControl, AsyncValidatorFn, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { from, Observable, timer } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators'
-import { AngularFireStorage } from '@angular/fire/storage';
+import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
 import { CustomValidators } from 'src/app/custom-validators';
-import { UserCollectionService } from 'src/app/services/user-collection.service';
+import { UtilService } from 'src/app/services/util.service';
+import { AuthService } from '../../services/auth.service';
 
 
 @Component({
@@ -21,8 +15,8 @@ import { UserCollectionService } from 'src/app/services/user-collection.service'
 export class SignUpComponent {
   registerForm: FormGroup;
 
-  constructor(public authService: AuthService, private router: Router, public util: UtilService, 
-    fb: FormBuilder, public snackBar: MatSnackBar) {
+  constructor(private authService: AuthService, private router: Router, public util: UtilService, 
+    private fb: FormBuilder, private snackBar: MatSnackBar) {
     this.registerForm = fb.group({
       username: ['', [Validators.required, util.getUsernameValidators()], CustomValidators.existingUsernameValidator(util)],
       email: ['', [Validators.required, Validators.email], CustomValidators.existingEmailValidator(util)],

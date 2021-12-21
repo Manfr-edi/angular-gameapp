@@ -1,22 +1,14 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { genreList } from '../data/genre/genre';
+import { platformList } from '../data/platform/platform';
 import { AdminService } from '../services/admin.service';
 import { AuthService } from '../services/auth.service';
 import { GameCollectionService } from '../services/game-collection.service';
 import { UtilService } from '../services/util.service';
-import { MatDialog } from '@angular/material/dialog';
-import { SelectOptionsComponent } from './select-options/select-options.component';
-import { platformList } from '../data/platform/platform';
-import { genreList } from '../data/genre/genre';
-import { HttpClient } from '@angular/common/http';
-import { AngularFireStorage } from '@angular/fire/storage';
-
-import * as firebase from 'firebase'
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
-import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
   selector: 'app-update-catalogue',
@@ -42,9 +34,9 @@ export class UpdateCatalogueComponent {
   imgUploading: boolean = false;
   dirtyImg: boolean = false;
 
-  constructor(public authService: AuthService, public adminService: AdminService, public util: UtilService,
-    public gameCollectionService: GameCollectionService, private route: ActivatedRoute, private router: Router,
-    private fb: FormBuilder, public dialog: MatDialog, private snackBar: MatSnackBar) {
+  constructor(private authService: AuthService, private adminService: AdminService, private util: UtilService,
+    private gameCollectionService: GameCollectionService, private route: ActivatedRoute, private router: Router,
+    private fb: FormBuilder, private dialog: MatDialog, private snackBar: MatSnackBar) {
 
     if (!authService.isAdmin)
       router.navigateByUrl("/");

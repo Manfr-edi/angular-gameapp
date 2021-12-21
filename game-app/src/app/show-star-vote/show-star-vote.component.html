@@ -1,0 +1,6 @@
+<div id="container" *ngIf="value">
+    <mat-icon *ngFor="let w of [].constructor(wholeStar)">star</mat-icon>
+    <mat-icon *ngIf="halfStar">star_half</mat-icon>
+    <mat-icon *ngFor="let e of [].constructor(emptyStar)">star_border</mat-icon>
+    <span class="info">{{value}} con {{ count == 1 ? "un solo votante" : count + " votanti"}}</span>
+</div>

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from 'src/app/services/auth.service';
@@ -10,7 +10,8 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class RedirectPageComponent {
 
-  constructor(private route: ActivatedRoute, router: Router, authService: AuthService, snackBar: MatSnackBar) {
+  constructor(private route: ActivatedRoute, private router: Router,
+    private authService: AuthService, private snackBar: MatSnackBar) {
 
     this.route.queryParams
       .subscribe(params => {

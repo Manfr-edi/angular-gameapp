@@ -1,14 +1,11 @@
-import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
-import { AuthService } from '../services/auth.service';
-import { UserCollectionService } from '../services/user-collection.service';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { userlist } from '../data/userlist/userlist';
-import { GameCollectionService } from '../services/game-collection.service';
-import { UtilService } from '../services/util.service';
-import { FormControl, FormGroup, FormBuilder, ReactiveFormsModule, FormArray, Validators } from '@angular/forms';
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { CustomValidators } from '../custom-validators';
-import * as firebase from 'firebase'
+import { userlist } from '../data/userlist/userlist';
+import { AuthService } from '../services/auth.service';
+import { GameCollectionService } from '../services/game-collection.service';
+import { UserCollectionService } from '../services/user-collection.service';
+import { UtilService } from '../services/util.service';
 
 @Component({
   selector: 'app-insertgamelist',
@@ -40,8 +37,8 @@ export class InsertgamelistComponent implements OnChanges {
 
   isLoading: boolean = true;
 
-  constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
-    public gameCollectionService: GameCollectionService, public util: UtilService, fb: FormBuilder,
+  constructor(private authService: AuthService, private userCollectionService: UserCollectionService,
+    private gameCollectionService: GameCollectionService, public util: UtilService, private fb: FormBuilder,
     private _snackBar: MatSnackBar) {
 
     this.gameForm = fb.group({
@@ -103,7 +100,6 @@ export class InsertgamelistComponent implements OnChanges {
     else {
       this.gameForm.controls['platform'].setValue(this.platformsGame[0]);
       this.gameForm.controls['destinationList'].setValue(userlist[0].code);
-      //this.selectedList.setValue(userlist[0].code);
     }
   }
 

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { Observable, } from 'rxjs';
-import { UtilService } from '../services/util.service';
+import { Observable } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { GameCollectionService } from '../services/game-collection.service';
+import { UtilService } from '../services/util.service';
 
 @Component({
   selector: 'app-game-catalogue',
@@ -15,7 +15,7 @@ export class GameCatalogueComponent {
   games$: Observable<any[]>;
   urls: Map<string, string> = new Map;
 
-  constructor(public authService: AuthService, public gameCollectionService: GameCollectionService, public util: UtilService) {
+  constructor(public authService: AuthService, private gameCollectionService: GameCollectionService, public util: UtilService) {
     let games = gameCollectionService.getCatalogueWithImageUrls();
     this.games$ = games.catalogue.snapshotChanges();
     games.urls.then(urls => this.urls = urls);
