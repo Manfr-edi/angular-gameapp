@@ -1,3 +1,8 @@
+body{
+    height: 93vh;
+    overflow-y: auto;
+
+}
 #cards {
     width: 80%;
     margin: auto;

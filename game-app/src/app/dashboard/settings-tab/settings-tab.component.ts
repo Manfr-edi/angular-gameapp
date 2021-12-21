@@ -6,6 +6,7 @@ import { AuthService } from 'src/app/services/auth.service';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { CustomValidators } from '../../custom-validators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings-tab',
@@ -37,7 +38,7 @@ export class SettingsTabComponent implements OnInit {
   modifyPlatform = false;
   modifyGenre = false
 
-  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, public fb: FormBuilder) {
+  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, public fb: FormBuilder, private _snackBar: MatSnackBar) {
     this.dataForm = fb.group({
       bio:[''],
       nicknameps:[''],
@@ -86,6 +87,7 @@ export class SettingsTabComponent implements OnInit {
       ["nicknament"]: this.dataForm.get("nicknament")?.value,
       ["nicknamest"]: this.dataForm.get("nicknamest")?.value
     });
+    this._snackBar.open("Dati modificati", 'Ok', { duration: 2000 });
     this.showmodifyDesc=false;
   }
 
@@ -109,7 +111,9 @@ export class SettingsTabComponent implements OnInit {
   }
 
   resetPsw() {
-    this.authService.ResetPassword(this.authService.currentEmail)
+    this.authService.ResetPassword(this.authService.currentEmail);
+    this._snackBar.open("Email di reset inviata", 'Ok', { duration: 2000 });
+    
   }
 
 }

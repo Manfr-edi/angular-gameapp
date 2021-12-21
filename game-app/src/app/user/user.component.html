@@ -1,120 +1,175 @@
-<div *ngIf="isFriend !== undefined">
-	<div *ngIf="userInfo$ | async; let userInfo">
-
-		{{userInfo.username}}
-
-		<div *ngIf="!isFriend && !hasRequest">
-
-			<button class="btn btn-outline-primary"
-				(click)="userLoggedService.sendRequest(userid,authService.currentUserName,authService.currentUserId); hasRequest=true">Aggiungi
-				Amico
-				<mat-icon>person_add</mat-icon>
-			</button>
-		</div>
-
-		
-			<h3>Piattaforme in Possesso</h3>
-			<mat-list>
-				<mat-list-item *ngIf="!userInfo.platform || userInfo.platform.length == 0"> Nessuna piattaforma</mat-list-item>
-				<mat-list-item *ngFor="let p of userInfo.platform"> {{p}} </mat-list-item>
-			</mat-list>
-		
-
-		
-
-			<h3>Generi Preferiti</h3>
-			<mat-list>
-				<mat-list-item *ngIf="!userInfo.genre || userInfo.genre.length == 0"> Nessun genere</mat-list-item>
-				<mat-list-item *ngFor="let g of userInfo.genre"> {{g}} </mat-list-item>
-			</mat-list>
-
-		
-
-		<div *ngIf="isFriend">
-			<mat-icon>person</mat-icon>
-			<h3>Amichetto</h3>
-			<button class="btn btn-outline-primary"
-				(click)="userLoggedService.removeFriend(userid,authService.currentUserId);">Rimuovi Amico
-			</button><br>
+<body>
+	<div *ngIf="isFriend !== undefined; else loading">
 
 
 
+		<div *ngIf="userInfo$ | async; let userInfo">
 
+			{{userInfo.username}}
 
-			<div class="btn-group">
-				<button class="btn btn-outline-primary" (click)="UpdateList(userlists[0].code);">Completed
-					Games</button>
-				<button class="btn btn-outline-primary" (click)="UpdateList(userlists[1].code);">Playing Games</button>
-				<button class="btn btn-outline-primary" (click)="UpdateList(userlists[2].code);">Desired Games</button>
-			</div>
-
-			<div *ngIf="gameList$ | async; let list">
-				<div *ngFor="let u of list">
-					<a [routerLink]="['/games', u.payload.doc.id]">
-						{{ util.capitalize(u.payload.doc.data().title) }}
-					</a>
-					<p *ngIf="viewlist===userlists[0].code">
-						Tempo di completamento: {{u.payload.doc.data().completetime}}
-					</p>
-				</div>
-				<br>
-				<div *ngIf="(viewlist === userlists[0].code && (myGameList$ | async)); let mylist">
-					Giochi totali: {{list.length}}
-					Giochi totali miei: {{mylist.length}} <br>
-
-					Media di Completamento: {{util.avgTime(list)}}
-					Media di Completamento mia: {{util.avgTime(mylist)}} <br>
-
-					Somma spese mie: {{mySpese.sumPrice}}
-					Media spese mie: {{mySpese.avgPrice}}
-					Numero giochi acquistati miei: {{mySpese.countBoughtGame}}
-
-					Somma spese utente: {{userSpese.sumPrice}}
-					Media spese utente: {{userSpese.avgPrice}}
-					Numero giochi acquistati utente: {{userSpese.countBoughtGame}}
-
-				</div>
-
+			<div id="img">
+				<img src="../../../assets/User.png">
+				<button mat-raised-button color="accent">Modifica Immagine</button>
 			</div>
 
 
 
-			<button *ngIf="!isCommonGames" class="btn btn-outline-primary"
-				(click)="isCommonGames = true; CommonGames(); ">Giochi Comuni</button>
 
-			<div *ngIf="isCommonGames && common$; let common">
-				<p>Giochi Comuni</p>
-				<div id=cards *ngFor="let u of common">
-					<mat-card id="my">
-						<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
-						<mat-card-content>
-							Tempo di completamento mio: {{u.mytime }}<br>
-							Spese del gioco mie: {{u.myprice }}
-							Lista : {{u.mylist}}
-
-						</mat-card-content>
-					</mat-card>
-
-					<mat-card id="friend">
-						<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
-						<mat-card-content>
-							Tempo di completamento: {{u.usertime }}<br>
-							Spese del gioco: {{u.userprice }}
-							Lista : {{u.friendlist}}
-
-						</mat-card-content>
-					</mat-card>
-
-				</div>
-
+			<div *ngIf="hasRequest">
+				<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia inviata
+				</button>
 			</div>
 
+			<div *ngIf="!isFriend && !hasRequest">
+				<button class="btn btn-outline-primary"
+					(click)="userLoggedService.sendRequest(userid,authService.currentUserName,authService.currentUserId); hasRequest=true">Aggiungi
+					Amico
+					<mat-icon>person_add</mat-icon>
+				</button>
+			</div>
+
+			<div *ngIf="isFriend">
+				<mat-icon>person</mat-icon>
+				<h3>Siete Amici</h3>
+				<button class="btn btn-outline-primary"
+					(click)="userLoggedService.removeFriend(userid,authService.currentUserId); isFriend = false">Rimuovi Amico
+				</button><br>
+			</div>
+
+			<mat-tab-group mat-align-tabs="start">
+				<mat-tab label="Info">
+					{{userInfo.bio}} <br>
+					{{ userInfo.nicknameps }}
+					{{ userInfo.nicknamexb }}
+					{{ userInfo.nicknament }}
+					{{ userInfo.nicknamest }}
+
+
+
+
+					<div *ngIf="isFriend">
+						<h3>Piattaforme in Possesso</h3>
+						<mat-list>
+							<mat-list-item *ngIf="!userInfo.platform || userInfo.platform.length == 0"> Nessuna
+								piattaforma
+							</mat-list-item>
+							<mat-list-item *ngFor="let p of userInfo.platform"> {{p}} </mat-list-item>
+						</mat-list>
+
+
+
+
+						<h3>Generi Preferiti</h3>
+						<mat-list>
+							<mat-list-item *ngIf="!userInfo.genre || userInfo.genre.length == 0"> Nessun genere
+							</mat-list-item>
+							<mat-list-item *ngFor="let g of userInfo.genre"> {{g}} </mat-list-item>
+						</mat-list>
+
+					</div>
+				</mat-tab>
+
+
+				<mat-tab label="Giochi">
+
+					<div *ngIf="isFriend">
+
+						<div class="btn-group">
+							<button class="btn btn-outline-primary" (click)="UpdateList(userlists[0].code);">Completed
+								Games</button>
+							<button class="btn btn-outline-primary" (click)="UpdateList(userlists[1].code);">Playing
+								Games</button>
+							<button class="btn btn-outline-primary" (click)="UpdateList(userlists[2].code);">Desired
+								Games</button>
+						</div>
+
+						<div *ngIf="gameList$ | async; let list">
+							<div *ngFor="let u of list">
+								<a [routerLink]="['/games', u.payload.doc.id]">
+									{{ util.capitalize(u.payload.doc.data().title) }}
+								</a>
+								<p *ngIf="viewlist===userlists[0].code">
+									Tempo di completamento: {{u.payload.doc.data().completetime}}
+								</p>
+							</div>
+							<br>
+
+						</div>
+
+
+
+
+
+
+					</div>
+
+					<div *ngIf="!isFriend">Aggiungi questo utente agli amici per visualizzare i suoi giochi!</div>
+				</mat-tab>
+
+				<mat-tab label="Giochi in Comune">
+					<div *ngIf="isFriend">
+
+						<div *ngIf="gameList$ | async; let list">
+
+							<div *ngIf="(viewlist === userlists[0].code && (myGameList$ | async)); let mylist">
+								Giochi totali: {{list.length}}
+								Giochi totali miei: {{mylist.length}} <br>
+
+								Media di Completamento: {{util.avgTime(list)}}
+								Media di Completamento mia: {{util.avgTime(mylist)}} <br>
+
+								Somma spese mie: {{mySpese.sumPrice}}
+								Media spese mie: {{mySpese.avgPrice}}
+								Numero giochi acquistati miei: {{mySpese.countBoughtGame}}
+
+								Somma spese utente: {{userSpese.sumPrice}}
+								Media spese utente: {{userSpese.avgPrice}}
+								Numero giochi acquistati utente: {{userSpese.countBoughtGame}}
+
+							</div>
+
+						</div>
+
+
+						<div *ngIf="common$; let common">
+							<p>Giochi Comuni</p>
+							<div id=cards *ngFor="let u of common">
+								<mat-card id="my">
+									<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
+									<mat-card-content>
+										Tempo di completamento mio: {{u.mytime }}<br>
+										Spese del gioco mie: {{u.myprice }}
+										Lista : {{u.mylist}}
+
+									</mat-card-content>
+								</mat-card>
+
+								<mat-card id="friend">
+									<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
+									<mat-card-content>
+										Tempo di completamento: {{u.usertime }}<br>
+										Spese del gioco: {{u.userprice }}
+										Lista : {{u.friendlist}}
+
+									</mat-card-content>
+								</mat-card>
+
+							</div>
+
+						</div>
+					</div>
+					<div *ngIf="!isFriend">Aggiungi questo utente agli amici per visualizzare i suoi giochi!</div>
+				</mat-tab>
+			</mat-tab-group>
+
 
 		</div>
 
-		<div *ngIf="hasRequest">
-			<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia inviata
-			</button>
-		</div>
 
 	</div>
+
+	<ng-template #loading>
+		<mat-spinner id="spinner"></mat-spinner>
+	</ng-template>
+
+</body>

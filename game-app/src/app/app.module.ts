@@ -59,6 +59,7 @@ import { MatGridListModule } from '@angular/material/grid-list';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
 
 import { NotificationComponent } from './notification/notification.component';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
@@ -106,7 +107,8 @@ const routes: Routes = [
     MatGridListModule,
     MatBadgeModule, 
     MatListModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    MatTabsModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],
