@@ -67,7 +67,6 @@ textarea{
 {
     height: 60vh;
     width: 43vh;
-    background-color: green;
     display: inline-block;
 }
 
@@ -106,7 +105,15 @@ textarea{
     display: flex;
     flex-flow: row wrap;
 }
-.mat-list-item.option {
+
+.mat-list-item.option 
+{
     display: initial;
     width: 25%;
-  }
+}
+
+#progressBar
+{
+    position: absolute;
+    top: 50vh;
+}

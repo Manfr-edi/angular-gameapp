@@ -46,11 +46,11 @@
 				<!--ADMIN COMMAND-->
 				<ng-container *ngIf="authService.isAdmin">
 					<li class="nav-item">
-						<button mat-button [routerLink]="'/settings'">{{authService.currentUsername}}</button>
+						<button mat-button>{{authService.currentUsername}}</button>
 					</li>
 
 					<li class="nav-item">
-						<button mat-icon-button title="Aggiungi videogioco">
+						<button  [routerLink]="'/add'" mat-icon-button title="Aggiungi videogioco">
 							<mat-icon>add_circle_outline</mat-icon>
 						</button>
 					</li>

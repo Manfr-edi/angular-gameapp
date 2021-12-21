@@ -1,4 +1,4 @@
-<mat-stepper linear="false" #stepper>
+<mat-stepper [ngStyle]="{'opacity': imgUploading ? 0.5 : 1}" linear="false" #stepper>
     <mat-step [stepControl]="mainDataForm" label="Dati Principali">
         <div class="container">
             <form [formGroup]="mainDataForm">
@@ -36,13 +36,15 @@
     <mat-step [stepControl]="platGenForm" label="Piattaforma e Genere">
         <div class="container">
             <form [formGroup]="platGenForm">
-
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                         <mat-panel-title> Piattaforme </mat-panel-title>
+                        <mat-panel-description>
+                            {{platGenForm.controls['platform'].value}}
+                          </mat-panel-description>
                     </mat-expansion-panel-header>
-                    <mat-selection-list class="list" formControlName="platform">
-                        <mat-list-option class="option" *ngFor="let plat of allPlatforms">
+                    <mat-selection-list color="primary" class="list" formControlName="platform">
+                        <mat-list-option class="option" *ngFor="let plat of allPlatforms" [value]="plat">
                             {{plat}}
                         </mat-list-option>
                     </mat-selection-list>
@@ -51,9 +53,12 @@
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
                         <mat-panel-title> Generi </mat-panel-title>
+                        <mat-panel-description>
+                            {{platGenForm.controls['genre'].value}}
+                          </mat-panel-description>
                     </mat-expansion-panel-header>
-                    <mat-selection-list class="list" formControlName="genre">
-                        <mat-list-option class="option" *ngFor="let g of allGenre">
+                    <mat-selection-list color="primary" class="list" formControlName="genre">
+                        <mat-list-option class="option" *ngFor="let g of allGenre" [value]="g">
                             {{g}}
                         </mat-list-option>
                     </mat-selection-list>
@@ -104,3 +109,5 @@
         </div>
     </mat-step>
 </mat-stepper>
+
+<mat-progress-bar *ngIf="imgUploading" id="progressBar" mode="determinate" [value]="uploadStateProgress"></mat-progress-bar>

@@ -19,16 +19,16 @@ import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 @Component({
-  selector: 'app-modify-game',
-  templateUrl: './modify-game.component.html',
-  styleUrls: ['./modify-game.component.css']
+  selector: 'app-update-catalogue',
+  templateUrl: './update-catalogue.component.html',
+  styleUrls: ['./update-catalogue.component.css']
 })
-export class ModifyGameComponent {
+export class UpdateCatalogueComponent {
 
   allPlatforms = platformList;
   allGenre = genreList;
   //Dati
-  gameid: string;
+  gameid?: string;
 
   //Forms
   mainDataForm: FormGroup;
@@ -39,6 +39,8 @@ export class ModifyGameComponent {
   uploadStateProgress: number = 0;
   img?: File;
   imgSetted: boolean = false;
+  imgUploading: boolean = false;
+  dirtyImg: boolean = false;
 
   constructor(public authService: AuthService, public adminService: AdminService, public util: UtilService,
     public gameCollectionService: GameCollectionService, private route: ActivatedRoute, private router: Router,
@@ -49,8 +51,8 @@ export class ModifyGameComponent {
 
     //Lettura id del gioco
     const routeParams = this.route.snapshot.paramMap;
-    this.gameid = String(routeParams.get('gameid'));
-    this.imgSetted = true;
+    if (routeParams.get('gameid'))
+      this.gameid = String(routeParams.get('gameid'));
 
     this.mainDataForm = fb.group({
       title: ['', Validators.required],
@@ -61,7 +63,7 @@ export class ModifyGameComponent {
     });
 
     this.platGenForm = fb.group({
-      platform: ['', Validators.required],
+      platform: [[''], Validators.required],
       genre: ['', Validators.required]
     });
 
@@ -70,13 +72,13 @@ export class ModifyGameComponent {
     })
 
     //SE STO MODIFICANDO IL GIOCO DEVO PRECARICARE LE FORM
-    if (this.gameid !== undefined)
+    if (this.gameid)
       gameCollectionService.getGame(this.gameid).ref.get().then(game => {
         //MAIN DATA
         this.mainDataForm.controls["title"].setValue(game.get("title"));
         this.mainDataForm.controls["developer"].setValue(game.get("developer"));
         this.mainDataForm.controls["price"].setValue(game.get("price"));
-        this.mainDataForm.controls["release"].setValue(new Date(game.get("release") * 1000));
+        this.mainDataForm.controls["release"].setValue(game.get("release").toDate());
         this.mainDataForm.controls["publisher"].setValue(game.get("publisher"));
         //PLAT GEN
         this.platGenForm.controls["platform"].setValue(game.get("platform"));
@@ -84,19 +86,8 @@ export class ModifyGameComponent {
         //BIO
         this.bioForm.controls['bio'].setValue(game.get('bio'));
         //IMAGE
-        util.getGameImageUrl(this.gameid).then(url => this.imgUrl = url);
+        util.getGameImageUrl(this.gameid!).then(url => { this.imgUrl = url; this.imgSetted = true; });
       });
-  }
-
-  openOptionsDialog(allOptions: string[], fieldName: string) {
-    const dialogRef = this.dialog.open(SelectOptionsComponent, {
-      data: { allOptions: allOptions, selectedOptions: this.mainDataForm.get(fieldName)?.value }
-    });
-
-    dialogRef.afterClosed().subscribe(res => {
-      if (res !== undefined) //Il dialog si è chiuso con 'Seleziona'
-        this.mainDataForm.get(fieldName)?.setValue(res)
-    })
   }
 
   loadImage(event: any) {
@@ -112,14 +103,15 @@ export class ModifyGameComponent {
     this.img = undefined;
     this.imgUrl = "";
     this.imgSetted = false;
+    this.dirtyImg = true;
   }
 
-  progressUploadImg(perc: number)
-  {
-    console.log("State: " + perc);
+  progressUploadImg(perc: number) {
+   this.uploadStateProgress = perc;
   }
 
   updateGame() {
+    this.imgUploading = true;
     //PER ORA CONSIDERO DI AVERE IL GAMEID
     this.adminService.updateGame(this.mainDataForm.controls["title"].value,
       this.mainDataForm.controls["developer"].value,
@@ -128,11 +120,14 @@ export class ModifyGameComponent {
       this.mainDataForm.controls["publisher"].value,
       this.platGenForm.controls["platform"].value,
       this.platGenForm.controls["genre"].value,
-      this.bioForm.controls['bio'].value, this.img!, this.progressUploadImg, this.gameid)
-      .then(r =>
-        this.snackBar.open(r ? "Videogioco modificato con successo!" :
-          "Non è stato possibile caricare l'immagine di copertina, riprova!", 'Ok', { duration: 2000 }))
-      .catch(err => this.snackBar.open("Errore imprevisto"));
+      this.bioForm.controls['bio'].value, this.dirtyImg ? this.img! : undefined, this.progressUploadImg.bind(this), this.gameid)
+      .then(r => {
+        this.snackBar.open(r ? "Videogioco " + (this.gameid ? "modificato" : "aggiunto") + " con successo!" :
+          "Non è stato possibile caricare l'immagine di copertina, riprova!", 'Ok', { duration: 2000 });
+        this.router.navigateByUrl("/");
+      })
+      .catch(err => this.snackBar.open("Errore imprevisto"))
+      .finally(() => this.imgUploading = false)
   }
 
 

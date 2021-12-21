@@ -7,9 +7,6 @@
       <div *ngFor="let game of games">
         <mat-card id="card">
 
-          <!--  <img mat-card-lg-image [src]="util.getGameImgUrl(game.payload.doc.data().title)"
-            [routerLink]="['/games', game.payload.doc.id]"> -->
-
           <img mat-card-lg-image  [src] = "urls.get(game.payload.doc.id)"
             [routerLink]="['/games', game.payload.doc.id]">
 

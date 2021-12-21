@@ -64,12 +64,12 @@ import {MatListModule} from '@angular/material/list';
 import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DeleteDialogComponent } from './game-catalogue/admin-control/delete-dialog/delete-dialog.component';
-import { ModifyGameComponent } from './modify-game/modify-game.component';
+import { UpdateCatalogueComponent } from './update-catalogue/update-catalogue.component';
 import { AdminControlComponent } from './game-catalogue/admin-control/admin-control.component'; 
 import {MatStepperModule} from '@angular/material/stepper';
 import {MatDatepickerModule} from '@angular/material/datepicker'; 
 import { MatNativeDateModule } from '@angular/material/core';
-import { SelectOptionsComponent } from './modify-game/select-options/select-options.component';
+import { SelectOptionsComponent } from './update-catalogue/select-options/select-options.component';
 import {MatProgressBarModule} from '@angular/material/progress-bar'; 
 import {MatExpansionModule} from '@angular/material/expansion'; 
 
@@ -87,7 +87,8 @@ const routes: Routes = [
   { path: 'resetpassword', component: ResetPasswordComponent },
   { path: 'newpassword', component: InsertNewPasswordComponent },
   { path: 'redirect', component: RedirectPageComponent},
-  { path: 'modify/:gameid', component: ModifyGameComponent}
+  { path: 'modify/:gameid', component: UpdateCatalogueComponent},
+  { path: 'add', component: UpdateCatalogueComponent}
 ];
 
 @NgModule({
@@ -145,7 +146,7 @@ const routes: Routes = [
     ShowChatsComponent,
     AddToListComponent,
     DeleteDialogComponent,
-    ModifyGameComponent,
+    UpdateCatalogueComponent,
     AdminControlComponent,
     SelectOptionsComponent
   ],
