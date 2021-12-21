@@ -6,9 +6,9 @@
 
 		<img id="gameico" [src]="imgUrl">
 
-		<mat-card id="card">
+		<mat-card id="updateFormCard">
 			<form id="updateForm" (ngSubmit)="onSubmit()" [formGroup]="gameForm">
-				<div id="formCard">
+				<div id="formContainer">
 					<div id="title">
 						<mat-card-title>Inserisci i dati </mat-card-title>
 					</div>
@@ -20,7 +20,7 @@
 							</mat-select>
 						</mat-form-field>
 					</div>
-					<div id="time">
+					<div class="variableChild">
 						<mat-form-field *ngIf="gameForm.get('time')?.enabled" appearance="fill">
 							<mat-label>Tempo di completamento</mat-label>
 							<input
@@ -28,8 +28,7 @@
 								matInput type="number" placeholder="ore" required formControlName="time">
 							<span matSuffix>h</span>
 						</mat-form-field>
-					</div>
-					<div id="price">
+
 						<mat-form-field *ngIf="gameForm.get('price')?.enabled" appearance="fill">
 							<mat-label>Prezzo di acquisto</mat-label>
 							<input
@@ -38,16 +37,15 @@
 							<span matSuffix>&euro;</span>
 						</mat-form-field>
 					</div>
-					<div id="platform">
+
+					<div class="variableChild">
 						<mat-form-field *ngIf="gameForm.get('platform')?.enabled" appearance="fill">
 							<mat-label>Piattaforma</mat-label>
 							<mat-select formControlName="platform">
 								<mat-option *ngFor="let plat of platformsGame" [value]="plat">{{plat}}</mat-option>
 							</mat-select>
 						</mat-form-field>
-					</div>
 
-					<div id="vote">
 						<mat-form-field *ngIf="gameForm.get('vote')?.enabled" appearance="fill">
 							<mat-label>Voto</mat-label>
 							<mat-select formControlName="vote">
@@ -57,19 +55,20 @@
 							</mat-select>
 						</mat-form-field>
 					</div>
+
 					<div id="note">
-						<mat-form-field id="not" appearance="fill">
+						<mat-form-field id="noteField" appearance="fill">
 							<mat-label>Note Aggiuntive</mat-label>
 							<textarea matInput formControlName="note"></textarea>
 						</mat-form-field>
 					</div>
-					<div id="sub">
-						<button type="submit" [disabled]="!gameForm.valid" mat-button color="primary">Update
-							List</button>
+
+
+					<div id="bottom">
+						<p>* Dati obbligatori</p>
+						<button type="submit" [disabled]="!gameForm.valid" mat-button color="primary">Update List</button>
 					</div>
-					<div id="ad">
-						<mat-card-content>* Dati obbligatori</mat-card-content>
-					</div>
+
 				</div>
 
 			</form>

@@ -65,12 +65,9 @@
 	</div>
 
 	<div id="text-list" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified ">
-
 		<app-add-to-list *ngIf="gameid" [gameID]="gameid" (showInsertFormChanged)="onShowInsertFormChanged($event)">
 		</app-add-to-list>
-
 	</div>
-
 
 	<ng-template #loading>
 		<mat-spinner id="spinner"></mat-spinner>

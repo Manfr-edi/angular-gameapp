@@ -8,7 +8,6 @@ import { UserCollectionService } from '../../services/user-collection.service';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
-import * as firebase from 'firebase'
 
 @Component({
   selector: 'app-game-tab',
@@ -29,7 +28,7 @@ export class GameTabComponent {
   //Filtri
   genreSelected = "";
   platformSelected = "";
-  
+
   gameid: string = '';
   games$: Observable<any[]> = new Observable;
   urls: Map<string, string> = new Map;
@@ -50,8 +49,8 @@ export class GameTabComponent {
   }
 
   async onChangeFilter() {
-    this.games$ = this.userCollectionService.getGamesWithEqualFilterNotEmpty(this.viewlist,
-      [{ par: "platform", val: this.platformSelected }, { par: "genre", val: this.genreSelected }]).snapshotChanges();
+    this.games$ = this.userCollectionService.getGamesWithPlatGenNotEmpty(this.viewlist,
+      this.platformSelected, this.genreSelected).snapshotChanges();
   }
 
   async onChangeFilterGenre() {
@@ -59,6 +58,6 @@ export class GameTabComponent {
   }
 
   completed(event: boolean) {
-    this.updateForm = !event;
-  } 
+    this.updateForm = false;
+  }
 }

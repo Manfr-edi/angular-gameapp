@@ -39,9 +39,6 @@ export class GameCollectionService {
   //Nel caso in cui sto rimuovendo il tempo di completamento
   //completedTime DEVE essere pari a 0
   async updateCompletedAvg(gameid: string, completedTime_old: number, completedTime: number): Promise<boolean> {
-    console.log("time_old: " + completedTime_old);
-    console.log("time: " + completedTime);
-
     let gameDoc = this.catalogue.doc(gameid);
 
     //Tempo medio memorizzato nel database
@@ -60,8 +57,6 @@ export class GameCollectionService {
       else
         par.completedtimeavg = 0;
     }
-
-    console.log(par);
     return gameDoc.update(par).then(() => true).catch(err => false);
   }
 
@@ -71,9 +66,6 @@ export class GameCollectionService {
   //vote DEVE essere pari a 0
   //Nel caso vote == old_vote == 0, non accade nulla
   async updateVoteAvg(gameid: string, vote_old: number, vote: number): Promise<boolean> {
-    console.log("vote_old: " + vote_old);
-    console.log("vote: " + vote);
-
     let gameDoc = this.catalogue.doc(gameid);
 
     if (vote == vote_old && vote == 0)

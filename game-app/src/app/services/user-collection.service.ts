@@ -1,5 +1,6 @@
+import { Platform } from '@angular/cdk/platform';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentData, Query, DocumentSnapshot, CollectionReference } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentData, Query } from '@angular/fire/firestore';
 import { userlist } from '../data/userlist/userlist';
 import { AuthService } from '../services/auth.service';
 import { GameCollectionService } from './game-collection.service';
@@ -20,77 +21,6 @@ export class UserCollectionService {
 
 	constructor(public authService: AuthService, public db: AngularFirestore,
 		public gameCollectionService: GameCollectionService, public userLoggedService: UserLoggedService) {
-	}
-
-	async UpdateGame1(selectedList: string, previousList: string, gameid: string, gametitle: string,
-		note: string, time: number, vote: number, selectedPlatform: string, genre: string, price: number): Promise<boolean> {
-
-		//Genero il documento base per inserire un gioco in una lista
-		let doc = new Map<String, any>([
-			["title", gametitle],
-			["note", note],
-			["genre", genre]
-		]);
-
-
-		//Controlli per l'inserimento in lista completati
-		if (selectedList === this.userlists[0].code) {
-			//Nel caso il tempo di completamento sia valido
-			doc.set("completetime", time);
-
-			//Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
-			if (vote > 0)
-				doc.set("vote", vote);
-		}
-
-		//Nel caso la lista completati o in gioco
-		if (selectedList !== this.userlists[2].code) {
-			doc.set("price", price);
-			//Viene inserita la piattaforma
-			doc.set("platform", selectedPlatform);
-		}
-
-		//In questo caso sto aggiornando un gioco nella sua stessa lista
-		if (selectedList === previousList) {
-			return this.getGameFromList(gameid, selectedList).update(Object.fromEntries(doc))
-				.then(async () => {
-					//Prendo il vecchio voto, se esiste
-					let v = (await this.getGameDataFromList(gameid, selectedList)).get("vote");
-					//Nel caso in cui vote == 0, devo rimuovere il voto precedente
-					//Nel caso in cui vote > 0, devo aggiornare il voto
-					//Nel caso vote == old_vote == 0, non deve accadere nulla
-					return this.gameCollectionService.updateVoteAvg(gameid, v ? v : 0, vote)
-						.then(async () => {
-							//Aggiorno il tempo di completamento medio nel caso immetto un gioco in Completed
-							if (selectedList === userlist[0].code)
-								return this.gameCollectionService.updateCompletedAvg(gameid, (await this.getGameDataFromList(gameid, selectedList)).get("completetime"), time);
-							return true;
-						}).catch(e => false)
-				})
-				.catch(err => false);
-		}
-		else {
-			return this.getGameFromList(gameid, selectedList).set(Object.fromEntries(doc))
-				.then(async () => {
-					if (previousList !== '') //Non si tratta di un'aggiunta(sto spostando), devo rimuovere il gioco dalla lista precedente
-						return this.RemoveGame(previousList, gameid);
-
-					//STO AGGIUNGENDO IL GIOCO 
-
-					//Prendo il vecchio voto, se esiste
-					let v = (await this.getGameDataFromList(gameid, selectedList)).get("vote");
-					//Nel caso in cui vote == 0, devo rimuovere il voto precedente
-					//Nel caso in cui vote > 0, devo aggiornare il voto
-					//Nel caso vote == old_vote == 0, non deve accadere nulla
-					return this.gameCollectionService.updateVoteAvg(gameid, v ? v : 0, vote)
-						.then(async () => {
-							//Aggiorno il tempo di completamento medio nel caso immetto un gioco in Completed
-							if (selectedList === userlist[0].code)
-								return this.gameCollectionService.updateCompletedAvg(gameid, 0, time);
-							return true;
-						}).catch(e => false)
-				})
-		}
 	}
 
 	//Nel caso di aggiunta di un nuovo gioco : selectedList != '' e previousList == ''
@@ -159,7 +89,7 @@ export class UserCollectionService {
 			else //Nel caso modifica con cambio lista
 				//Rimuovo il gioco dalla lista precedente
 				return this.RemoveGame(previousList, gameid, userid) //Gestisce di gia un'eventuale ripristino
-					.then(state => {console.log(state)
+					.then(state => {
 						if (state)//SE ho rimosso il gioco
 						{
 							return this.getGameFromList(gameid, selectedList).set(Object.fromEntries(doc))
@@ -208,9 +138,8 @@ export class UserCollectionService {
 		let sum = 0;
 		let count = 0;
 
-		let filter = [{ par: "platform", val: platformSelected }, { par: "genre", val: genreSelected }];
 		for (let i = 0; i < 2; i++) {
-			await this.getGamesWithEqualFilterNotEmpty(userlist[i].code, filter, userid)
+			await this.getGamesWithPlatGenNotEmpty(userlist[i].code, platformSelected, genreSelected, userid)
 				.get().forEach(docs => docs.forEach(doc => {
 					sum += doc.get("price");
 					count++;
@@ -248,19 +177,18 @@ export class UserCollectionService {
 		return this.getList(list, userid).doc(gameid);
 	}
 
-	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente attualmente loggato
-	//che rispetta dei filtri presentati in ingresso, in particare i filtri sono di uguaglianza e i valori non devono essere nulli.
-	getGamesWithEqualFilterNotEmpty(list: string, filter: { par: string; val: any }[], userid?: string): AngularFirestoreCollection {
+	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente indicato
+	//che rispetta dei filtri(piattaforma e genere) presentati in ingresso, nel caso un filtro è '', non viene considerato
+	getGamesWithPlatGenNotEmpty(list: string, platform: string, genre: string, userid?: string): AngularFirestoreCollection {
 		return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
 			let a = (ref as Query<DocumentData>);
-			if (filter.length > 0)
-				for (let f of filter)
-					if (f.val !== '')
-						a = a.where(f.par, "==", f.val);
+			if (platform !== '')
+				a = a.where("platform", "==", platform);
+			if (genre !== '')
+				a = a.where("genre", "array-contains", genre)
 			return a;
 		});
 	}
-
 
 	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente attualmente loggato
 	//che rispetta dei filtri presentati in ingresso, in particare i filtri sono di uguaglianza e i valori non devono essere nulli.

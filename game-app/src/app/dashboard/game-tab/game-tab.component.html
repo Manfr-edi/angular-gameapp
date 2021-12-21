@@ -41,11 +41,11 @@
 									<mat-card-content>Ore giocate: {{game.payload.doc.data().completetime}}
 									</mat-card-content>
 
-									<mat-card-content>Prezzo : {{game.payload.doc.data().price}} <span
-											matSuffix>&euro;</span>
+									<mat-card-content>Prezzo : {{game.payload.doc.data().price}} <span matSuffix>&euro;</span>
 									</mat-card-content>
 									<mat-card-content *ngIf="game.payload.doc.data().vote != null">Voto :
 										{{game.payload.doc.data().vote}}</mat-card-content>
+									<mat-card-content >Piattaforme : {{game.payload.doc.data().platform}}</mat-card-content>
 								</div>
 							</mat-card-title>
 

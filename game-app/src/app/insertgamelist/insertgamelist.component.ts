@@ -135,11 +135,15 @@ export class InsertgamelistComponent implements OnChanges {
   }
 
   async onSubmit() {
-    this.completed.emit(await this.userCollectionService.UpdateGame(this.gameForm.get("destinationList")?.value, this.updateList, this.gameid,
+    this.userCollectionService.UpdateGame(this.gameForm.get("destinationList")?.value, this.updateList, this.gameid,
       this.gametitle, this.gameForm.get("note")?.value,
       this.gameForm.get("time")?.value, this.gameForm.get("vote")?.value,
-      this.gameForm.get("platform")?.value, this.gamegenre, this.gameForm.get("price")?.value));
-
+      this.gameForm.get("platform")?.value, this.gamegenre, this.gameForm.get("price")?.value)
+      .then(res => {
+        this._snackBar.open(res ? "Lista videogiochi aggiornata correttamente!" :
+          "Impossibile aggiornare lista videogiochi!", 'Ok', { duration: 2000 });
+        this.completed.emit(res);
+      });
   }
 
   checkField(field: string, name: string, map: Map<string, string>) {

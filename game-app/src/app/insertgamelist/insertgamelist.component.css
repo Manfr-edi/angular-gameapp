@@ -2,14 +2,14 @@
 {
 	padding: 10px;
 	overflow-y: scroll;
-	height: 85vh;	
+	height: 85vh;
+	scrollbar-width: none; 	
 }
+
 #container::-webkit-scrollbar {
 	display: none;
 }
-#container {
-	scrollbar-width: none; 
-}
+
 #cont_flex{
 	display: flex;
 	flex-wrap: wrap;
@@ -18,12 +18,8 @@
 	row-gap: 10px;
 	column-gap: 20px;
 }
-#gameIco {
-  max-width: 25%;
-  max-height: 60%;
-}
+
 #gameInfo{
-	
 	width: 100%;
 	text-align: center;
 	color: white;
@@ -31,79 +27,73 @@
     font-family: 'Helvetica', Arial , Sans-Serif;
     font-weight: bold; 
 }
-#updateForm{
-	margin-left: auto;
+
+#gameIco {
+  max-width: 25%;
+  max-height: 60%;
 }
-#formCard
-{
-	width: 100%;
-	vertical-align: middle;
-	justify-items: center;
-	display: grid;
-	grid-template-areas:
-	'title title'
-	'list list'
-	'time price'
-	'vote plat'
-	'note note'
-	'ad sub';
-	column-gap: 10px;
-	padding: 10px;
-}
-#card{
+
+#updateFormCard{
 	max-width: 70%;
 	height: fit-content;
 }
 
+#updateForm{
+	margin-left: auto;
+}
+
+#formContainer
+{
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+}
+
 #title{
-    grid-area: title;
 }
+
 #list{
-	grid-area:list;
-	height: max-content;	
+	margin: auto;	
 }
-#time{ 
-	grid-area: time;
+
+.variableChild{ 
+	display: flex;
+	justify-content: space-between;
 }
-#platform{
-	grid-area: plat;
+
+/* Se ho un solo mat-form-field */
+.variableChild mat-form-field:only-child {
+	width: 100%;
 }
-#price{
-	grid-area: price;
+
+/* Se ho due mat-form-field */
+.variableChild mat-form-field:first-child:nth-last-child(2),
+.variableChild mat-form-field:first-child:nth-last-child(2) ~ mat-form-field {
+	width: 45%;
 }
+
 #note{
-	grid-area: note;
 	width: 100%;		
 }
-#not{
+
+#noteField{
 	margin: auto;
 	width:100%;
 }
-#vote{
-	grid-area: vote;
-}
-#sub{
-	grid-area: sub;
-	
-}
-#ad{
-	grid-area: ad;
-	
+
+#bottom{
+	display: flex;
+	justify-content: space-between;
 }
 
-.mat-form-field
+#bottom p
 {
-	max-width: 500px;
+	color: red;
+	font-size: 10;
 }
 
 #spinner {
 	margin: auto;
   }
 
-.mat-card-content{
-	color:red;
-	font-size: 12;
-	margin-top: 10px;
-	
-}
-  
