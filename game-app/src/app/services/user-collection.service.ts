@@ -22,7 +22,7 @@ export class UserCollectionService {
 		public gameCollectionService: GameCollectionService, public userLoggedService: UserLoggedService) {
 	}
 
-	async UpdateGame(selectedList: string, previousList: string, gameid: string, gametitle: string,
+	async UpdateGame1(selectedList: string, previousList: string, gameid: string, gametitle: string,
 		note: string, time: number, vote: number, selectedPlatform: string, genre: string, price: number): Promise<boolean> {
 
 		//Genero il documento base per inserire un gioco in una lista
@@ -39,10 +39,8 @@ export class UserCollectionService {
 			doc.set("completetime", time);
 
 			//Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
-			if (vote > 0) {
-				var y: number = +vote;
-				doc.set("vote", y);
-			}
+			if (vote > 0)
+				doc.set("vote", vote);
 		}
 
 		//Nel caso la lista completati o in gioco
@@ -52,54 +50,158 @@ export class UserCollectionService {
 			doc.set("platform", selectedPlatform);
 		}
 
-		//Inserimento documento nel database
+		//In questo caso sto aggiornando un gioco nella sua stessa lista
 		if (selectedList === previousList) {
-
 			return this.getGameFromList(gameid, selectedList).update(Object.fromEntries(doc))
 				.then(async () => {
-					if (selectedList === userlist[0].code)
-						return this.gameCollectionService.updateCompletedAvg(gameid, (await this.getGameDataFromList(gameid, selectedList)).get("completetime"), time);
-					return true;
+					//Prendo il vecchio voto, se esiste
+					let v = (await this.getGameDataFromList(gameid, selectedList)).get("vote");
+					//Nel caso in cui vote == 0, devo rimuovere il voto precedente
+					//Nel caso in cui vote > 0, devo aggiornare il voto
+					//Nel caso vote == old_vote == 0, non deve accadere nulla
+					return this.gameCollectionService.updateVoteAvg(gameid, v ? v : 0, vote)
+						.then(async () => {
+							//Aggiorno il tempo di completamento medio nel caso immetto un gioco in Completed
+							if (selectedList === userlist[0].code)
+								return this.gameCollectionService.updateCompletedAvg(gameid, (await this.getGameDataFromList(gameid, selectedList)).get("completetime"), time);
+							return true;
+						}).catch(e => false)
 				})
 				.catch(err => false);
-			/*
-			if (selectedList === userlist[0].code)
-				this.gameCollectionService.updateCompletedAvg(gameid, (await this.getGameDataFromList(gameid, selectedList)).get("completetime"), time);
-			this.getGameFromList(gameid, selectedList).update(Object.fromEntries(doc));*/
 		}
 		else {
 			return this.getGameFromList(gameid, selectedList).set(Object.fromEntries(doc))
-				.then(() => {
-					if (previousList !== '') //Non si tratta di un'aggiunta, devo rimuovere il gioco dalla lista precedente
+				.then(async () => {
+					if (previousList !== '') //Non si tratta di un'aggiunta(sto spostando), devo rimuovere il gioco dalla lista precedente
 						return this.RemoveGame(previousList, gameid);
 
-					//Aggiornamento tempi di completamento nel catalogo
-					if (selectedList === userlist[0].code)
-						return this.gameCollectionService.updateCompletedAvg(gameid, 0, time);
+					//STO AGGIUNGENDO IL GIOCO 
 
-					return true;
+					//Prendo il vecchio voto, se esiste
+					let v = (await this.getGameDataFromList(gameid, selectedList)).get("vote");
+					//Nel caso in cui vote == 0, devo rimuovere il voto precedente
+					//Nel caso in cui vote > 0, devo aggiornare il voto
+					//Nel caso vote == old_vote == 0, non deve accadere nulla
+					return this.gameCollectionService.updateVoteAvg(gameid, v ? v : 0, vote)
+						.then(async () => {
+							//Aggiorno il tempo di completamento medio nel caso immetto un gioco in Completed
+							if (selectedList === userlist[0].code)
+								return this.gameCollectionService.updateCompletedAvg(gameid, 0, time);
+							return true;
+						}).catch(e => false)
 				})
-			/*
-			if (previousList !== '') //Non si tratta di un'aggiunta, devo rimuovere il gioco dalla lista precedente
-				this.RemoveGame(previousList, gameid);
-
-			this.getGameFromList(gameid, selectedList).set(Object.fromEntries(doc));
-
-			//Aggiornamento tempi di completamento nel catalogo
-			if (selectedList === userlist[0].code)
-				this.gameCollectionService.updateCompletedAvg(gameid, 0, time);
-				*/
 		}
 	}
 
-	async RemoveGame(selectedList: string, id: string): Promise<boolean> {
-		return this.getGameFromList(id, selectedList).delete()
+	//Nel caso di aggiunta di un nuovo gioco : selectedList != '' e previousList == ''
+	//Nel caso di aggiornamento di un gioco(stessa lista) : selectedList == previousList && selectedList != ''
+	//Nel caso di aggiornamento di un gioco(cambio lista) : selectedList != previousList && selectedList != '' && previousList != ''
+	//Nel caso selectedList == '' : non accade nulla => false
+	async UpdateGame(selectedList: string, previousList: string, gameid: string, gametitle: string, note: string,
+		time: number, vote: number, selectedPlatform: string, genre: string, price: number, userid?: string): Promise<boolean> {
+
+		//In questo caso non accade nulla
+		if (selectedList == '')
+			return false;
+
+		let old_doc: DocumentData | undefined = undefined;
+
+		//Salvo un riferimento al vecchio documento, se esiste, nel caso debbo ripristinare.
+		//Effettuo il salvataggio solo nel caso di modifica di un gioco
+		//Se il backup fallisce, viene restituito false
+		//Se il gameid non esiste viene restituito false
+		if (previousList != '') {
+			old_doc = await this.getGameDataFromList(gameid, previousList, userid)
+				.then(doc => doc.exists ? doc : undefined)
+				.catch(e => undefined);
+			if (!old_doc)
+				return false;
+		}
+
+		//Genero il documento base per inserire un gioco in una lista
+		let doc = new Map<String, any>([
+			["title", gametitle],
+			["note", note],
+			["genre", genre]
+		]);
+
+		//Controlli per l'inserimento in lista completati
+		if (selectedList === this.userlists[0].code) {
+			//Nel caso il tempo di completamento sia valido
+			doc.set("completetime", time);
+
+			//Nel caso sia stato inserito un voto valido, lo inserisco, altrimenti no essendo opzionale
+			if (vote > 0)
+				doc.set("vote", vote);
+		}
+
+		//Nel caso la lista completati o in gioco
+		if (selectedList !== this.userlists[2].code) {
+			doc.set("price", price);
+			doc.set("platform", selectedPlatform);
+		}
+
+		//Nel caso viene aggiornato un gioco gia presente in una lista
+		if (previousList == selectedList)
+			return this.getGameFromList(gameid, selectedList).update(Object.fromEntries(doc))
+				.then(() => {
+					let old_vote = old_doc!.get('vote');
+					return this.updateVoteCompleteTimeAvg(gameid, selectedList, time, vote ? vote : 0,
+						old_doc!.get("completetime"), old_vote ? old_vote : 0, old_doc)
+				}).catch(e => { this.getGameFromList(gameid, selectedList).update(old_doc!); return false }); //Ripristino e restituisco false
+		else
+			//Nel caso di aggiunta di un gioco ad una lista
+			if (previousList == '')
+				return this.getGameFromList(gameid, selectedList).set(Object.fromEntries(doc))
+					.then(() => this.updateVoteCompleteTimeAvg(gameid, selectedList, time, vote, 0, 0, old_doc))
+					.catch(e => { this.getGameFromList(gameid, selectedList).update(old_doc!); return false });
+
+			else //Nel caso modifica con cambio lista
+				//Rimuovo il gioco dalla lista precedente
+				return this.RemoveGame(previousList, gameid, userid) //Gestisce di gia un'eventuale ripristino
+					.then(state => {console.log(state)
+						if (state)//SE ho rimosso il gioco
+						{
+							return this.getGameFromList(gameid, selectedList).set(Object.fromEntries(doc))
+								.then(() => this.updateVoteCompleteTimeAvg(gameid, selectedList, time, vote, 0, 0, old_doc))
+								.catch(e => { this.getGameFromList(gameid, selectedList).update(old_doc!); return false });
+						}
+
+						return false;
+					});
+
+	}
+
+	async RemoveGame(selectedList: string, gameid: string, userid?: string): Promise<boolean> {
+		//Salvo un riferimento al vecchio documento, nel caso debbo ripristinare.
+		//Se il backup fallisce, viene restituito false
+		//Se il gameid non esiste viene restituito false
+		let old_doc = await this.getGameDataFromList(gameid, selectedList, userid)
+			.then(doc => doc.exists ? doc : undefined)
+			.catch(e => undefined);
+		if (!old_doc)
+			return false;
+
+		return this.getGameFromList(gameid, selectedList, userid).delete()
 			.then(async () => {
-				if (selectedList === userlist[0].code)
-					return this.gameCollectionService.updateCompletedAvg(id, (await this.getGameDataFromList(id, selectedList)).get("completetime"), 0);
-				return true;
+				let old_vote = old_doc!.get('vote');
+				return this.updateVoteCompleteTimeAvg(gameid, selectedList, 0, 0, old_doc!.get('completetime'),
+					old_vote ? old_vote : 0, old_doc);
 			})
-			.catch(err => false);
+			.catch(e => { this.getGameFromList(gameid, selectedList).update(old_doc!); return false }); //Ripristino e restituisco false
+	}
+
+	private updateVoteCompleteTimeAvg(gameid: string, list: string, time: number, vote: number, old_time: number,
+		old_vote: number, old_doc?: DocumentData) {
+		return this.gameCollectionService.updateVoteAvg(gameid, old_vote, list == userlist[0].code ? vote : 0) //Nel caso non sto nella lista Completed, il voto non va toccato
+			.then(() => {
+				if (list == userlist[0].code) //Nel caso la modifica riguarda la lista Completed
+					return this.gameCollectionService.updateCompletedAvg(gameid, old_time, time)
+						.then(() => true)
+						.catch(e => { if (old_doc) this.getGameFromList(gameid, list).update(old_doc); return false }); //Ripristino e restituisco false
+				return true
+			})
+			.catch(e => { if (old_doc) this.getGameFromList(gameid, list).update(old_doc); return false }); //Ripristino e restituisco false
 	}
 
 	async GetSpese(platformSelected: string, genreSelected: string, userid?: string): Promise<Spese> {
@@ -138,7 +240,7 @@ export class UserCollectionService {
 		return { list: coll, urls: this.gameCollectionService.getImageUrls(coll) };
 	}
 
-	async getGameDataFromList(gameid: string, list: string, userid?: string): Promise<any> {
+	async getGameDataFromList(gameid: string, list: string, userid?: string): Promise<DocumentData> {
 		return (await this.getGameFromList(gameid, list, userid).ref.get());
 	}
 

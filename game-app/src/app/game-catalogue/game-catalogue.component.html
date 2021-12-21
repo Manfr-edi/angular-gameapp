@@ -20,7 +20,11 @@
             </mat-card-content>
 
             <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
-              Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore
+              Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore con {{game.payload.doc.data().completedtimecount}} utenti
+            </mat-card-content>
+
+            <mat-card-content *ngIf="game.payload.doc.data().completedtimeavg">
+              Media Voti: {{game.payload.doc.data().voteavg}} ore con {{game.payload.doc.data().votecount}} count
             </mat-card-content>
           </div>
 

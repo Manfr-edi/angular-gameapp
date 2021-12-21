@@ -39,6 +39,9 @@ export class GameCollectionService {
   //Nel caso in cui sto rimuovendo il tempo di completamento
   //completedTime DEVE essere pari a 0
   async updateCompletedAvg(gameid: string, completedTime_old: number, completedTime: number): Promise<boolean> {
+    console.log("time_old: " + completedTime_old);
+    console.log("time: " + completedTime);
+
     let gameDoc = this.catalogue.doc(gameid);
 
     //Tempo medio memorizzato nel database
@@ -56,6 +59,40 @@ export class GameCollectionService {
         par.completedtimeavg = ((completedTimeAvg_cur * completedTimeCount_cur) - completedTime_old + completedTime) / par.completedtimecount;
       else
         par.completedtimeavg = 0;
+    }
+
+    console.log(par);
+    return gameDoc.update(par).then(() => true).catch(err => false);
+  }
+
+  //Nel caso in cui sto inserendo il voto
+  //vote_old DEVE essere pari a 0
+  //Nel caso in cui sto rimuovendo il voto
+  //vote DEVE essere pari a 0
+  //Nel caso vote == old_vote == 0, non accade nulla
+  async updateVoteAvg(gameid: string, vote_old: number, vote: number): Promise<boolean> {
+    console.log("vote_old: " + vote_old);
+    console.log("vote: " + vote);
+
+    let gameDoc = this.catalogue.doc(gameid);
+
+    if (vote == vote_old && vote == 0)
+      return true;
+    //Voto memorizzato nel database
+    let vote_cur = (await gameDoc.ref.get()).get("voteavg");
+    //Contatore dei voti memorizzato nel database
+    let votecount_cur = (await gameDoc.ref.get()).get("votecount");
+
+    var par = { voteavg: 0, votecount: 0 };
+
+    if (votecount_cur === undefined)
+      par = { voteavg: vote, votecount: vote > 0 ? 1 : 0 };
+    else {
+      par.votecount = votecount_cur + (vote_old == 0 ? 1 : 0) + (vote == 0 ? -1 : 0);
+      if (par.votecount > 0)
+        par.voteavg = ((vote_cur * votecount_cur) - vote_old + vote) / par.votecount;
+      else
+        par.voteavg = 0;
     }
 
     return gameDoc.update(par).then(() => true).catch(err => false);
