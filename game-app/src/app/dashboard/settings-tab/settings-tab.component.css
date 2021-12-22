@@ -63,14 +63,14 @@ body{
 }
 #plat{
     width: 30%; 
-    justify-content: center;
     background-color: white;
     font-size: 16px;
     font-weight: bold;
     margin-top: 5px;    
     border-radius: 20px;
-    display: flex;
+    display: flex;    
     align-items:baseline;
+    justify-content: center;
 }
 .btn{
     margin: 10px auto 5px auto;
