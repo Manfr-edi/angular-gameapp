@@ -1,51 +1,58 @@
-<app-check-user-verified></app-check-user-verified>
-<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
-	<input type="text" class="form-control form-control-sm" (keyup)="onKey($event)" placeholder="Cerca Utente">
+<body>
+	<app-check-user-verified></app-check-user-verified>
+	<div id="container" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
+		<input id="searchbar" type="text" class="form-control form-control-sm" (keyup)="onKey($event)"
+			placeholder="Cerca Utente" [matAutocomplete]="auto">
+		<mat-autocomplete #auto="matAutocomplete">
+			<div *ngIf="users$ | async; let users">
 
-	<div *ngIf="users$ | async; let users">
-		<ul>
-			<div *ngFor="let user of users">
+				<div *ngFor="let user of users">
 
-				<a *ngIf="user.payload.doc.id !== userLoggedService.getUserID() "
-					[routerLink]="['/user', user.payload.doc.id]">
-					{{ user.payload.doc.data().username }}
-				</a>
+					<mat-option *ngIf="user.payload.doc.id !== userLoggedService.getUserID() "
+						[routerLink]="['/user', user.payload.doc.id]">
+						{{ user.payload.doc.data().username }}
+					</mat-option>
+				</div>
+
+				<mat-option *ngIf="users?.length === 0">Nessun utente trovato</mat-option>
 			</div>
-		</ul>
-		<div *ngIf="users?.length === 0">Nessun utente trovato</div>
-	</div>
+		</mat-autocomplete>
 
+		<div class="flex" *ngIf="friends$ | async; let friends">
+			
+				<ng-container *ngFor="let friend of friends">
+					<mat-card class="card">
+					<img mat-card-lg-image src="../../../User.png">
+					<mat-card-title [routerLink]="['/user', friend.payload.doc.id]">
+						{{ friend.payload.doc.data().username }}
+					</mat-card-title>
 
-	<div *ngIf="friends$ | async; let friends">
-		<ul>
-			<div *ngFor="let friend of friends">
-
-				<a [routerLink]="['/user', friend.payload.doc.id]">
-					{{ friend.payload.doc.data().username }}
-				</a>
-				<button class="btn btn-outline-primary"
-					(click)="userLoggedService.removeFriend(friend.payload.doc.id, authService.currentUserId)">Rimuovi Amico
-				</button>
-
-			</div>
-		</ul>
-		<div *ngIf="friends.length === 0">Nessun amico</div>
-	</div>
-
-	<div *ngIf="requests$ | async; let requests">
-		<ul>
-		<div *ngFor="let request of requests">
-
-			<a [routerLink]="['/user', request.payload.doc.data().username]">
-				{{  request.payload.doc.data().username }}
-			</a>
-			<button class="btn btn-outline-primary"
-				(click)="userLoggedService.acceptRequest(request.payload.doc.id, request.payload.doc.data().username, authService.currentUserId)">Accetta Amico
-			</button>
-			<button class="btn btn-outline-primary"
-				(click)="userLoggedService.removeRequest(request.payload.doc.id)">Rifiuta Amico
-			</button>
+					<button class="btn btn-outline-primary"
+						(click)="userLoggedService.removeFriend(friend.payload.doc.id, authService.currentUserId)">Rimuovi
+						Amico
+					</button>
+					</mat-card>
+				</ng-container>
+			
+			<div *ngIf="friends.length === 0">Nessun amico</div>
 		</div>
-		</ul>
+
+		<div *ngIf="requests$ | async; let requests">
+			<ul>
+				<div *ngFor="let request of requests">
+
+					<a [routerLink]="['/user', request.payload.doc.data().username]">
+						{{ request.payload.doc.data().username }}
+					</a>
+					<button class="btn btn-outline-primary"
+						(click)="userLoggedService.acceptRequest(request.payload.doc.id, request.payload.doc.data().username, authService.currentUserId)">Accetta
+						Amico
+					</button>
+					<button class="btn btn-outline-primary"
+						(click)="userLoggedService.removeRequest(request.payload.doc.id)">Rifiuta Amico
+					</button>
+				</div>
+			</ul>
+		</div>
 	</div>
-</div>
+</body>

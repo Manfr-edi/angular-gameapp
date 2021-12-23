@@ -11,12 +11,25 @@
 			<div *ngIf="friendsChat$ | async; let friendsChat">
 				<mat-selection-list [multiple]="false">
 					<mat-list-option *ngFor="let friend of friendsChat" (click)="friendSelected(friend.payload.doc.id)">
-						{{friend.payload.doc.data().username}}
+						<mat-divider></mat-divider>
+						
+						<div id="text"> {{friend.payload.doc.data().username}} </div>
+						<!--
+						<button mat-icon-button [matMenuTriggerFor]="menu">
+							<mat-icon>more_vert</mat-icon>
+						</button>
+						<mat-menu #menu="matMenu">
+							<button mat-menu-item
+								(click)="userLoggedService.deleteChat(userLoggedService.getChatID(friend.payload.doc.id))">Delete</button>
+						</mat-menu>
+						-->
 					</mat-list-option>
 
 					<mat-list-option *ngFor="let friend of friendsNoChat"
 						(click)="friendSelected(friend.payload.doc.id)">
-						{{friend.payload.doc.data().username}}
+						<mat-divider></mat-divider>
+						{{friend.payload.doc.data().username}} bubu
+						
 					</mat-list-option>
 				</mat-selection-list>
 

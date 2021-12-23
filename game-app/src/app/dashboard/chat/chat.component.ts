@@ -19,14 +19,18 @@ export class ChatComponent implements OnChanges {
   messageTxt: string = "";
   curChatExists: boolean = false;
   friendID: string = "";
+  friendUsername = "";
 
   constructor(public authService: AuthService, public userLoggedService: UserLoggedService, public util: UtilService) {
   }
-
-  ngOnChanges(changes: any) {
+  async ngOnInit(){
+    this.friendUsername = await this.getFriendUsername();
+  }
+  async ngOnChanges(changes: any) {
     this.messages$ = this.userLoggedService.getMessaggesOrdered(this.chatID).valueChanges();
     this.userLoggedService.chatExistsByID(this.chatID).then(e => this.curChatExists = e)
     this.friendID = this.userLoggedService.getFriendIDFromChatID(this.chatID);
+    this.friendUsername = await this.getFriendUsername();
   }
 
   async sendMessage() {
@@ -42,6 +46,11 @@ export class ChatComponent implements OnChanges {
       if (this.messageTxt != '')
         this.sendMessage();
     }
+  }
+
+  async getFriendUsername(){
+    let friendUser = await this.userLoggedService.getUserDataParam("username",this.friendID);
+    return friendUser;
   }
 
 }

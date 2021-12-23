@@ -25,10 +25,10 @@ body{
     font-size: 16;
     font-weight: bold;
     margin: auto;
+    
 }
 #bio{
-    word-wrap: break-word;
-    
+    word-wrap: break-word;    
     font-weight: normal;
 }
 #nickname{

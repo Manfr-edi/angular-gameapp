@@ -60,6 +60,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatListModule } from '@angular/material/list';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 import { NotificationComponent } from './notification/notification.component';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
@@ -108,7 +109,8 @@ const routes: Routes = [
     MatBadgeModule, 
     MatListModule,
     MatCheckboxModule,
-    MatTabsModule
+    MatTabsModule,
+    MatAutocompleteModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],
