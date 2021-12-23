@@ -1,0 +1,122 @@
+body{
+    height: 93vh;
+    background-image: url("../../../assets/background.png");
+    background-repeat: repeat-xy;
+    background-size: 150px;
+    overflow-y:auto;
+}
+#container{
+    width: 70%;
+    margin: auto;
+}
+#name{
+    font-size: 20;
+    font-weight: bold;
+}
+#grid{
+    display: grid;
+    padding: 20px;
+    background-color: white;
+    grid-template-areas: 
+    'img cont'
+    'img form';
+    gap: 10px;
+    border-radius: 10px;
+}
+#cont{
+    grid-area: cont;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    justify-content: space-between;
+}
+
+#img{
+    grid-area: img;
+    display: flex;
+    flex-direction: column;
+}
+#form{
+    grid-area: form;
+}
+.single{    
+    padding:10px;
+    display:flex;
+    flex-direction: column;   
+}
+.head{
+    font-size: 24;
+    font-weight: bold;
+    color: white;
+}
+.title{
+    font-size: 20;
+    font-weight: bold;
+    color: white;
+}
+#flex{
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    justify-content: flex-start;   
+    column-gap: 5%;
+}
+#plat{
+    width: 30%; 
+    background-color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;    
+    border-radius: 20px;
+    display: flex;    
+    align-items:baseline;
+    justify-content: center;
+}
+.btn{
+    margin: 10px auto 5px auto;
+}
+#conf{
+    margin-left: 40%;
+    
+    margin-right: 45%;
+}
+.divider{
+    background-color: white;
+}
+#rst{
+    display: flex;
+    justify-content: space-between;
+}
+#bio{
+    width: 50%; 
+    justify-content: center;
+    background-color: white;
+    font-size: 16px;
+    font-weight: bold;
+    margin-top: 5px;    
+    border-radius: 10px;
+    display: flex;
+    align-items:baseline;
+}
+#prova{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    background-color: white;
+    margin-top: 20px;
+}
+#pass {
+    color:white;
+    font-size: 15;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+#biomod{
+    width: 100%;
+}
+
+.nick{
+    width: 40%;
+    border-radius: 5px;
+}
+

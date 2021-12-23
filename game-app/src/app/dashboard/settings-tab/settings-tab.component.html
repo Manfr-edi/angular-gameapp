@@ -1,33 +1,140 @@
-<app-check-user-verified></app-check-user-verified>
-<div *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">	<h5>User Information</h5>
-	<h4>
-		<strong>UID:</strong> {{ authService.currentUserId }}
-	</h4>
-	<h4>
-		<strong>Email:</strong> {{ authService.currentEmail }}
-	</h4>
+<body>
+	<!--<a href="https://psnprofiles.com/ikemenzi"> <img src="https://card.psnprofiles.com/2/ikemenzi.png" border="0"></a>-->
+	<app-check-user-verified></app-check-user-verified>
+	<div id="container" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified; else loading">
+		<br>
+		<div class="head">Informazioni</div>
+		<br>
 
-	<button (click)="resetPsw()">Reset Password</button>
-<table>
-	<th>
-		<ul>
-			<li *ngFor="let item of [].constructor(platformList.length); let i = index">
-				<input type="checkbox" id="scales" name="scales" [(ngModel)]="platforms[i]">
-				<label for="scales">{{platformList[i]}}</label>
-			</li>
-		</ul>
-		<button (click)="updateData('platform', platformList, platforms)">Aggiorna Piattaforme Preferite</button>
-	</th>
+		<div id="grid">
 
-	<th>
-		<ul>
-			<li *ngFor="let item of [].constructor(genreList.length); let i = index">
-				<input type="checkbox" id="scales" name="scales" [(ngModel)]="genres[i]">
-				<label for="scales">{{genreList[i]}}</label>
-			</li>
-		</ul>
-		<button (click)="updateData('genre',genreList, genres)">Aggiorna Piattaforme Preferite</button>
-	</th>
-</table>
+			<div id="img">
+				<img src="../../../assets/User.png">
+				<button mat-raised-button color="accent">Modifica Immagine</button>
+			</div>
 
-</div>
+			<div id="cont">
+				<div id="name">{{authService.currentUserName}}</div>
+				<div id="rst"> 
+					<div>{{ authService.currentEmail }}</div>
+					<button mat-stroked-button color="accent" (click)="resetPsw()">Reset Password</button>
+				</div>
+			</div>
+
+			<div id="form" *ngIf="!showmodifyDesc">
+				<form (ngSubmit)="onSubmit()" [formGroup]="dataForm">
+					<div id="prova">
+						<mat-form-field id="biomod" appearance="fill">
+							<mat-label>Descrizione</mat-label>
+							<textarea matInput placeholder="Bio" formControlName="bio" maxlength="250" value={{bio}}></textarea>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Playstation</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknameps"
+								value={{nicknameps}}>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Microsoft</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknamexb"
+								value={{nicknamexb}}>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Nintendo</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknament"
+								value={{nicknament}}>
+						</mat-form-field>
+						<mat-form-field class="nick" appearance="fill">
+							<mat-label>Nickname Steam</mat-label>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknamest"
+								value={{nicknamest}}>
+						</mat-form-field>
+					</div>
+					<button id="conf" type="submit" mat-raised-button color="accent">Conferma Modifica</button>
+				</form>
+
+			</div>
+		</div>
+		<br>
+
+
+		<div class="title"> Seleziona le tue piattaforme </div>
+		<div class="single" *ngIf="!modifyPlatform">
+			<div id="flex">
+				<ng-container *ngFor="let plat of platformList; let i = index">
+					<div id="plat" *ngIf="platforms[i]">{{platformList[i]}}</div>
+				</ng-container>
+			</div>
+			<button class="btn" mat-raised-button color="accent" (click)="modifyPlatform=true">Modifica Piattaforme
+				Preferite</button>
+		</div>
+		<div class="single" *ngIf="modifyPlatform">
+			<div id="flex">
+				<ng-container *ngFor="let item of [].constructor(platformList.length); let i = index">
+					<div id="plat">
+						<mat-checkbox [(ngModel)]="platforms[i]"></mat-checkbox>
+						<label for="scales">&nbsp;{{platformList[i]}}</label>
+
+					</div>
+				</ng-container>
+			</div>
+			<button mat-raised-button color="accent" class="btn"
+				(click)="updateData('platform', platformList, platforms)">Aggiorna
+				Piattaforme Preferite</button>
+		</div>
+
+		<mat-divider class="divider"></mat-divider>
+		<mat-divider class="divider"></mat-divider>
+		<br>
+
+		<div class="title"> Seleziona i tuoi generi preferiti </div>
+		<div class="single" *ngIf="!modifyGenre">
+			<div id="flex">
+				<ng-container id="for" *ngFor="let gen of genreList; let i = index">
+					<div id="plat" *ngIf="genres[i]">{{genreList[i]}}</div>
+				</ng-container>
+			</div>
+			<button mat-raised-button color="accent" class="btn" (click)="modifyGenre=true">Modifica Generi
+				Preferite</button>
+		</div>
+
+		<div class="single" *ngIf="modifyGenre">
+			<div id="flex">
+				<ng-container *ngFor="let item of [].constructor(genreList.length); let i = index">
+					<div id="plat">
+						<mat-checkbox [(ngModel)]="genres[i]">
+							<label for="scales">&nbsp;{{genreList[i]}}</label>
+						</mat-checkbox>
+					</div>
+				</ng-container>
+			</div>
+
+			<button mat-raised-button color="accent" class="btn"
+				(click)="updateData('genre',genreList, genres)">Aggiorna Generi Preferite</button>
+		</div>
+
+		<mat-divider class="divider"></mat-divider>
+		<mat-divider class="divider"></mat-divider>
+
+	</div>
+
+	<ng-template #loading>
+		<mat-spinner id="spinner"></mat-spinner>
+	</ng-template>
+</body>
+
+<!--
+		<div *ngIf="!showmodifyDesc">
+			<div id="bio" *ngIf="bio">Bio: {{ bio }}</div>
+			<div id="plat" *ngIf="nicknameps">Nickname Playstation: {{ nicknameps }}</div>
+			<div id="plat" *ngIf="nicknamexb">Nickname Microsoft: {{ nicknamexb }}</div>
+			<div id="plat" *ngIf="nicknament">Nickname Nintendo: {{ nicknament }}</div>
+			<div id="plat" *ngIf="nicknamest">Nickname Steam: {{ nicknamest }}</div>
+			<form id="prova" [formGroup]="dataForm">
+			<mat-form-field class="nick" appearance="fill">
+				<mat-label>Nickname Playstation</mat-label>
+				<input matInput type="text" placeholder="nickname" formControlName="nicknameps" value={{nicknameps}}>
+			</mat-form-field>
+		</form>
+			<button class="btn" mat-raised-button color="accent" (click)="showmodifyDesc=true">Modifica Dati</button>
+		</div>
+	-->

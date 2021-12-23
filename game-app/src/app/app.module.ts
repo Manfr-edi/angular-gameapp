@@ -53,11 +53,15 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatCardModule } from '@angular/material/card';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatBadgeModule} from '@angular/material/badge';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatBadgeModule } from '@angular/material/badge';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatListModule } from '@angular/material/list';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+
 import { NotificationComponent } from './notification/notification.component';
 import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component';
-import {MatListModule} from '@angular/material/list';
 import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
 import {MatDialogModule} from '@angular/material/dialog';
 import { DeleteDialogComponent } from './game-catalogue/admin-control/delete-dialog/delete-dialog.component';
@@ -71,6 +75,7 @@ import {MatExpansionModule} from '@angular/material/expansion';
 import { ShowStarVoteComponent } from './show-star-vote/show-star-vote.component'; 
 import { AdminService } from './services/admin.service';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
+
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -119,7 +124,10 @@ const routes: Routes = [
     MatDatepickerModule,
     MatNativeDateModule,
     MatProgressBarModule,
-    MatExpansionModule
+    MatExpansionModule,
+    MatCheckboxModule,
+    MatTabsModule,
+    MatAutocompleteModule
   ],
   exports: [RouterModule, FormsModule,
     ReactiveFormsModule],

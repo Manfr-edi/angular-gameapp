@@ -3,6 +3,9 @@ import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CustomValidators } from '../../custom-validators';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-settings-tab',
@@ -14,6 +17,14 @@ export class SettingsTabComponent implements OnInit {
   //Data
   genreList = genreList;
   platformList = platformList;
+  bio= "";
+  nicknameps = "";
+  nicknamexb = "";
+  nicknament = "";
+  nicknamest = "";
+  showmodifyDesc = false;
+
+  dataForm: FormGroup;
 
   //Filtri
   selectedGenre = "";
@@ -23,10 +34,30 @@ export class SettingsTabComponent implements OnInit {
   genres: boolean[] = [];
   platforms: boolean[] = [];
 
-  constructor(public authService: AuthService, private userLoggedService: UserLoggedService) {
+  modifyPlatform = false;
+  modifyGenre = false
+
+  constructor(public authService: AuthService, public userLoggedService: UserLoggedService, public fb: FormBuilder, private _snackBar: MatSnackBar) {
+    this.dataForm = fb.group({
+      bio:[''],
+      nicknameps:[''],
+      nicknamexb:[''],
+      nicknament:[''],
+      nicknamest:['']
+    });
   }
 
   async ngOnInit() {
+    this.bio = await this.userLoggedService.getUserDataParam("bio");
+    this.nicknameps = await this.userLoggedService.getUserDataParam("nicknameps");
+    this.nicknamexb = await this.userLoggedService.getUserDataParam("nicknamexb");
+    this.nicknament = await this.userLoggedService.getUserDataParam("nicknament");
+    this.nicknamest = await this.userLoggedService.getUserDataParam("nicknamest");
+    this.dataForm.controls['bio'].setValue(this.bio);
+    this.dataForm.controls['nicknameps'].setValue(this.nicknameps);    
+    this.dataForm.controls['nicknamexb'].setValue(this.nicknamexb);
+    this.dataForm.controls['nicknament'].setValue(this.nicknament);
+    this.dataForm.controls['nicknamest'].setValue(this.nicknamest);
     this.initList("platform", this.platformList, this.platforms);
     this.initList("genre", this.genreList, this.genres);
   }
@@ -39,6 +70,24 @@ export class SettingsTabComponent implements OnInit {
         dataSelected.push(list[i]);
 
     this.userLoggedService.updateUser({ [colDB]: dataSelected });
+    if(colDB==="genre"){
+      this.modifyGenre=false;
+    }
+    if(colDB==="platform"){
+      this.modifyPlatform=false;
+    }
+  }
+
+  onSubmit() {
+      this.userLoggedService.updateUser({
+      ["bio"]: this.dataForm.get("bio")?.value,
+      ["nicknameps"]: this.dataForm.get("nicknameps")?.value,
+      ["nicknamexb"]: this.dataForm.get("nicknamexb")?.value,
+      ["nicknament"]: this.dataForm.get("nicknament")?.value,
+      ["nicknamest"]: this.dataForm.get("nicknamest")?.value
+    });
+    this._snackBar.open("Dati modificati", 'Ok', { duration: 2000 });
+    this.showmodifyDesc=false;
   }
 
   async initList(parDB: string, list: string[], selected: boolean[]) {
@@ -61,7 +110,9 @@ export class SettingsTabComponent implements OnInit {
   }
 
   resetPsw() {
-    this.authService.ResetPassword(this.authService.currentEmail)
+    this.authService.ResetPassword(this.authService.currentEmail);
+    this._snackBar.open("Email di reset inviata", 'Ok', { duration: 2000 });
+    
   }
 
 }

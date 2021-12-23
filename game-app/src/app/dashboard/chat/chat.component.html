@@ -1,5 +1,10 @@
 <div id="container" *ngIf="messages$ | async; let message">
+    <div id="topbar">
+        <img  id="img" src="../../../assets/User.png">
+        <div id="name">{{friendUsername}}</div>
+    </div>
     <div id="containerChat">
+        
         <div *ngFor="let m of message">
             <mat-card *ngIf="authService.currentUsername === m.sender" class="meCard">
                 <mat-card-title class="msg">
@@ -26,5 +31,6 @@
             <mat-icon>send</mat-icon>
         </button>
     </div>
+    
 
 </div>

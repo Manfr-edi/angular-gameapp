@@ -1,10 +1,9 @@
 #container
 {
-    padding: 0 5%;
     display: flex;
     flex-direction: column-reverse;
-    height: 90vh;
-    background-color: chartreuse;
+    height: 93vh;
+    
 }
 
 #containerChat
@@ -15,7 +14,9 @@
     gap:10px;
     padding:5px;
     overflow-y: auto;
-    background-color: red;
+    background-image: url("../../../assets/background.png");
+    background-repeat: repeat-xy;
+    background-size: 150px;
     height: 100%;
 }
 
@@ -23,26 +24,44 @@
 {
     max-width: 30%;
 }
-
+#topbar{
+    order:3;
+    height: 8.6%;
+    display: flex;
+    justify-self: flex-start;
+    padding: 0 5px;
+    column-gap: 5px;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+#img{
+    height: 90%;
+}
+#name{
+    font-size:20;
+    font-weight: bold;
+    margin: auto 0;
+}
 .meCard
 {
     float:right;
     margin-left: auto;
+    min-width: 15%;
 }
 
 .friendCard
 {
     float:left;
+    min-width: 15%;
 }
 
 .msg
 {
-    font-size: 14;
+    font-size: 16;
     word-wrap: break-word;
 }
 
-.time
-{
+
+.time{
     text-align: right;
     font-size: 11;
 }
@@ -52,8 +71,8 @@
     width:100%;
     margin-left: auto;
     order:1;   
-    background-color: blue;
     display: flex;
+    background-color: white;
 }
 
 #messageTxt

@@ -117,7 +117,8 @@ export class UserLoggedService {
 	}
 
 	getFriendIDFromChatID(chatID: string, userid?: string) {
-		return chatID.substring(0, 28) === userid ? chatID.substring(28) : chatID.substring(0, 28);
+		let id = userid ? userid : this.getUserID();		
+		return chatID.substring(0, 28) === id ? chatID.substring(28) : chatID.substring(0, 28);
 	}
 
 	async getFriendsWithChat(withChat: boolean, userid?: string): Promise<AngularFirestoreCollection | undefined> {
@@ -152,7 +153,9 @@ export class UserLoggedService {
 	 **************************************/
 
 	getChatID(user1: string, user2?: string) {
+		
 		let u2 = user2 ? user2 : this.getUserID();
+		console.log("getchatid")
 		return user1 < u2 ? user1 + u2 : u2 + user1;
 	}
 
@@ -189,6 +192,12 @@ export class UserLoggedService {
 			this.updateUser({ chats: firebase.default.firestore.FieldValue.arrayUnion(id) }, user2);
 		}
 	}
+	/*
+	deleteChat(id: string) {
+		console.log("deletechat "+id);
+		this.db.collection("Chats").doc(id).delete();
+
+	}*/
 
 	getMessaggesOrdered(idChat: string) {
 		return this.getChat(idChat).collection("messages", ref => ref.orderBy("time", "desc"));
