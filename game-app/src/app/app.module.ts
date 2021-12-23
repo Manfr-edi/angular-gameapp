@@ -63,16 +63,16 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { NotificationComponent } from './notification/notification.component';
 import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component';
 import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
-import {MatDialogModule} from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { DeleteDialogComponent } from './game-catalogue/admin-control/delete-dialog/delete-dialog.component';
 import { UpdateCatalogueComponent } from './update-catalogue/update-catalogue.component';
-import { AdminControlComponent } from './game-catalogue/admin-control/admin-control.component'; 
-import {MatStepperModule} from '@angular/material/stepper';
-import {MatDatepickerModule} from '@angular/material/datepicker'; 
+import { AdminControlComponent } from './game-catalogue/admin-control/admin-control.component';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
-import {MatProgressBarModule} from '@angular/material/progress-bar'; 
-import {MatExpansionModule} from '@angular/material/expansion';
-import { ShowStarVoteComponent } from './show-star-vote/show-star-vote.component'; 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ShowStarVoteComponent } from './show-star-vote/show-star-vote.component';
 import { AdminService } from './services/admin.service';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
 
@@ -90,9 +90,9 @@ const routes: Routes = [
   { path: 'settings', component: SettingsTabComponent },
   { path: 'resetpassword', component: ResetPasswordComponent },
   { path: 'newpassword', component: InsertNewPasswordComponent },
-  { path: 'redirect', component: RedirectPageComponent},
-  { path: 'modify/:gameid', component: UpdateCatalogueComponent},
-  { path: 'add', component: UpdateCatalogueComponent}
+  { path: 'redirect', component: RedirectPageComponent },
+  { path: 'modify/:gameid', component: UpdateCatalogueComponent },
+  { path: 'add', component: UpdateCatalogueComponent }
 ];
 
 @NgModule({
@@ -117,7 +117,7 @@ const routes: Routes = [
     MatProgressSpinnerModule,
     MatSnackBarModule,
     MatGridListModule,
-    MatBadgeModule, 
+    MatBadgeModule,
     MatListModule,
     MatDialogModule,
     MatStepperModule,

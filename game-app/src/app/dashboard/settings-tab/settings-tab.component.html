@@ -1,5 +1,4 @@
 <body>
-	<!--<a href="https://psnprofiles.com/ikemenzi"> <img src="https://card.psnprofiles.com/2/ikemenzi.png" border="0"></a>-->
 	<app-check-user-verified></app-check-user-verified>
 	<div id="container" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified; else loading">
 		<br>
@@ -14,7 +13,7 @@
 			</div>
 
 			<div id="cont">
-				<div id="name">{{authService.currentUserName}}</div>
+				<div id="name">{{authService.currentUsername}}</div>
 				<div id="rst"> 
 					<div>{{ authService.currentEmail }}</div>
 					<button mat-stroked-button color="accent" (click)="resetPsw()">Reset Password</button>

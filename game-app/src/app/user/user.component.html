@@ -12,13 +12,12 @@
 					<img mat-card-md-image id="img" src="../../../assets/User.png">
 
 					<div id="wait" *ngIf="hasRequest">
-						<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia
-							inviata</button>
+						<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia inviata</button>
 					</div>
 
 					<div id="notfriends" *ngIf="!isFriend && !hasRequest">
 						<button class="btn btn-outline-primary"
-							(click)="userLoggedService.sendRequest(userid,authService.currentUserName,authService.currentUserId); hasRequest=true">Aggiungi
+							(click)="userLoggedService.sendRequest(userid,authService.currentUsername,authService.currentUserId); hasRequest=true">Aggiungi
 							Amico
 							<mat-icon>person_add</mat-icon>
 						</button>
@@ -114,7 +113,7 @@
 							<div id="flexp" *ngIf="gameList$ | async; let list">
 								<ng-container *ngFor="let u of list">
 									<mat-card id="gcard">
-										<img mat-card-lg-image [src]="util.getGameImgUrl(u.payload.doc.data().title)">
+										<img mat-card-lg-image [src]="util.getGameImageUrl(u.payload.doc.id)">
 										<div id="gamedata">
 											<mat-card-title [routerLink]="['/games', u.payload.doc.id]">
 												{{ util.capitalize(u.payload.doc.data().title) }}
@@ -143,7 +142,7 @@
 									*ngIf="(viewlist === userlists[0].code && (myGameList$ | async)); let mylist">
 
 									<mat-card class="com">
-										<mat-card-title> Statistiche di {{authService.currentUserName}}</mat-card-title>
+										<mat-card-title> Statistiche di {{authService.currentUsername}}</mat-card-title>
 										<mat-card-content>
 											Giochi totali: {{mylist.length}} <br>
 											Media di Completamento: {{util.avgTime(mylist)}} <br>
