@@ -21,23 +21,26 @@ export class AdminService {
   updateGame(title: string, developer: string, price: number, release: Date, publisher: string,
     platform: string[], genre: string[], bio: string, img?: File, progress?: (perc: number) => void, gameid?: string): Promise<boolean> {
 
+    //Tolgo l'orario dalla data
+    release = new Date(release.getFullYear(), release.getMonth(), release.getDate());
+
     let doc = this.db.collection("Games").doc(gameid);
 
-    if (img)
+    if (img) {
       //Faccio prima l'upload dell'immagine, in modo che se fallisce non ho sporcato il db.
       return this.uploadGameImg(doc.ref.id, img, progress)
-        .then(r =>
-          doc.set({
+        .then(r => doc.update({
             title: title, developer: developer, price: price,
             release: release, publisher: publisher, platform: platform, genre: genre, bio: bio
           }).then(() => true).catch(err => false))
         .catch(e => false);
+    }
     else
-      return doc.set({
+      return doc.update({
         title: title, developer: developer, price: price, release: release,
         publisher: publisher, platform: platform, genre: genre, bio: bio
       }).then(() => true).catch(err => false);
-
+    
 
   }
 

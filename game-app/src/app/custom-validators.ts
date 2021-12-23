@@ -2,6 +2,7 @@ import { AngularFirestore } from "@angular/fire/firestore";
 import { AbstractControl, AsyncValidatorFn, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { from, Observable } from "rxjs";
 import { debounceTime, map } from "rxjs/operators";
+import { GameCollectionService } from "./services/game-collection.service";
 import { UserCollectionService } from "./services/user-collection.service";
 import { UtilService } from "./services/util.service";
 
@@ -10,7 +11,7 @@ export class CustomValidators {
         Questo validators verifica viene applicato ai form group e controlla che i due controlli presentati in ingresso
         abbiano lo stesso valore. Se uno dei parametri non è valido restituisce null.
     */
-    static matchValidator(control1: string, control2: string) : ValidationErrors | null {
+    static matchValidator(control1: string, control2: string): ValidationErrors | null {
         return (control: AbstractControl): ValidationErrors | null => {
             let c1 = control.get(control1);
             let c2 = control.get(control2);
@@ -41,6 +42,15 @@ export class CustomValidators {
         };
     }
 
+    static selectionListRequired(): ValidatorFn {
+        //"[0-9]?[0-9]?[0-9]?[0-9](\.)?(?(1)[0-9][0-9]?|$)"
+        return (control: AbstractControl): ValidationErrors | null => {
+            if( control.value == undefined || (control.value as string[]).length == 0 )
+                return {required: {value: true}};
+            return null;
+        };
+    }
+
     /*
         Questo validators asincrono verifica che il controllo sul quale viene applicato non presenti un valore 
         che corrisponde di già ad un username presente nel db corrente.
@@ -54,7 +64,7 @@ export class CustomValidators {
                     }
                 )
             );
-            
+
         };
     }
 
@@ -62,16 +72,35 @@ export class CustomValidators {
         Questo validators asincrono verifica che il controllo sul quale viene applicato non presenti un valore 
         che corrisponde di già ad un'email presente nel db corrente.
     */
-        static existingEmailValidator(util: UtilService): AsyncValidatorFn {
-            return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
-                return from(util.searchUserByEmail(control.value).get()).pipe(
-                    debounceTime(500), map(
-                        res => {
-                            return (res && !res.empty) ? { 'emailExists': true } : null;
-                        }
-                    )
-                );
-                
-            };
-        }
+    static existingEmailValidator(util: UtilService): AsyncValidatorFn {
+        return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+            return from(util.searchUserByEmail(control.value).get()).pipe(
+                debounceTime(500), map(
+                    res => {
+                        return (res && !res.empty) ? { 'emailExists': true } : null;
+                    }
+                )
+            );
+
+        };
+    }
+
+    /*
+        Questo validators asincrono verifica che il controllo sul quale viene applicato non presenti un valore 
+        che corrisponde di già ad un titolo presente nel catalogo corrente. Nel caso viene passato l'argomento
+        actual, tale validator restituisce false se il valore del controller è pari ad actual.
+    */
+    static existingTitleGameValidator(catalogue: GameCollectionService, actual?: string): AsyncValidatorFn {
+        return (control: AbstractControl): Promise<ValidationErrors | null> | Observable<ValidationErrors | null> => {
+            return from(catalogue.getGameByTitle(control.value).get()).pipe(
+                debounceTime(500), map(
+                    res => {
+                        if (actual && actual == control.value)
+                            return null;
+                        return (res && !res.empty) ? { 'titleGameExists': true } : null;
+                    }
+                )
+            );
+        };
+    }
 }

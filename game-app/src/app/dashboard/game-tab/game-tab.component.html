@@ -14,13 +14,13 @@
 
 			<div id="filtersDiv">
 				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()"
-					[(ngModel)]="genreSelected">
+					[(ngModel)]="filters.genre">
 					<option value=""> Tutti i generi </option>
 					<option *ngFor="let g of genreList"> {{g}} </option>
 				</select>
 
 				<select class="btn btn-secondary dropdown-toggle" (change)="onChangeFilter()"
-					[(ngModel)]="platformSelected">
+					[(ngModel)]="filters.platform">
 					<option value="">
 						Tutte le Piattaforme
 					</option>
@@ -41,11 +41,13 @@
 									<mat-card-content>Ore giocate: {{game.payload.doc.data().completetime}}
 									</mat-card-content>
 
-									<mat-card-content>Prezzo : {{game.payload.doc.data().price}} <span matSuffix>&euro;</span>
+									<mat-card-content>Prezzo : {{game.payload.doc.data().price}} <span
+											matSuffix>&euro;</span>
 									</mat-card-content>
 									<mat-card-content *ngIf="game.payload.doc.data().vote != null">Voto :
 										{{game.payload.doc.data().vote}}</mat-card-content>
-									<mat-card-content >Piattaforme : {{game.payload.doc.data().platform}}</mat-card-content>
+									<mat-card-content>Piattaforme : {{game.payload.doc.data().platform}}
+									</mat-card-content>
 								</div>
 							</mat-card-title>
 
@@ -79,18 +81,16 @@
 		</div>
 
 		<div id="statsdiv">
+			<mat-card id="shoppingDiv">
+				<mat-card-title> Report Spese </mat-card-title>
+				<app-shopping-report *ngIf="updateReport" [updateReport]="updateReport"></app-shopping-report>
+			</mat-card>
+			
 			<div *ngIf="games$ | async; let games">
-
-				<mat-card id="shoppingDiv">
-					<mat-card-title> Report Spese </mat-card-title>
-					<app-shopping-report [genreSelected]="genreSelected" [platformSelected]="platformSelected">
-					</app-shopping-report>
-				</mat-card>
-
 				<mat-card id="timeDIv" *ngIf="viewlist === userlists[0].code && games.length > 0 && !updateForm">
 					<mat-card-title> Media dei tempi di completamento</mat-card-title>
-					<mat-card-content class="rett">Il numero di giochi e': {{games.length}} </mat-card-content>
-					<mat-card-content class="rett">Il numero medio di tempi di completamento e': {{util.avgTime(games)}}
+					<mat-card-content class="rett">Numero giochi completati: {{games.length}} </mat-card-content>
+					<mat-card-content class="rett">Tempo di completamento medio: {{util.avgTime(games)}}
 					</mat-card-content>
 				</mat-card>
 			</div>

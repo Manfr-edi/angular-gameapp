@@ -134,12 +134,13 @@ export class UserCollectionService {
 			.catch(e => { if (old_doc) this.getGameFromList(gameid, list).update(old_doc); return false }); //Ripristino e restituisco false
 	}
 
-	async GetSpese(platformSelected: string, genreSelected: string, userid?: string): Promise<Spese> {
+	async GetSpese(filters?: { platform?: string, genre?: string }, userid?: string): Promise<Spese> {
 		let sum = 0;
 		let count = 0;
 
 		for (let i = 0; i < 2; i++) {
-			await this.getGamesWithPlatGenNotEmpty(userlist[i].code, platformSelected, genreSelected, userid)
+			await (filters ? this.getGamesWithPlatGenNotEmpty(userlist[i].code, filters, userid) :
+				this.getList(userlist[i].code, userid))
 				.get().forEach(docs => docs.forEach(doc => {
 					sum += doc.get("price");
 					count++;
@@ -179,30 +180,16 @@ export class UserCollectionService {
 
 	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente indicato
 	//che rispetta dei filtri(piattaforma e genere) presentati in ingresso, nel caso un filtro è '', non viene considerato
-	getGamesWithPlatGenNotEmpty(list: string, platform: string, genre: string, userid?: string): AngularFirestoreCollection {
+	getGamesWithPlatGenNotEmpty(list: string, filters: { platform?: string, genre?: string }, userid?: string): AngularFirestoreCollection {
 		return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
 			let a = (ref as Query<DocumentData>);
-			if (platform !== '')
-				a = a.where("platform", "==", platform);
-			if (genre !== '')
-				a = a.where("genre", "array-contains", genre)
+			if (filters.platform && filters.platform !== '')
+				a = a.where("platform", "==", filters.platform);
+			if (filters.genre && filters.genre !== '')
+				a = a.where("genre", "array-contains", filters.genre)
 			return a;
 		});
 	}
-
-	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente attualmente loggato
-	//che rispetta dei filtri presentati in ingresso, in particare i filtri sono di uguaglianza e i valori non devono essere nulli.
-	getGamesWithEqualGenre(list: string, val: string, userid?: string): AngularFirestoreCollection {
-		return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
-			let a = (ref as Query<DocumentData>);
-			if (val !== '')
-				a = a.where("genre", "array-contains", val)
-
-			return a;
-		});
-	}
-
-
 
 
 }

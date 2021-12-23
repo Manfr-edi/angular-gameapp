@@ -76,12 +76,13 @@ export class AuthService {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((data) => {
         this.authState = data.user;
-        return this.db.collection("Users").doc(data.user?.uid).set({
+        this.db.collection("Users").doc(data.user?.uid).set({
           username: username,
           email: email
-        }).then(() => { data.user?.sendEmailVerification(); return undefined; }).catch(
-          err => undefined)
-          .catch(err => AuthError.GeneralError);
+        });
+        data.user?.sendEmailVerification();
+
+        return undefined;
       })
       .catch(err => this.getError(err.code));
   }

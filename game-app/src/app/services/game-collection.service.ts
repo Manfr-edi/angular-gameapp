@@ -34,6 +34,11 @@ export class GameCollectionService {
       ref.where('title', '>=', title).where('title', '<=', title + '\uf8ff'));
   }
 
+  getGameByTitle(title: string)
+  {
+    return this.db.collection('Games', ref => ref.where('title', '==', title));
+  }
+
   //Nel caso in cui sto inserendo il tempo di completamento
   //completedTime_old DEVE essere pari a 0
   //Nel caso in cui sto rimuovendo il tempo di completamento

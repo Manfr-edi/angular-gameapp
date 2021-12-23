@@ -13,8 +13,6 @@ import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 
-
-
 import { environment } from '../environments/environment';
 
 // Moduli per l'autenticazione
@@ -58,7 +56,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import {MatGridListModule} from '@angular/material/grid-list';
 import {MatBadgeModule} from '@angular/material/badge';
 import { NotificationComponent } from './notification/notification.component';
-import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
 import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component';
 import {MatListModule} from '@angular/material/list';
 import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
@@ -72,6 +69,8 @@ import { MatNativeDateModule } from '@angular/material/core';
 import {MatProgressBarModule} from '@angular/material/progress-bar'; 
 import {MatExpansionModule} from '@angular/material/expansion';
 import { ShowStarVoteComponent } from './show-star-vote/show-star-vote.component'; 
+import { AdminService } from './services/admin.service';
+import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -142,15 +141,15 @@ const routes: Routes = [
     ResetPasswordComponent,
     InsertNewPasswordComponent,
     NotificationComponent,
-    RedirectPageComponent,
     ShowChatsComponent,
     AddToListComponent,
     DeleteDialogComponent,
     UpdateCatalogueComponent,
     AdminControlComponent,
-    ShowStarVoteComponent
+    ShowStarVoteComponent,
+    RedirectPageComponent
   ],
-  providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService],
+  providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService, AdminService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

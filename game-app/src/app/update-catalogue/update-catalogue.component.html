@@ -4,27 +4,31 @@
             <form [formGroup]="mainDataForm">
                 <mat-form-field id="title" appearance="fill">
                     <mat-label>Titolo</mat-label>
-                    <input matInput placeholder="titolo" formControlName="title" required>
+                    <input (focusout)="checkTitle()" matInput placeholder="titolo" formControlName="title" required>
                 </mat-form-field>
 
                 <mat-form-field class="leftSide" appearance="fill">
                     <mat-label>Sviluppatore</mat-label>
-                    <input matInput placeholder="sviluppatore" formControlName="developer" required>
+                    <input (focusout)="checkField(mainDataForm,'developer', 'Sviluppatore')" matInput
+                        placeholder="sviluppatore" formControlName="developer" required>
                 </mat-form-field>
 
                 <mat-form-field class="rightSide" appearance="fill">
                     <mat-label>Publisher</mat-label>
-                    <input matInput placeholder="publisher" formControlName="publisher" required>
+                    <input (focusout)="checkField(mainDataForm,'publisher', 'Publisher')" matInput
+                        placeholder="publisher" formControlName="publisher" required>
                 </mat-form-field>
 
                 <mat-form-field class="leftSide" appearance="fill">
                     <mat-label>Prezzo d'uscita</mat-label>
-                    <input matInput placeholder="prezzo" formControlName="price" required>
+                    <input (focusout)="checkField(mainDataForm,'price','Prezzo d\'uscita', util.priceFieldErrorParameters())"
+                        matInput placeholder="prezzo" formControlName="price" required>
                 </mat-form-field>
 
                 <mat-form-field class="rightSide" appearance="fill">
                     <mat-label>Data d'uscita</mat-label>
-                    <input matInput [matDatepicker]="picker" formControlName="release" required>
+                    <input (focusout)="checkField(mainDataForm,'release','Data d\'uscita')" matInput
+                        [matDatepicker]="picker" formControlName="release" required>
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -38,12 +42,12 @@
             <form [formGroup]="platGenForm">
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
-                        <mat-panel-title> Piattaforme </mat-panel-title>
+                        <mat-panel-title [ngStyle]="{'color':platGenForm.controls['platform'].valid ? 'black' : 'red' }"> Piattaforme </mat-panel-title>
                         <mat-panel-description>
                             {{platGenForm.controls['platform'].value}}
-                          </mat-panel-description>
+                        </mat-panel-description>
                     </mat-expansion-panel-header>
-                    <mat-selection-list color="primary" class="list" formControlName="platform">
+                    <mat-selection-list (focusout)="checkField(platGenForm,'platform','Piattaforma')" color="primary" class="list" formControlName="platform">
                         <mat-list-option class="option" *ngFor="let plat of allPlatforms" [value]="plat">
                             {{plat}}
                         </mat-list-option>
@@ -52,12 +56,12 @@
 
                 <mat-expansion-panel>
                     <mat-expansion-panel-header>
-                        <mat-panel-title> Generi </mat-panel-title>
+                        <mat-panel-title [ngStyle]="{'color':platGenForm.controls['genre'].valid ? 'black' : 'red' }">Generi</mat-panel-title>
                         <mat-panel-description>
                             {{platGenForm.controls['genre'].value}}
-                          </mat-panel-description>
+                        </mat-panel-description>
                     </mat-expansion-panel-header>
-                    <mat-selection-list color="primary" class="list" formControlName="genre">
+                    <mat-selection-list (focusout)="checkField(platGenForm,'genre','Genere')" color="primary" class="list" formControlName="genre">
                         <mat-list-option class="option" *ngFor="let g of allGenre" [value]="g">
                             {{g}}
                         </mat-list-option>
@@ -110,4 +114,5 @@
     </mat-step>
 </mat-stepper>
 
-<mat-progress-bar *ngIf="imgUploading" id="progressBar" mode="determinate" [value]="uploadStateProgress"></mat-progress-bar>
+<mat-progress-bar *ngIf="imgUploading" id="progressBar" mode="determinate" [value]="uploadStateProgress">
+</mat-progress-bar>

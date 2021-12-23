@@ -48,8 +48,8 @@ export class UserComponent implements OnInit {
   }
 
   async ngOnInit() {
-    this.userSpese = await this.userCollectionService.GetSpese("", "", this.userid);
-    this.mySpese = await this.userCollectionService.GetSpese("", "");
+    this.userSpese = await this.userCollectionService.GetSpese(undefined, this.userid);
+    this.mySpese = await this.userCollectionService.GetSpese();
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
     this.hasRequest = await this.userLoggedService.checkRequest(this.userid,this.authService.currentUserId);
   }

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter } from '@angular/core';
 import { Observable } from 'rxjs';
 import { genreList } from 'src/app/data/genre/genre';
 import { platformList } from 'src/app/data/platform/platform';
@@ -25,12 +25,13 @@ export class GameTabComponent {
   updateForm = false;
 
   //Filtri
-  genreSelected = "";
-  platformSelected = "";
+  filters: { platform?: string, genre?: string } = { platform: '', genre: '' };
 
   gameid: string = '';
   games$: Observable<any[]> = new Observable;
   urls: Map<string, string> = new Map;
+
+  updateReport: EventEmitter<{ platform?: string, genre?: string }> = new EventEmitter;
 
   constructor(public authService: AuthService, public userCollectionService: UserCollectionService,
     private userLoggedService: UserLoggedService, public util: UtilService) {
@@ -48,15 +49,14 @@ export class GameTabComponent {
   }
 
   async onChangeFilter() {
-    this.games$ = this.userCollectionService.getGamesWithPlatGenNotEmpty(this.viewlist,
-      this.platformSelected, this.genreSelected).snapshotChanges();
-  }
-
-  async onChangeFilterGenre() {
-    this.games$ = this.userCollectionService.getGamesWithEqualGenre(this.viewlist, this.genreSelected).snapshotChanges();
+    this.games$ = this.userCollectionService.getGamesWithPlatGenNotEmpty(this.viewlist, this.filters).snapshotChanges();
+    this.updateReport.emit(this.filters);
   }
 
   completed(event: boolean) {
     this.updateForm = false;
+
+    //Mando il segnale che permette di aggiornare il report delle spese
+    this.updateReport.emit(this.filters);
   }
 }

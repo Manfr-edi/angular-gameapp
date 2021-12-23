@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, Router } from '@angular/router';
+import { CustomValidators } from '../custom-validators';
 import { genreList } from '../data/genre/genre';
 import { platformList } from '../data/platform/platform';
 import { AdminService } from '../services/admin.service';
@@ -34,7 +35,7 @@ export class UpdateCatalogueComponent {
   imgUploading: boolean = false;
   dirtyImg: boolean = false;
 
-  constructor(private authService: AuthService, private adminService: AdminService, private util: UtilService,
+  constructor(private authService: AuthService, private adminService: AdminService, public util: UtilService,
     private gameCollectionService: GameCollectionService, private route: ActivatedRoute, private router: Router,
     private fb: FormBuilder, private dialog: MatDialog, private snackBar: MatSnackBar) {
 
@@ -55,17 +56,21 @@ export class UpdateCatalogueComponent {
     });
 
     this.platGenForm = fb.group({
-      platform: [[''], Validators.required],
-      genre: ['', Validators.required]
+      platform: ['', CustomValidators.selectionListRequired()],
+      genre: ['', CustomValidators.selectionListRequired()]
     });
 
     this.bioForm = fb.group({
       bio: ['', [Validators.required, Validators.maxLength(10000)]]
     })
 
+
     //SE STO MODIFICANDO IL GIOCO DEVO PRECARICARE LE FORM
-    if (this.gameid)
+    if (this.gameid) {
       gameCollectionService.getGame(this.gameid).ref.get().then(game => {
+        this.mainDataForm.get('title')?.addAsyncValidators(CustomValidators.existingTitleGameValidator(gameCollectionService,
+          game.get("title")));
+
         //MAIN DATA
         this.mainDataForm.controls["title"].setValue(game.get("title"));
         this.mainDataForm.controls["developer"].setValue(game.get("developer"));
@@ -80,6 +85,9 @@ export class UpdateCatalogueComponent {
         //IMAGE
         util.getGameImageUrl(this.gameid!).then(url => { this.imgUrl = url; this.imgSetted = true; });
       });
+    }
+    else //Se sto aggiungendo un gioco 
+      this.mainDataForm.get('title')?.addAsyncValidators(CustomValidators.existingTitleGameValidator(gameCollectionService));
   }
 
   loadImage(event: any) {
@@ -88,7 +96,7 @@ export class UpdateCatalogueComponent {
     //Carico l'immagine in modo da poterla mostrare
     var reader = new FileReader();
     reader.readAsDataURL(this.img)
-    reader.onload = () => { this.imgUrl = reader.result as string; this.imgSetted = true }
+    reader.onload = () => { this.imgUrl = reader.result as string; this.dirtyImg = true; this.imgSetted = true }
   }
 
   cancelImage() {
@@ -99,7 +107,7 @@ export class UpdateCatalogueComponent {
   }
 
   progressUploadImg(perc: number) {
-   this.uploadStateProgress = perc;
+    this.uploadStateProgress = perc;
   }
 
   updateGame() {
@@ -122,5 +130,24 @@ export class UpdateCatalogueComponent {
       .finally(() => this.imgUploading = false)
   }
 
+  checkField(form: FormGroup, field: string, name: string, map?: Map<string, string>) {
+    let msg = this.util.getFieldMsgError(form.get(field) as FormControl, name, map);
 
+    if (msg)
+      this.snackBar.open(msg, 'Ok', { duration: 2000 });
+  }
+
+  checkTitle() {
+    this.checkField(this.mainDataForm, 'title', 'Titolo');
+
+    let msg = this.util.getFieldMsgError(this.mainDataForm.get('title') as FormControl, "Titolo");
+
+    if (!msg)
+      if (this.mainDataForm.get('title')?.hasError("titleGameExists"))
+        msg = "Titolo già presente nel catalogo!";
+
+    if (msg)
+      this.snackBar.open(msg, 'Ok', { duration: 2000 });
+
+  }
 }
