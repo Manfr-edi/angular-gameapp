@@ -3,22 +3,72 @@ body{
     background-repeat: repeat-xy;
     background-size: 150px;
     padding-top: 20px;
-    
 }
-#searchbar{
+
+#container
+{
     width: 90%;
     margin: auto;
 }
 
 .card{
-    width: 45%;
+    width: 30%;
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: row;
+    column-gap: 10px;
+}
+
+mat-card-title
+{
+    font-size: 20;
 }
 
 .flex{
-    padding: 10px;
+    padding: 10px 0;
     margin: 30px auto;
-    width: 90%;
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
+    column-gap: 5%
+}
+
+.content
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.divider
+{
+    background-color: white;
+    border-top-width: 3px;
+}
+
+.requestTitle
+{
+    margin-top: 10px;
+    font-size: 20;
+    font-weight: bold;
+    color: white;
+}
+
+.friendImg
+{
+    cursor: pointer;
+}
+
+.friendName
+{
+    cursor: pointer;
+}
+
+.requestContent
+{
+    display: flex;
+    flex-direction: row;
     justify-content: space-between;
+    width: 100%;
+    align-items: baseline;
 }

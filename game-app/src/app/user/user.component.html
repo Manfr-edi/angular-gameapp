@@ -10,11 +10,10 @@
 					<img mat-card-md-image id="img" [src]="userImgUrl ? userImgUrl : '../../../assets/User.png'">
 
 					<div id="wait" *ngIf="hasRequest">
-						<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia
-							inviata</button>
+						<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia inviata</button>
 					</div>
 
-					<div id="notfriends" *ngIf="!isFriend && !hasRequest">
+					<div id="notfriends" *ngIf="!isFriend && !hasRequest && !requestReceived">
 						<button class="btn btn-outline-primary"
 							(click)="userLoggedService.sendRequest(userid,authService.currentUsername,authService.currentUserId); hasRequest=true">Aggiungi
 							Amico
@@ -28,6 +27,16 @@
 						<button class="btn btn-outline-primary"
 							(click)="userLoggedService.removeFriend(userid,authService.currentUserId); isFriend = false">Rimuovi
 							Amico
+						</button>
+					</div>
+
+					<div *ngIf="requestReceived">
+						<button class="btn btn-outline-primary"
+							(click)="userLoggedService.acceptRequest(userid, userInfo.username, authService.currentUserId); isFriend = true; requestReceived=false">Accetta
+						</button>
+
+						<button class="btn btn-outline-primary"
+							(click)="userLoggedService.removeRequest(userid, authService.currentUserId); isFriend = false; requestReceived=false">Rifiuta
 						</button>
 					</div>
 				</mat-card>

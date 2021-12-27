@@ -19,40 +19,52 @@
 		</mat-autocomplete>
 
 		<div class="flex" *ngIf="friends$ | async; let friends">
-			
-				<ng-container *ngFor="let friend of friends">
-					<mat-card class="card">
-					<img mat-card-lg-image [src]="imgUrlFriends.has(friend.payload.doc.id) ? imgUrlFriends.get(friend.payload.doc.id) : '../../../assets/User.png'">
-					<mat-card-title [routerLink]="['/user', friend.payload.doc.id]">
-						{{ friend.payload.doc.data().username }}
-					</mat-card-title>
+			<ng-container *ngFor="let friend of friends">
+				<mat-card class="card">
+					<img class="friendImg" mat-card-lg-image
+						[src]="imgUrlFriends.has(friend.payload.doc.id) ? imgUrlFriends.get(friend.payload.doc.id) : '../../../assets/User.png'">
 
-					<button class="btn btn-outline-primary"
-						(click)="userLoggedService.removeFriend(friend.payload.doc.id, authService.currentUserId)">Rimuovi
-						Amico
-					</button>
-					</mat-card>
-				</ng-container>
-			
+					<div class="content">
+						<mat-card-title class="friendName" [routerLink]="['/user', friend.payload.doc.id]">
+							{{ friend.payload.doc.data().username }}
+						</mat-card-title>
+
+						<button mat-raised-button color="accent"
+							(click)="removeFriend(friend.payload.doc.id, friend.payload.doc.data().username)">Rimuovi
+							Amico
+						</button>
+					</div>
+				</mat-card>
+			</ng-container>
+
 			<div *ngIf="friends.length === 0">Nessun amico</div>
 		</div>
 
-		<div *ngIf="requests$ | async; let requests">
-			<ul>
-				<div *ngFor="let request of requests">
 
-					<a [routerLink]="['/user', request.payload.doc.data().username]">
-						{{ request.payload.doc.data().username }}
-					</a>
-					<button class="btn btn-outline-primary"
-						(click)="userLoggedService.acceptRequest(request.payload.doc.id, request.payload.doc.data().username, authService.currentUserId)">Accetta
-						Amico
-					</button>
-					<button class="btn btn-outline-primary"
-						(click)="userLoggedService.removeRequest(request.payload.doc.id)">Rifiuta Amico
-					</button>
-				</div>
-			</ul>
+		<div *ngIf="requests$ | async; let requests">
+			<ng-container *ngIf="requests.length > 0">
+				<mat-divider class="divider"></mat-divider>
+				<div class="requestTitle">Richieste di amicizia</div>
+			</ng-container>
+
+			<div class="flex">
+				<mat-card *ngFor="let request of requests" class="card">
+					<div class="requestContent">
+						<mat-card-title class="friendName" [routerLink]="['/user', request.payload.doc.id]">
+							{{ request.payload.doc.data().username }}
+						</mat-card-title>
+
+						<button mat-raised-button color="accent"
+							(click)="userLoggedService.acceptRequest(request.payload.doc.id, request.payload.doc.data().username, authService.currentUserId)">Accetta
+							Amico
+						</button>
+						<button mat-raised-button color="accent"
+							(click)="userLoggedService.removeRequest(request.payload.doc.id)">Rifiuta Amico
+						</button>
+					</div>
+				</mat-card>
+			</div>
 		</div>
+
 	</div>
 </body>

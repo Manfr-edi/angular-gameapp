@@ -1,6 +1,6 @@
 <div id="container" *ngIf="messages$ | async; let message">
     <div id="topbar">
-        <img  id="img" src="../../../assets/User.png">
+        <img  id="img" [src]="imgUrlUser ? imgUrlUser : '../../../assets/User.png'">
         <div id="name">{{friendUsername}}</div>
     </div>
     <div id="containerChat">

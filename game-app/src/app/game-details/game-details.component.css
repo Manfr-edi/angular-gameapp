@@ -20,7 +20,7 @@ body {
     'stat';
     grid-gap: 10px;
     padding: 10px;       
-    max-width: 80%;
+    width: 80%;
 }
 .tab >div{
 text-align: start;

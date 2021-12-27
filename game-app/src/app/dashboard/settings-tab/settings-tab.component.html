@@ -11,7 +11,7 @@
 
 				<div id="imageBtn">
 					<button mat-raised-button color="accent" (click)="chooseImage()">Carica
-						<input id="file-upload" type="file" (change)="loadUserImage($event)" />
+						<input id="file-upload" type="file" accept="image/jpeg" (change)="loadUserImage($event)" />
 					</button>
 
 					<button mat-raised-button color="accent" [disabled]="!userImgUrl" (click)="cancelUserImage()">Cancella</button>

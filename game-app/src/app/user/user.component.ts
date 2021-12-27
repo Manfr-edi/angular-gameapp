@@ -33,6 +33,7 @@ export class UserComponent implements OnInit {
   userImgUrl?: string;
   imgUrlGameList: Map<string, string> = new Map;
 
+  requestReceived = true;
   constructor(private route: ActivatedRoute, public authService: AuthService, private userCollectionService: UserCollectionService,
     public userLoggedService: UserLoggedService, public util: UtilService, private router: Router) {
 
@@ -58,6 +59,8 @@ export class UserComponent implements OnInit {
     this.mySpese = await this.userCollectionService.GetSpese();
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
     this.hasRequest = await this.userLoggedService.checkRequest(this.userid, this.authService.currentUserId);
+    this.requestReceived = await this.userLoggedService.checkRequest(this.authService.currentUserId, this.userid);
+    
     if (this.isFriend)
       await this.CommonGames();
   }

@@ -19,8 +19,11 @@ export class ChatComponent implements OnChanges {
   friendID: string = "";
   friendUsername = "";
 
+  imgUrlUser?: string;
+
   constructor(public authService: AuthService, private userLoggedService: UserLoggedService, public util: UtilService) {
   }
+
   async ngOnInit(){
     this.friendUsername = await this.getFriendUsername();
   }
@@ -29,6 +32,8 @@ export class ChatComponent implements OnChanges {
     this.userLoggedService.chatExistsByID(this.chatID).then(e => this.curChatExists = e)
     this.friendID = this.userLoggedService.getFriendIDFromChatID(this.chatID);
     this.friendUsername = await this.getFriendUsername();
+
+    this.util.getUserImageUrl(this.friendID).then(url => { this.imgUrlUser = url;});
   }
 
   async sendMessage() {

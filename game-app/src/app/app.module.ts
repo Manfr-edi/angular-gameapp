@@ -75,7 +75,7 @@ import { MatExpansionModule } from '@angular/material/expansion';
 import { ShowStarVoteComponent } from './show-star-vote/show-star-vote.component';
 import { AdminService } from './services/admin.service';
 import { RedirectPageComponent } from './authentication/redirect-page/redirect-page.component';
-
+import { AcceptRequestDialogComponent } from './dashboard/friend-tab/accept-request-dialog/accept-request-dialog.component';
 
 const routes: Routes = [
   { path: '', component: GameCatalogueComponent },
@@ -155,7 +155,8 @@ const routes: Routes = [
     UpdateCatalogueComponent,
     AdminControlComponent,
     ShowStarVoteComponent,
-    RedirectPageComponent
+    RedirectPageComponent,
+    AcceptRequestDialogComponent
   ],
   providers: [AuthService, UserCollectionService, GameCollectionService, UserLoggedService, UtilService, AdminService],
   bootstrap: [AppComponent]

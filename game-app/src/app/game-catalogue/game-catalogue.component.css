@@ -1,4 +1,3 @@
-
 body {
   padding-top: 20px;
   background-image: url("../../assets/background.png");
@@ -8,10 +7,46 @@ body {
   height: 93vh;
 }
 
+#search {
+  width: 90%;
+  margin: auto;
+}
+
+#container {
+  overflow-y:auto;
+  height: 83vh;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  justify-content: space-around;
+  row-gap: 20px;
+  margin-top: 20px;
+
+  padding-bottom: 50px;
+  scrollbar-width: none;  /* Firefox */
+}
+
+#container::-webkit-scrollbar {
+  display: none;
+}
+
+#card {
+  width: 40%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+}
+
+mat-card img {
+  width: 20%;
+}
+
+mat-card img:hover{
+  cursor: pointer;
+}
+
 #gamedata{
   margin-left: 10px;
-  margin-top: auto;
-  margin-bottom: auto;
   display: flex;
   flex-direction: column;
   width: 50%;
@@ -21,65 +56,16 @@ mat-card-title:hover{
   cursor: pointer;
 }
 
-mat-card content {
-  margin-left: 10px;
-  display: block;
-  margin: auto;
-}
-
-mat-card img {
-  width: 20%;
-  margin-left: 0;
-
-}
-
-mat-card img:hover{
-  cursor: pointer;
-}
-
 #btn {
-  margin: auto 30 auto auto;
+  margin-right: 30px;
+  margin-left: auto;
   width: 75px;
   height: 75px;
   font-size: large;
 }
 
-#card {
-  padding: 10px;
-  margin-bottom: 10px;
-  margin-right: auto;
-  margin-left: auto;
-  width: 600px;
-  display: inline-flex;
-}
-
-#search {
-  width: 90%;
-  margin: auto;
-}
-
 #spinner {
   margin: auto;
-}
-
-.flexp {
-  overflow-y:scroll;
-  height: 100%;
-  padding: 20px 0 50px 0;
-  display: flex;
-  flex-wrap: wrap;
-  flex-direction: row;
-  max-height: calc(5 * 200px);
-  margin-left: auto;
-  margin-right: auto;
-  justify-content: space-around;
-  row-gap: 20px;
-  margin-top: 20px;
-}
-
-::-webkit-scrollbar {
-  width: 0px;
-  background: transparent; /* make scrollbar transparent */
 }
 
 /*ADMIN*/

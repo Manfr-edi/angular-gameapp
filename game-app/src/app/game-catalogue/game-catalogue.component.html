@@ -2,44 +2,39 @@
   <input type="text" id="search" class="form-control form-control-sm" (keyup)="onKey($event)"
     placeholder="Inserisci titolo">
 
-  <div id="gamesDiv" *ngIf="games$ | async; let games; else loading">
-    <ul class="flexp">
-      <div *ngFor="let game of games">
-        <mat-card id="card">
+  <div id="container" *ngIf="games$ | async; let games; else loading">
+    <mat-card id="card" *ngFor="let game of games">
+      <img mat-card-lg-image [src]="urls.get(game.payload.doc.id)" [routerLink]="['/games', game.payload.doc.id]">
 
-          <img mat-card-lg-image  [src] = "urls.get(game.payload.doc.id)"
-            [routerLink]="['/games', game.payload.doc.id]">
+      <div id="gamedata">
+        <mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
+          {{ util.capitalize(game.payload.doc.data().title) }}
+        </mat-card-title>
 
-          <div id="gamedata">
-            <mat-card-title id="title" [routerLink]="['/games', game.payload.doc.id]">
-              {{ util.capitalize(game.payload.doc.data().title) }}
-            </mat-card-title>
+        <mat-card-content>
+          Genere: {{game.payload.doc.data().genre}}
+        </mat-card-content>
 
-            <mat-card-content>
-              Genere: {{game.payload.doc.data().genre}}
-            </mat-card-content>
+        <mat-card-content *ngIf="game.payload.doc.data().completedtimecount > 0">
+          Tempo medio: {{game.payload.doc.data().completedtimeavg | number : '1.0-2' }} ore con
+          {{game.payload.doc.data().completedtimecount == 1 ? "un solo utente" :
+          game.payload.doc.data().completedtimecount + " utenti"}}
+        </mat-card-content>
 
-            <mat-card-content *ngIf="game.payload.doc.data().completedtimecount > 0">
-              Tempo medio: {{game.payload.doc.data().completedtimeavg | number : '1.2-2' }} ore con
-               {{game.payload.doc.data().completedtimecount == 1 ? "un solo utente" : game.payload.doc.data().completedtimecount + " utenti"}}
-            </mat-card-content>
-
-            <mat-card-content>
-              <app-show-star-vote [value]="game.payload.doc.data().voteavg" [count]="game.payload.doc.data().votecount"></app-show-star-vote>
-            </mat-card-content>
-          </div>
-
-          <button *ngIf="!authService.isLogged || authService.isUserEmailLoggedIn" mat-fab id="btn" color="primary"
-            [routerLink]="['/games', game.payload.doc.id]">Apri</button>
-
-          <div id="adminControl" *ngIf="authService.isAdmin">
-            <app-admin-control [gameid]="game.payload.doc.id"></app-admin-control>
-          </div>
-
-        </mat-card>
-
+        <mat-card-content>
+          <app-show-star-vote [value]="game.payload.doc.data().voteavg" [count]="game.payload.doc.data().votecount">
+          </app-show-star-vote>
+        </mat-card-content>
       </div>
-    </ul>
+
+      <button *ngIf="!authService.isLogged || authService.isUserEmailLoggedIn" mat-fab id="btn" color="primary"
+        [routerLink]="['/games', game.payload.doc.id]">Apri</button>
+
+      <div id="adminControl" *ngIf="authService.isAdmin">
+        <app-admin-control [gameid]="game.payload.doc.id"></app-admin-control>
+      </div>
+
+    </mat-card>
     <div *ngIf="games.length === 0">Nessun gioco trovato</div>
   </div>
 
