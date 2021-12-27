@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AngularFirestoreCollection, DocumentData } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
@@ -16,23 +17,29 @@ export class FriendTabComponent implements OnInit {
   friends$: Observable<any[]>;
   requests$: Observable<any[]> = new Observable;
 
+  imgUrlFriends: Map<string, string> = new Map;
+
   constructor(public authService: AuthService, public userLoggedService: UserLoggedService, private util: UtilService) {
     this.users$ = new Observable();
-    this.friends$ = userLoggedService.getFriends().snapshotChanges();
+
+    //Carico la lista degli amici e le relative foto profilo
+    let friends = userLoggedService.getFriends();
+    util.loadUserListImgUrls(friends, this.imgUrlFriends)
+    this.friends$ = friends.snapshotChanges();
   }
 
-  ngOnInit(): void {    
+  ngOnInit(): void {
     this.requests$ = this.userLoggedService.getRequests().snapshotChanges();
   }
+
 
   onKey(event: any) {
     let s = event.target.value as string;
 
     if (s == null || s.length == 0)
       this.users$ = new Observable();
-    else
-     // this.users$ = this.userLoggedService.searchUser(s.toLowerCase()).snapshotChanges();
-     this.users$ = this.util.searchUser(s.toLowerCase()).snapshotChanges();
+    else 
+      this.users$ = this.util.searchUser(s.toLowerCase()).snapshotChanges();
   }
 
 

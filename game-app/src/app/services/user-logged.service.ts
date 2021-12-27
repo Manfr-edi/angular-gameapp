@@ -13,8 +13,6 @@ export interface MessageInfo {
 	time: Date;
 };
 
-
-
 @Injectable({
 	providedIn: 'root'
 })
@@ -54,7 +52,34 @@ export class UserLoggedService {
 	}
 
 	updateUser(data: Partial<DocumentData>, userid?: string) {
-		this.getUserDoc(userid).update(data);
+		return this.getUserDoc(userid).update(data).then(() => true).catch(e => false);
+	}
+
+	uploadUserImg(img: File, progress?: (perc: number) => void, userid?: string): Promise<boolean> {
+		let uid = userid ? userid : this.getUserID();
+
+		let uploadTask = firebase.default.storage().ref().child(this.util.getUserImageChild(uid)).put(img);
+
+		uploadTask.on('state_changed', snapshot => { //Upload in progress
+			if (progress)
+				progress(snapshot.bytesTransferred / snapshot.totalBytes * 100)
+		},
+			err => {
+				return null;
+			},
+			() => { //Upload riuscito
+				//uploadTask.snapshot.ref.getDownloadURL().then(url => { this.imgUrl = url });
+			})
+
+		return uploadTask.then(() => true).catch(err => false);
+	}
+
+	cancelUserImg(userid?: string) {
+		let uid = userid ? userid : this.getUserID();
+
+		return firebase.default.storage().ref().child(this.util.getUserImageChild(uid)).delete()
+			.then(() => true)
+			.catch(e => false)
 	}
 
 	/*************************************
@@ -117,7 +142,7 @@ export class UserLoggedService {
 	}
 
 	getFriendIDFromChatID(chatID: string, userid?: string) {
-		let id = userid ? userid : this.getUserID();		
+		let id = userid ? userid : this.getUserID();
 		return chatID.substring(0, 28) === id ? chatID.substring(28) : chatID.substring(0, 28);
 	}
 
@@ -153,7 +178,7 @@ export class UserLoggedService {
 	 **************************************/
 
 	getChatID(user1: string, user2?: string) {
-		
+
 		let u2 = user2 ? user2 : this.getUserID();
 		console.log("getchatid")
 		return user1 < u2 ? user1 + u2 : u2 + user1;

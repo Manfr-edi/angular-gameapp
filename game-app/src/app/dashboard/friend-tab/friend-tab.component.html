@@ -22,7 +22,7 @@
 			
 				<ng-container *ngFor="let friend of friends">
 					<mat-card class="card">
-					<img mat-card-lg-image src="../../../User.png">
+					<img mat-card-lg-image [src]="imgUrlFriends.has(friend.payload.doc.id) ? imgUrlFriends.get(friend.payload.doc.id) : '../../../assets/User.png'">
 					<mat-card-title [routerLink]="['/user', friend.payload.doc.id]">
 						{{ friend.payload.doc.data().username }}
 					</mat-card-title>

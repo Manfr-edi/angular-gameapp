@@ -6,46 +6,47 @@
 		<br>
 
 		<div id="grid">
-
 			<div id="img">
-				<img src="../../../assets/User.png">
-				<button mat-raised-button color="accent">Modifica Immagine</button>
-			</div>
+				<img [src]="userImgUrl ? userImgUrl : '../../../assets/User.png'">
 
+				<div id="imageBtn">
+					<button mat-raised-button color="accent" (click)="chooseImage()">Carica
+						<input id="file-upload" type="file" (change)="loadUserImage($event)" />
+					</button>
+
+					<button mat-raised-button color="accent" [disabled]="!userImgUrl" (click)="cancelUserImage()">Cancella</button>
+					<button mat-raised-button color="accent" [disabled]="!canLoad" (click)="confirmUserImage()">Conferma</button>
+				</div>
+			</div>
 			<div id="cont">
 				<div id="name">{{authService.currentUsername}}</div>
-				<div id="rst"> 
+				<div id="rst">
 					<div>{{ authService.currentEmail }}</div>
 					<button mat-stroked-button color="accent" (click)="resetPsw()">Reset Password</button>
 				</div>
 			</div>
-
-			<div id="form" *ngIf="!showmodifyDesc">
+			<div id="form">
 				<form (ngSubmit)="onSubmit()" [formGroup]="dataForm">
 					<div id="prova">
 						<mat-form-field id="biomod" appearance="fill">
 							<mat-label>Descrizione</mat-label>
-							<textarea matInput placeholder="Bio" formControlName="bio" maxlength="250" value={{bio}}></textarea>
+							<textarea matInput placeholder="Bio" formControlName="bio" maxlength="250"></textarea>
 						</mat-form-field>
 						<mat-form-field class="nick" appearance="fill">
 							<mat-label>Nickname Playstation</mat-label>
-							<input matInput type="text" placeholder="nickname" formControlName="nicknameps"
-								value={{nicknameps}}>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknameps">
 						</mat-form-field>
 						<mat-form-field class="nick" appearance="fill">
 							<mat-label>Nickname Microsoft</mat-label>
-							<input matInput type="text" placeholder="nickname" formControlName="nicknamexb"
-								value={{nicknamexb}}>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknamexb">
 						</mat-form-field>
 						<mat-form-field class="nick" appearance="fill">
 							<mat-label>Nickname Nintendo</mat-label>
-							<input matInput type="text" placeholder="nickname" formControlName="nicknament"
-								value={{nicknament}}>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknament">
 						</mat-form-field>
 						<mat-form-field class="nick" appearance="fill">
 							<mat-label>Nickname Steam</mat-label>
-							<input matInput type="text" placeholder="nickname" formControlName="nicknamest"
-								value={{nicknamest}}>
+							<input matInput type="text" placeholder="nickname" formControlName="nicknamest">
 						</mat-form-field>
 					</div>
 					<button id="conf" type="submit" mat-raised-button color="accent">Conferma Modifica</button>
@@ -120,20 +121,3 @@
 		<mat-spinner id="spinner"></mat-spinner>
 	</ng-template>
 </body>
-
-<!--
-		<div *ngIf="!showmodifyDesc">
-			<div id="bio" *ngIf="bio">Bio: {{ bio }}</div>
-			<div id="plat" *ngIf="nicknameps">Nickname Playstation: {{ nicknameps }}</div>
-			<div id="plat" *ngIf="nicknamexb">Nickname Microsoft: {{ nicknamexb }}</div>
-			<div id="plat" *ngIf="nicknament">Nickname Nintendo: {{ nicknament }}</div>
-			<div id="plat" *ngIf="nicknamest">Nickname Steam: {{ nicknamest }}</div>
-			<form id="prova" [formGroup]="dataForm">
-			<mat-form-field class="nick" appearance="fill">
-				<mat-label>Nickname Playstation</mat-label>
-				<input matInput type="text" placeholder="nickname" formControlName="nicknameps" value={{nicknameps}}>
-			</mat-form-field>
-		</form>
-			<button class="btn" mat-raised-button color="accent" (click)="showmodifyDesc=true">Modifica Dati</button>
-		</div>
-	-->

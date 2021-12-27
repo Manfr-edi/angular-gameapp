@@ -20,7 +20,7 @@
             </mat-card-content>
 
             <mat-card-content *ngIf="game.payload.doc.data().completedtimecount > 0">
-              Tempo medio: {{game.payload.doc.data().completedtimeavg}} ore con
+              Tempo medio: {{game.payload.doc.data().completedtimeavg | number : '1.2-2' }} ore con
                {{game.payload.doc.data().completedtimecount == 1 ? "un solo utente" : game.payload.doc.data().completedtimecount + " utenti"}}
             </mat-card-content>
 

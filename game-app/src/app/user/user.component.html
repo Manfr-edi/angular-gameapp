@@ -6,13 +6,12 @@
 			<div id="profile">
 
 				<mat-card id="card">
-
 					<mat-card-title>{{userInfo.username}} </mat-card-title>
-
-					<img mat-card-md-image id="img" src="../../../assets/User.png">
+					<img mat-card-md-image id="img" [src]="userImgUrl ? userImgUrl : '../../../assets/User.png'">
 
 					<div id="wait" *ngIf="hasRequest">
-						<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia inviata</button>
+						<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia
+							inviata</button>
 					</div>
 
 					<div id="notfriends" *ngIf="!isFriend && !hasRequest">
@@ -35,8 +34,8 @@
 				<div id="desc" *ngIf="userInfo.bio">Descrizione
 					<mat-card id="bio">
 						<mat-card-content>
-						{{userInfo.bio}}
-					</mat-card-content>
+							{{userInfo.bio}}
+						</mat-card-content>
 					</mat-card>
 				</div>
 			</div>
@@ -113,7 +112,7 @@
 							<div id="flexp" *ngIf="gameList$ | async; let list">
 								<ng-container *ngFor="let u of list">
 									<mat-card id="gcard">
-										<img mat-card-lg-image [src]="util.getGameImageUrl(u.payload.doc.id)">
+										<img mat-card-lg-image [src]="imgUrlGameList.get(u.payload.doc.id)">
 										<div id="gamedata">
 											<mat-card-title [routerLink]="['/games', u.payload.doc.id]">
 												{{ util.capitalize(u.payload.doc.data().title) }}
@@ -167,19 +166,20 @@
 							</div>
 							<div class="title2">Giochi in comune</div>
 							<div id="cards" *ngIf="common$; let common">
-								
+
 								<ng-container *ngFor="let u of common">
 									<mat-card class="com">
 										<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
 										<mat-card-content>
 											Lista : {{u.mylist}}
 											<div *ngIf="u.mylist===userlists[0].name">
-											Tempo di completamento mio: {{u.mytime }}
+												Tempo di completamento mio: {{u.mytime }}
 											</div>
-											<div *ngIf="u.mylist===userlists[0].name || u.friendlist===userlists[1].name">
-											Spese del gioco mie: {{u.myprice }}
+											<div
+												*ngIf="u.mylist===userlists[0].name || u.friendlist===userlists[1].name">
+												Spese del gioco mie: {{u.myprice }}
 											</div>
-											
+
 
 										</mat-card-content>
 									</mat-card>
@@ -189,11 +189,12 @@
 										<mat-card-content>
 											Lista : {{u.friendlist}}
 											<div *ngIf="u.friendlist===userlists[0].name">
-											Tempo di completamento: {{u.usertime }}
+												Tempo di completamento: {{u.usertime }}
 											</div>
-											<div *ngIf="u.friendlist===userlists[0].name || u.friendlist===userlists[1].name">
-											Spese del gioco: {{u.userprice }}
-										    </div>										
+											<div
+												*ngIf="u.friendlist===userlists[0].name || u.friendlist===userlists[1].name">
+												Spese del gioco: {{u.userprice }}
+											</div>
 
 										</mat-card-content>
 									</mat-card>

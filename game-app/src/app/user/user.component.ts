@@ -22,8 +22,6 @@ export class UserComponent implements OnInit {
   username = '';
   userid: string;
 
- 
-
   //Dati visualizzati
   userInfo$: Observable<any>;
   gameList$: Observable<any[]> = new Observable;
@@ -32,33 +30,45 @@ export class UserComponent implements OnInit {
   userSpese: Spese = {} as Spese;
   mySpese: Spese = {} as Spese;
 
+  userImgUrl?: string;
+  imgUrlGameList: Map<string, string> = new Map;
+
   constructor(private route: ActivatedRoute, public authService: AuthService, private userCollectionService: UserCollectionService,
-     public userLoggedService: UserLoggedService, public util: UtilService, private router: Router) {
+    public userLoggedService: UserLoggedService, public util: UtilService, private router: Router) {
 
     const routeParams = this.route.snapshot.paramMap;
     this.userid = String(routeParams.get('userid'));
 
     //Non permette all'utente di andare sulla propria pagina
-    if( this.userid === authService.currentUserId )
+    if (this.userid === authService.currentUserId)
       router.navigateByUrl("/");
 
     this.userInfo$ = this.userLoggedService.getUserDoc(this.userid).valueChanges();
 
     this.UpdateList(this.userlists[0].code);
+
+    //Carico immagine profilo
+    util.getUserImageUrl(this.userid).then(url => { if (url) this.imgUrlGameList.set(this.userid, url) });
   }
 
   async ngOnInit() {
+    this.util.getUserImageUrl(this.userid).then(url => this.userImgUrl = url);
+
     this.userSpese = await this.userCollectionService.GetSpese(undefined, this.userid);
     this.mySpese = await this.userCollectionService.GetSpese();
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
-    this.hasRequest = await this.userLoggedService.checkRequest(this.userid,this.authService.currentUserId);
-    if(this.isFriend)
-    await this.CommonGames();
+    this.hasRequest = await this.userLoggedService.checkRequest(this.userid, this.authService.currentUserId);
+    if (this.isFriend)
+      await this.CommonGames();
   }
 
   UpdateList(actualList: string): void {
     this.viewlist = actualList;
-    this.gameList$ = this.userCollectionService.getList(this.viewlist, this.userid).snapshotChanges();
+
+    let gameList = this.userCollectionService.getList(this.viewlist, this.userid);
+    this.gameList$ = gameList.snapshotChanges();
+    this.util.loadGameListImgUrls(gameList, this.imgUrlGameList);
+
     this.myGameList$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
   }
 
@@ -69,7 +79,7 @@ export class UserComponent implements OnInit {
       this.userCollectionService.getList(u.code).get().forEach(games =>
         games.forEach(async game => {
           for (let u1 of userlist) {
-            let g = await (this.userCollectionService.getGameFromList(game.id, u1.code,this.userid).ref.get());
+            let g = await (this.userCollectionService.getGameFromList(game.id, u1.code, this.userid).ref.get());
             if (g.exists) {
               this.common$.push({
                 title: g.get("title"), mytime: game.get("completetime"),

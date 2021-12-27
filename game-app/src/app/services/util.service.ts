@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Md5 } from "md5-typescript";
 import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
-import { AngularFirestore, CollectionReference, DocumentData } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData } from '@angular/fire/firestore';
 import { CustomValidators } from '../custom-validators';
 import * as firebase from 'firebase'
 
@@ -12,11 +12,27 @@ export class UtilService {
 
   constructor(public db: AngularFirestore) { }
 
+  loadUserListImgUrls(list: AngularFirestoreCollection<DocumentData>, map: Map<string, string>) {
+    list.get().forEach(us => us.forEach(u =>
+      this.getUserImageUrl(u.id).then(url => {
+        if (url)
+          map.set(u.id, url)
+      })));
+  }
+
+  loadGameListImgUrls(list: AngularFirestoreCollection<DocumentData>, map: Map<string, string>) {
+    list.get().forEach(us => us.forEach(u =>
+      this.getGameImageUrl(u.id).then(url => {
+        if (url)
+          map.set(u.id, url)
+      })));
+  }
+
   searchUserByEmail(email: string) {
     return this.db.collection('Users', ref => this.searchByField(ref, "email", email));
   }
 
-  searchUser(username: string) {
+  searchUser(username: string) : AngularFirestoreCollection<DocumentData> {
     return this.db.collection('Users', ref => this.searchByField(ref, "username", username));
   }
 
@@ -49,11 +65,22 @@ export class UtilService {
     return "Games/" + gameid + '.jpg';
   }
 
-  getGameImageUrl(gameid: string) : Promise<string>
-  {
+  getGameImageUrl(gameid: string): Promise<string> {
     return firebase.default.storage().ref(this.getGameImageChild(gameid)).getDownloadURL();
   }
-  
+
+  getUserImageChild(userid: string): string {
+    return "Users/" + userid + ".jpg";
+  }
+
+  /*
+    Questo metodo restituisce l'url dell'immagine dell'utente se essa esiste, altrimenti restituisce undefined
+  */
+  getUserImageUrl(userid: string): Promise<string | undefined> {
+    return firebase.default.storage().ref(this.getUserImageChild(userid)).getDownloadURL()
+      .then(s => s)
+      .catch(e => undefined);
+  }
 
   getMsgTime(timestamp: firebase.default.firestore.Timestamp) {
 
@@ -128,7 +155,7 @@ export class UtilService {
   /*
    Questo metodo restituisce i Validators necessari a controllare la struttura del tempo di completamento di un videogioco
  */
-   getCompletedTimeValidators() {
+  getCompletedTimeValidators() {
     return Validators.compose([Validators.min(0.01), Validators.max(9999),
     CustomValidators.max2DecimalValidator()]);
   }
@@ -160,8 +187,7 @@ export class UtilService {
     return undefined;
   }
 
-  getDateFormat(): string
-  {
+  getDateFormat(): string {
     return 'dd/MM/YYYY';
   }
 }
