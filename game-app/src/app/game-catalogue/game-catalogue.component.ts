@@ -22,7 +22,7 @@ export class GameCatalogueComponent {
   }
 
   onKey(event: any) {
-    this.games$ = this.gameCollectionService.getGamesByTitle(event.target.value.toLowerCase()).snapshotChanges();
+    this.games$ = this.gameCollectionService.searchGamesByTitle(event.target.value.toLowerCase()).snapshotChanges();
   }
 
 

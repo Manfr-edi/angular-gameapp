@@ -153,7 +153,7 @@
 										<mat-card-title> Statistiche di {{authService.currentUsername}}</mat-card-title>
 										<mat-card-content>
 											Giochi totali: {{mylist.length}} <br>
-											Media di Completamento: {{util.avgTime(mylist)}} <br>
+											Media di Completamento: {{util.avgCompleteTime(mylist)}} <br>
 											Somma spese: {{mySpese.sumPrice}}<br>
 											Media spese: {{mySpese.avgPrice}}<br>
 											Numero giochi acquistati: {{mySpese.countBoughtGame}}<br>
@@ -163,7 +163,7 @@
 										<mat-card-title> Statistiche di {{userInfo.username}}</mat-card-title>
 										<mat-card-content>
 											Giochi totali: {{list.length}}<br>
-											Media di Completamento: {{util.avgTime(list)}}<br>
+											Media di Completamento: {{util.avgCompleteTime(list)}}<br>
 											Somma spese: {{userSpese.sumPrice}}<br>
 											Media spese: {{userSpese.avgPrice}}<br>
 											Numero giochi acquistati: {{userSpese.countBoughtGame}}<br>

@@ -55,11 +55,11 @@ export class UserComponent implements OnInit {
   async ngOnInit() {
     this.util.getUserImageUrl(this.userid).then(url => this.userImgUrl = url);
 
-    this.userSpese = await this.userCollectionService.GetSpese(undefined, this.userid);
-    this.mySpese = await this.userCollectionService.GetSpese();
+    this.userSpese = await this.userCollectionService.getShoppingReport(undefined, this.userid);
+    this.mySpese = await this.userCollectionService.getShoppingReport();
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
-    this.hasRequest = await this.userLoggedService.checkRequest(this.userid, this.authService.currentUserId);
-    this.requestReceived = await this.userLoggedService.checkRequest(this.authService.currentUserId, this.userid);
+    this.hasRequest = await this.userLoggedService.checkRequest(this.authService.currentUserId, this.userid);
+    this.requestReceived = await this.userLoggedService.checkRequest(this.userid);
     
     if (this.isFriend)
       await this.CommonGames();
@@ -70,7 +70,7 @@ export class UserComponent implements OnInit {
 
     let gameList = this.userCollectionService.getList(this.viewlist, this.userid);
     this.gameList$ = gameList.snapshotChanges();
-    this.util.loadGameListImgUrls(gameList, this.imgUrlGameList);
+    this.util.loadGameListImgUrls(gameList).then(urls => this.imgUrlGameList = urls);
 
     this.myGameList$ = this.userCollectionService.getList(this.viewlist).snapshotChanges();
   }

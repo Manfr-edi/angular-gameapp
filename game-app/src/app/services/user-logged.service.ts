@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, DocumentData, CollectionReference, Query, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { AuthService } from './auth.service';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentData } from '@angular/fire/firestore';
+import * as firebase from 'firebase';
 import { userlist } from 'src/app/data/userlist/userlist';
-import * as firebase from 'firebase'
-import { GameCollectionService } from './game-collection.service';
+import { AuthService } from './auth.service';
 import { UtilService } from './util.service';
 
 export interface MessageInfo {
@@ -20,9 +19,8 @@ export class UserLoggedService {
 	userDoc: AngularFirestoreDocument;
 	userlists = userlist
 
-	constructor(public db: AngularFirestore, public authService: AuthService, public gameCollectionService: GameCollectionService,
-		public util: UtilService) {
-		this.userDoc = db.doc('Users/' + this.authService.currentUserId);
+	constructor(private db: AngularFirestore, private authService: AuthService, private util: UtilService) {
+		this.userDoc = db.doc('Users/' + authService.currentUserId);
 	}
 
 
@@ -36,6 +34,10 @@ export class UserLoggedService {
 	 * 
 	 **************************************/
 
+	getUserID() {
+		return this.userDoc.ref.id;
+	}
+
 	//Questo metodo restituisce il documento relativo all'utente per il quale si � indicato l'id
 	//nel caso in cui l'id non viene passato, viene restituito il documento relativo
 	//all'utente attualmente loggato
@@ -43,43 +45,20 @@ export class UserLoggedService {
 		return userid ? this.db.doc("Users/" + userid) : this.userDoc;
 	}
 
-	getUserID() {
-		return this.userDoc.ref.id;
-	}
-
 	async getUserDataParam(par: string, userid?: string): Promise<any> {
 		return (await this.getUserDoc(userid).ref.get()).get(par);
 	}
 
-	updateUser(data: Partial<DocumentData>, userid?: string) {
+	updateUser(data: Partial<DocumentData>, userid?: string): Promise<boolean> {
 		return this.getUserDoc(userid).update(data).then(() => true).catch(e => false);
 	}
 
 	uploadUserImg(img: File, progress?: (perc: number) => void, userid?: string): Promise<boolean> {
-		let uid = userid ? userid : this.getUserID();
-
-		let uploadTask = firebase.default.storage().ref().child(this.util.getUserImageChild(uid)).put(img);
-
-		uploadTask.on('state_changed', snapshot => { //Upload in progress
-			if (progress)
-				progress(snapshot.bytesTransferred / snapshot.totalBytes * 100)
-		},
-			err => {
-				return null;
-			},
-			() => { //Upload riuscito
-				//uploadTask.snapshot.ref.getDownloadURL().then(url => { this.imgUrl = url });
-			})
-
-		return uploadTask.then(() => true).catch(err => false);
+		return this.util.uploadFile(this.util.getUserImageChild(userid ? userid : this.getUserID()), img, progress);
 	}
 
 	cancelUserImg(userid?: string) {
-		let uid = userid ? userid : this.getUserID();
-
-		return firebase.default.storage().ref().child(this.util.getUserImageChild(uid)).delete()
-			.then(() => true)
-			.catch(e => false)
+		return this.util.deleteFile(this.util.getUserImageChild(userid ? userid : this.getUserID()));
 	}
 
 	/*************************************
@@ -100,50 +79,20 @@ export class UserLoggedService {
 		return this.getUserDoc(userid).collection("Friends", ref => this.util.searchByField(ref, "username", username));
 	}
 
-	async checkIsFriend(userid: string, curUserId?: string): Promise<boolean> {
-		return (await this.getUserDoc(curUserId).collection("Friends").doc(userid).ref.get()).exists;
+	async checkIsFriend(possibleFriendID: string, userid?: string): Promise<boolean> {
+		return (await this.getUserDoc(userid).collection("Friends").doc(possibleFriendID).ref.get()).exists;
 	}
 
-	removeFriend(id: string, userid: string) {
-		this.getUserDoc(userid).collection("Friends").doc(id).delete();
-		this.getUserDoc(id).collection("Friends").doc(userid).delete();
-	}
+	removeFriend(friendID: string, userid?: string) {
+		let uid = userid ? userid : this.getUserID();
 
-	getRequests(userid?: string) {
-		return this.getUserDoc(userid).collection("Requests");
-	}
-
-	async checkRequest(userid: string, curUserId: string): Promise<boolean> {
-		return (await this.getUserDoc(userid).collection("Requests").doc(curUserId).ref.get()).exists;
-	}
-
-	sendRequest(id: string, username: string, userid: string) {
-		this.getUserDoc(id).collection("Requests").doc(userid).set({ username: username, time: firebase.default.firestore.FieldValue.serverTimestamp() });
-		this.getUserDoc(id).collection("Notification").doc().set({ userid: userid, username: username, type: "request", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
-	}
-
-	async acceptRequest(id: string, username: string, userid: string) {
-		this.getUserDoc(userid).collection("Friends").doc(id).set({ username: username });
-		this.getUserDoc(id).collection("Friends").doc(userid).set({ username: this.authService.currentUsername });
-		this.removeRequest(id, userid);
-		let username1 = await this.getUserDataParam("username", userid);
-		this.getUserDoc(id).collection("Notification").doc().set({
-			userid: userid, username: username1,
-			type: "accepted", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false
-		});
-	}
-
-	removeRequest(id: string, userid?: string) {
-		this.getUserDoc(userid).collection("Requests").doc(id).delete();
-
-		this.getUserDoc(userid).collection("Notification", ref => ref.where("type", "==", "request").where("userid", "==", id)).get().forEach(
-			docs => docs.forEach(
-				d => this.deleteNotification(d.id)));
+		this.getUserDoc(uid).collection("Friends").doc(friendID).delete();
+		this.getUserDoc(friendID).collection("Friends").doc(uid).delete();
 	}
 
 	getFriendIDFromChatID(chatID: string, userid?: string) {
-		let id = userid ? userid : this.getUserID();
-		return chatID.substring(0, 28) === id ? chatID.substring(28) : chatID.substring(0, 28);
+		let uid = userid ? userid : this.getUserID();
+		return chatID.substring(0, 28) === uid ? chatID.substring(28) : chatID.substring(0, 28);
 	}
 
 	async getFriendsWithChat(withChat: boolean, userid?: string): Promise<AngularFirestoreCollection | undefined> {
@@ -155,8 +104,8 @@ export class UserLoggedService {
 			let idFriends: string[] = new Array;
 
 			chats.map(d => {
-				let s = d.substr(0, 28);
-				idFriends.push(s == id ? d.substr(28) : s);
+				let s = d.substring(0, 28)
+				idFriends.push(s == id ? d.substring(28) : s)
 			})
 
 			return doc.collection("Friends",
@@ -170,6 +119,58 @@ export class UserLoggedService {
 	/*************************************
 	 * 
 	 * 
+	 *            Richieste
+	 * 
+	 * 
+	 * 
+	 * 
+	 **************************************/
+
+	getRequests(userid?: string) {
+		return this.getUserDoc(userid).collection("Requests");
+	}
+
+	checkRequest(requesterID: string, userid?: string): Promise<boolean> {
+		return this.getUserDoc(userid).collection("Requests").doc(requesterID).ref.get().then(doc => doc.exists).catch(e => false);
+	}
+
+	sendRequest(requiredID: string, requiredUsername: string, userid?: string) {
+		let uid = userid ? userid : this.getUserID();
+
+		this.getUserDoc(requiredID).collection("Requests").doc(uid).set({ username: requiredUsername, time: firebase.default.firestore.FieldValue.serverTimestamp() });
+		this.getUserDoc(requiredID).collection("Notification").doc().set({ userid: uid, username: requiredUsername, type: "request", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false });
+	}
+
+	async acceptRequest(friendID: string, friendUsername: string, userid?: string, username?: string) {
+		let uid = userid ? userid : this.getUserID();
+		let uname = username ? username : await this.getUserDataParam("username", uid);
+
+		//Segno l'amicizia
+		this.getUserDoc(uid).collection("Friends").doc(friendID).set({ username: friendUsername });
+		this.getUserDoc(friendID).collection("Friends").doc(uid).set({ username: uname });
+		//Rimuovo la richiesta
+		this.removeRequest(friendID, uid);
+		//Invio notifica
+
+		this.getUserDoc(friendID).collection("Notification").doc().set({
+			userid: uid, username: uname,
+			type: "accepted", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false
+		});
+	}
+
+	removeRequest(requestorID: string, userid?: string) {
+		//Rimuovo la richiesta
+		this.getUserDoc(userid).collection("Requests").doc(requestorID).delete();
+
+		//Rimuovo la notifica relativa a tale richiesta
+		this.getUserDoc(userid).collection("Notification", ref => ref.where("type", "==", "request").where("userid", "==", requestorID)).get().forEach(
+			docs => docs.forEach(
+				d => this.deleteNotification(d.id)));
+	}
+
+	/*************************************
+	 * 
+	 * 
 	 *            Chat
 	 * 
 	 * 
@@ -177,11 +178,9 @@ export class UserLoggedService {
 	 * 
 	 **************************************/
 
-	getChatID(user1: string, user2?: string) {
-
-		let u2 = user2 ? user2 : this.getUserID();
-		console.log("getchatid")
-		return user1 < u2 ? user1 + u2 : u2 + user1;
+	getChatID(user1: string, userid?: string) {
+		let uid = userid ? userid : this.getUserID();
+		return user1 < uid ? user1 + uid : uid + user1;
 	}
 
 	getChat(id: string) {
@@ -190,15 +189,15 @@ export class UserLoggedService {
 
 	//Questo metodo restituisce il documento relativo alla chat tra due utenti
 	//Il secondo utente pu� essere omesso, nel caso viene considerato l'utente loggato
-	getChatByUsers(user1: string, user2?: string) {
-		return this.getChat(this.getChatID(user1, user2));
+	getChatByUsers(friendID: string, userid?: string) {
+		return this.getChat(this.getChatID(friendID, userid));
 	}
 
-	async chatExists(user1: string, user2?: string): Promise<boolean> {
+	async chatExists(friendID: string, userid?: string): Promise<boolean> {
 		//Computo il chat id
-		let chatId = this.getChatID(user1, user2);
+		let chatId = this.getChatID(friendID, userid);
 		//Cerco l'id nell'utente 1
-		let chats = (await this.getUserDataParam("chats", user1) as string[]);
+		let chats = (await this.getUserDataParam("chats", friendID) as string[]);
 		//Se chats esiste e in esso � presente la chat, restituisce true
 		return chats && chats.findIndex(v => v === chatId) != -1;
 	}
@@ -207,22 +206,16 @@ export class UserLoggedService {
 		return (await this.db.collection("Chats").doc(chatID).ref.get()).exists;
 	}
 
-	async createChat(user1: string, user2?: string) {
+	async createChat(friendID: string, userid?: string) {
 		//Genero l'id
-		let id = this.getChatID(user1, user2);
+		let id = this.getChatID(friendID, userid);
 
 		//Controllo che la chat non esista gia
-		if (!(await this.chatExists(user1, user2))) {
-			this.updateUser({ chats: firebase.default.firestore.FieldValue.arrayUnion(id) }, user1);
-			this.updateUser({ chats: firebase.default.firestore.FieldValue.arrayUnion(id) }, user2);
+		if (!(await this.chatExists(friendID, userid))) {
+			this.updateUser({ chats: firebase.default.firestore.FieldValue.arrayUnion(id) }, friendID);
+			this.updateUser({ chats: firebase.default.firestore.FieldValue.arrayUnion(id) }, userid);
 		}
 	}
-	/*
-	deleteChat(id: string) {
-		console.log("deletechat "+id);
-		this.db.collection("Chats").doc(id).delete();
-
-	}*/
 
 	getMessaggesOrdered(idChat: string) {
 		return this.getChat(idChat).collection("messages", ref => ref.orderBy("time", "desc"));
@@ -235,22 +228,10 @@ export class UserLoggedService {
 		this.getChat(idChat).collection("messages").doc().set(
 			{ text: message, time: firebase.default.firestore.FieldValue.serverTimestamp(), sender: username });
 
-		//var user = idChat.substring(0, 28) === s ? idChat.substring(28) : idChat.substring(0, 28);
 		var user = this.getFriendIDFromChatID(idChat, s);
 
 		this.getUserDoc(user).collection("Notification").doc().set({ userid: s, username: username, type: "message", time: firebase.default.firestore.FieldValue.serverTimestamp(), seen: false })
 	}
-
-	//Questo metodo restituisce l'ultimo messaggio presente nella chat, se quest'ultima � vuota restituisce null.
-	async getLastMessageInfo(idChat: string): Promise<MessageInfo | undefined> {
-
-		let m: MessageInfo | undefined;
-		(await this.getChat(idChat).collection("messages", ref => ref.orderBy("time").limit(1)).ref.get()).docs.forEach(async d => {
-			m = { id: d.id, sender: d.get("sender"), text: d.get("text"), time: d.get("time") }
-		});
-		return m;
-	}
-
 
 	/*************************************
 	 * 

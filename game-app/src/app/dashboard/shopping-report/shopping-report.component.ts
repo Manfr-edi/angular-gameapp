@@ -16,12 +16,12 @@ export class ShoppingReportComponent implements OnInit, OnChanges {
   }
 
   ngOnInit(): void {
-    this.userCollectionService.GetSpese().then(s => this.spesa = s);
+    this.userCollectionService.getShoppingReport().then(s => this.spesa = s);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (this.updateReport?.observers.length == 0) //Mi iscrivo una sola volta
-      this.updateReport?.subscribe(filters => this.userCollectionService.GetSpese(filters).then(s => this.spesa = s));
+      this.updateReport?.subscribe(filters => this.userCollectionService.getShoppingReport(filters).then(s => this.spesa = s));
   }
 }
 

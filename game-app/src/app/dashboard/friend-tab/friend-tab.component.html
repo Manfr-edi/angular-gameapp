@@ -55,7 +55,7 @@
 						</mat-card-title>
 
 						<button mat-raised-button color="accent"
-							(click)="userLoggedService.acceptRequest(request.payload.doc.id, request.payload.doc.data().username, authService.currentUserId)">Accetta
+							(click)="acceptRequest(request.payload.doc.id, request.payload.doc.data().username)">Accetta
 							Amico
 						</button>
 						<button mat-raised-button color="accent"

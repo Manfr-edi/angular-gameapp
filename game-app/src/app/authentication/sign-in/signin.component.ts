@@ -36,7 +36,7 @@ export class SignInComponent {
           this.snackBar.open("Impossibile effettuare il login!", 'Ok', { duration: 2000 });
         else
           if (!this.authService.isadmin)
-            this.router.navigate(['/gametab']);
+            this.router.navigate(['/gametab'])
           else
             this.router.navigate(["/"])
       });

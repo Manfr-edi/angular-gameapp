@@ -1,10 +1,9 @@
-import { Platform } from '@angular/cdk/platform';
 import { Injectable } from '@angular/core';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection, DocumentData, Query } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument, DocumentData, Query } from '@angular/fire/firestore';
 import { userlist } from '../data/userlist/userlist';
-import { AuthService } from '../services/auth.service';
 import { GameCollectionService } from './game-collection.service';
 import { UserLoggedService } from './user-logged.service';
+import { UtilService } from './util.service';
 
 export interface Spese {
 	sumPrice: number;
@@ -19,15 +18,77 @@ export class UserCollectionService {
 
 	userlists = userlist;
 
-	constructor(public authService: AuthService, public db: AngularFirestore,
-		public gameCollectionService: GameCollectionService, public userLoggedService: UserLoggedService) {
+	constructor(private db: AngularFirestore, private gameCollectionService: GameCollectionService,
+		private userLoggedService: UserLoggedService, private util: UtilService) {
 	}
+
+	getList(list: string, userid?: string): AngularFirestoreCollection {
+		return this.userLoggedService.getUserDoc(userid).collection(list);
+	}
+
+	getListWithImageUrls(list: string, userid?: string): { list: AngularFirestoreCollection, urls: Promise<Map<string, string>> } {
+		let coll = this.userLoggedService.getUserDoc(userid).collection(list);
+		return { list: coll, urls: this.util.loadGameListImgUrls(coll) };
+	}
+
+	getGameFromList(gameid: string, list: string, userid?: string): AngularFirestoreDocument {
+		return this.getList(list, userid).doc(gameid);
+	}
+
+	async getGameDataFromList(gameid: string, list: string, userid?: string): Promise<DocumentData> {
+		return (await this.getGameFromList(gameid, list, userid).ref.get());
+	}
+
+	async checkUniqueList(gameid: string, userid?: string): Promise<boolean> {
+		for (let l of userlist)
+			return !(await this.getGameDataFromList(gameid, l.code, userid)).exists
+		return true;
+	}
+
+	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente indicato
+	//che rispetta dei filtri(piattaforma e genere) presentati in ingresso, nel caso un filtro è '', non viene considerato
+	getGamesWithPlatGenNotEmpty(list: string, filters: { platform?: string, genre?: string }, userid?: string): AngularFirestoreCollection {
+		return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
+			let a = (ref as Query<DocumentData>);
+			if (filters.platform && filters.platform !== '')
+				a = a.where("platform", "==", filters.platform);
+			if (filters.genre && filters.genre !== '')
+				a = a.where("genre", "array-contains", filters.genre)
+			return a;
+		});
+	}
+
+	async getShoppingReport(filters?: { platform?: string, genre?: string }, userid?: string): Promise<Spese> {
+		let sum = 0;
+		let count = 0;
+
+		for (let i = 0; i < 2; i++) {
+			await (filters ? this.getGamesWithPlatGenNotEmpty(userlist[i].code, filters, userid) :
+				this.getList(userlist[i].code, userid))
+				.get().forEach(docs => docs.forEach(doc => {
+					sum += doc.get("price");
+					count++;
+				}));
+		}
+
+		//Calcolo la media e aggiorno i dati
+		if (count > 0)
+			return { sumPrice: sum, avgPrice: sum / count, countBoughtGame: count };
+		else
+			return { sumPrice: 0, avgPrice: 0, countBoughtGame: 0 };
+	}
+
+	/********************************
+	 * 
+	 *        Modifica Lista
+	 * 
+	 ********************************/
 
 	//Nel caso di aggiunta di un nuovo gioco : selectedList != '' e previousList == ''
 	//Nel caso di aggiornamento di un gioco(stessa lista) : selectedList == previousList && selectedList != ''
 	//Nel caso di aggiornamento di un gioco(cambio lista) : selectedList != previousList && selectedList != '' && previousList != ''
 	//Nel caso selectedList == '' : non accade nulla => false
-	async UpdateGame(selectedList: string, previousList: string, gameid: string, gametitle: string, note: string,
+	async updateGame(selectedList: string, previousList: string, gameid: string, gametitle: string, note: string,
 		time: number, vote: number, selectedPlatform: string, genre: string, price: number, userid?: string): Promise<boolean> {
 
 		//In questo caso non accade nulla
@@ -88,7 +149,7 @@ export class UserCollectionService {
 
 			else //Nel caso modifica con cambio lista
 				//Rimuovo il gioco dalla lista precedente
-				return this.RemoveGame(previousList, gameid, userid) //Gestisce di gia un'eventuale ripristino
+				return this.removeGame(previousList, gameid, userid) //Gestisce di gia un'eventuale ripristino
 					.then(state => {
 						if (state)//SE ho rimosso il gioco
 						{
@@ -102,7 +163,7 @@ export class UserCollectionService {
 
 	}
 
-	async RemoveGame(selectedList: string, gameid: string, userid?: string): Promise<boolean> {
+	async removeGame(selectedList: string, gameid: string, userid?: string): Promise<boolean> {
 		//Salvo un riferimento al vecchio documento, nel caso debbo ripristinare.
 		//Se il backup fallisce, viene restituito false
 		//Se il gameid non esiste viene restituito false
@@ -133,63 +194,5 @@ export class UserCollectionService {
 			})
 			.catch(e => { if (old_doc) this.getGameFromList(gameid, list).update(old_doc); return false }); //Ripristino e restituisco false
 	}
-
-	async GetSpese(filters?: { platform?: string, genre?: string }, userid?: string): Promise<Spese> {
-		let sum = 0;
-		let count = 0;
-
-		for (let i = 0; i < 2; i++) {
-			await (filters ? this.getGamesWithPlatGenNotEmpty(userlist[i].code, filters, userid) :
-				this.getList(userlist[i].code, userid))
-				.get().forEach(docs => docs.forEach(doc => {
-					sum += doc.get("price");
-					count++;
-				}));
-		}
-
-		//Calcolo la media e aggiorno i dati
-		if (count > 0)
-			return { sumPrice: sum, avgPrice: sum / count, countBoughtGame: count };
-		else
-			return { sumPrice: 0, avgPrice: 0, countBoughtGame: 0 };
-	}
-
-	async CheckUniqueList(id: string, userid?: string): Promise<boolean> {
-		for (let l of userlist)
-			if ((await this.getGameDataFromList(id, l.code, userid)).exists)
-				return false;
-		return true;
-	}
-
-	getList(list: string, userid?: string): AngularFirestoreCollection {
-		return this.userLoggedService.getUserDoc(userid).collection(list);
-	}
-
-	getListWithImageUrls(list: string, userid?: string): { list: AngularFirestoreCollection, urls: Promise<Map<string, string>> } {
-		let coll = this.userLoggedService.getUserDoc(userid).collection(list);
-		return { list: coll, urls: this.gameCollectionService.getImageUrls(coll) };
-	}
-
-	async getGameDataFromList(gameid: string, list: string, userid?: string): Promise<DocumentData> {
-		return (await this.getGameFromList(gameid, list, userid).ref.get());
-	}
-
-	getGameFromList(gameid: string, list: string, userid?: string): AngularFirestoreDocument {
-		return this.getList(list, userid).doc(gameid);
-	}
-
-	//Questa funzione restituisce la collezione dei giochi presenti in una determinata lista dell'utente indicato
-	//che rispetta dei filtri(piattaforma e genere) presentati in ingresso, nel caso un filtro è '', non viene considerato
-	getGamesWithPlatGenNotEmpty(list: string, filters: { platform?: string, genre?: string }, userid?: string): AngularFirestoreCollection {
-		return this.userLoggedService.getUserDoc(userid).collection(list, ref => {
-			let a = (ref as Query<DocumentData>);
-			if (filters.platform && filters.platform !== '')
-				a = a.where("platform", "==", filters.platform);
-			if (filters.genre && filters.genre !== '')
-				a = a.where("genre", "array-contains", filters.genre)
-			return a;
-		});
-	}
-
 
 }

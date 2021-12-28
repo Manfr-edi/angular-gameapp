@@ -9,7 +9,7 @@ export class GameCollectionService {
 
   private catalogue: AngularFirestoreCollection<any>;
 
-  constructor(public db: AngularFirestore, public util: UtilService) {
+  constructor(private db: AngularFirestore, private util: UtilService) {
     this.catalogue = this.db.collection("Games");
   }
 
@@ -18,7 +18,7 @@ export class GameCollectionService {
   }
 
   getCatalogueWithImageUrls(): { catalogue: AngularFirestoreCollection<any>, urls: Promise<Map<string, string>> } {
-    return { catalogue: this.getCatalogue(), urls: this.getImageUrls(this.getCatalogue()) };
+    return { catalogue: this.getCatalogue(), urls: this.util.loadGameListImgUrls(this.getCatalogue()) };
   }
 
   getGame(gameid: string) {
@@ -29,14 +29,13 @@ export class GameCollectionService {
     return { game: this.getGame(gameid), url: this.util.getGameImageUrl(gameid) };
   }
 
-  getGamesByTitle(title: string) {
-    return this.db.collection('Games', ref =>
-      ref.where('title', '>=', title).where('title', '<=', title + '\uf8ff'));
+  getGameByTitle(title: string) {
+    return this.db.collection('Games', ref => ref.where('title', '==', title));
   }
 
-  getGameByTitle(title: string)
-  {
-    return this.db.collection('Games', ref => ref.where('title', '==', title));
+  searchGamesByTitle(title: string) {
+    return this.db.collection('Games', ref =>
+      ref.where('title', '>=', title).where('title', '<=', title + '\uf8ff'));
   }
 
   //Nel caso in cui sto inserendo il tempo di completamento
@@ -101,15 +100,6 @@ export class GameCollectionService {
 
   async getDataFieldGame(gameid: string, field: string) {
     return (await this.db.doc('Games/' + gameid).ref.get()).get(field);
-  }
-
-  getImageUrls(games: AngularFirestoreCollection): Promise<Map<string, string>> {
-    return new Promise<Map<string, string>>((resolve, reject) => {
-      let urls: Map<string, string> = new Map;
-      games.get().forEach(games =>
-        games.forEach(game => this.util.getGameImageUrl(game.id).then(url => urls.set(game.id, url)))).then(
-          () => resolve(urls));
-    });
   }
 
 }

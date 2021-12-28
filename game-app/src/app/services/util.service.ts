@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Md5 } from "md5-typescript";
-import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { AngularFirestore, AngularFirestoreCollection, CollectionReference, DocumentData } from '@angular/fire/firestore';
+import { AbstractControl, Validators } from '@angular/forms';
+import * as firebase from 'firebase';
 import { CustomValidators } from '../custom-validators';
-import * as firebase from 'firebase'
 
 @Injectable({
   providedIn: 'root'
@@ -12,75 +11,15 @@ export class UtilService {
 
   constructor(public db: AngularFirestore) { }
 
-  loadUserListImgUrls(list: AngularFirestoreCollection<DocumentData>, map: Map<string, string>) {
-    list.get().forEach(us => us.forEach(u =>
-      this.getUserImageUrl(u.id).then(url => {
-        if (url)
-          map.set(u.id, url)
-      })));
-  }
-
-  loadGameListImgUrls(list: AngularFirestoreCollection<DocumentData>, map: Map<string, string>) {
-    list.get().forEach(us => us.forEach(u =>
-      this.getGameImageUrl(u.id).then(url => {
-        if (url)
-          map.set(u.id, url)
-      })));
-  }
-
-  searchUserByEmail(email: string) {
-    return this.db.collection('Users', ref => this.searchByField(ref, "email", email));
-  }
-
-  searchUser(username: string) : AngularFirestoreCollection<DocumentData> {
-    return this.db.collection('Users', ref => this.searchByField(ref, "username", username));
-  }
-
-  //Questa funzione effettua la ricerca mediante un campo
-  searchByField(ref: CollectionReference<DocumentData>, fieldname: string, fieldval: string) {
-    return ref.where(fieldname, '>=', fieldval).where(fieldname, '<=', fieldval + '\uf8ff');
-  }
-
-  capitalize(str: string) {
-    var cap = "";
-    var splitted = str.split(" ");
-    for (let s of splitted) {
-      cap += s.substring(0, 1).toUpperCase() + s.substring(1) + " ";
-    }
-    return cap;
-  }
-
-  avgTime(games: any[]) {
-    if (!games || games.length == 0) {
-      return 0;
-    }
-    let sumTime = 0;
-    for (let game of games)
-      sumTime += game.payload.doc.data().completetime;
-
-    return Math.round((sumTime / games.length) * 100) / 100;
-  }
-
-  getGameImageChild(gameid: string): string {
-    return "Games/" + gameid + '.jpg';
-  }
-
-  getGameImageUrl(gameid: string): Promise<string> {
-    return firebase.default.storage().ref(this.getGameImageChild(gameid)).getDownloadURL();
-  }
-
-  getUserImageChild(userid: string): string {
-    return "Users/" + userid + ".jpg";
-  }
-
-  /*
-    Questo metodo restituisce l'url dell'immagine dell'utente se essa esiste, altrimenti restituisce undefined
-  */
-  getUserImageUrl(userid: string): Promise<string | undefined> {
-    return firebase.default.storage().ref(this.getUserImageChild(userid)).getDownloadURL()
-      .then(s => s)
-      .catch(e => undefined);
-  }
+  /*************************************
+   * 
+   * 
+   *            Util
+   * 
+   * 
+   * 
+   * 
+   **************************************/
 
   getMsgTime(timestamp: firebase.default.firestore.Timestamp) {
 
@@ -117,6 +56,145 @@ export class UtilService {
 
     return "";
   }
+
+  getDateFormat(): string {
+    return 'dd/MM/YYYY';
+  }
+
+  /*************************************
+   * 
+   * 
+   *            File e Immagini
+   * 
+   * 
+   * 
+   * 
+   **************************************/
+
+  /*
+    Questo metodo si occupa di caricare un file sul Cloud Storage
+  */
+  uploadFile(childName: string, file: File, progress?: (perc: number) => void): Promise<boolean> {
+    let uploadTask = firebase.default.storage().ref().child(childName).put(file);
+
+    uploadTask.on('state_changed', snapshot => { //Upload in progress
+      if (progress)
+        progress(snapshot.bytesTransferred / snapshot.totalBytes * 100)
+    },
+      err => {
+        return null;
+      },
+      () => { //Upload riuscito
+      })
+
+    return uploadTask.then(() => true).catch(err => false);
+  }
+
+  deleteFile(childName: string) {
+    return firebase.default.storage().ref().child(childName).delete();
+  }
+
+  loadUserListImgUrls(list: AngularFirestoreCollection<DocumentData>): Promise<Map<string, string>> {
+    let map: Map<string, string> = new Map;
+    return list.get().forEach(us => us.forEach(u =>
+      this.getUserImageUrl(u.id).then(url => {
+        if (url)
+          map.set(u.id, url)
+      }))).then(() => map)
+  }
+
+  loadGameListImgUrls(list: AngularFirestoreCollection<DocumentData>): Promise<Map<string, string>> {
+    let map: Map<string, string> = new Map;
+    return list.get().forEach(us => us.forEach(u =>
+      this.getGameImageUrl(u.id).then(url => {
+        if (url)
+          map.set(u.id, url)
+      }))).then(() => map)
+  }
+
+  /*
+    Questo metodo restituisce l'url dell'immagine dell'utente se essa esiste, altrimenti restituisce undefined
+  */
+  getUserImageUrl(userid: string): Promise<string | undefined> {
+    return firebase.default.storage().ref(this.getUserImageChild(userid)).getDownloadURL()
+      .then(s => s)
+      .catch(e => undefined);
+  }
+
+  getGameImageChild(gameid: string): string {
+    return "Games/" + gameid + '.jpg';
+  }
+
+  getGameImageUrl(gameid: string): Promise<string> {
+    return firebase.default.storage().ref(this.getGameImageChild(gameid)).getDownloadURL();
+  }
+
+  getUserImageChild(userid: string): string {
+    return "Users/" + userid + ".jpg";
+  }
+
+  /*************************************
+   * 
+   * 
+   *            Utente
+   * 
+   * 
+   * 
+   * 
+   **************************************/
+
+  searchUserByEmail(email: string) {
+    return this.db.collection('Users', ref => this.searchByField(ref, "email", email));
+  }
+
+  searchUser(username: string): AngularFirestoreCollection<DocumentData> {
+    return this.db.collection('Users', ref => this.searchByField(ref, "username", username));
+  }
+
+  //Questa funzione effettua la ricerca mediante un campo
+  searchByField(ref: CollectionReference<DocumentData>, fieldname: string, fieldval: string) {
+    return ref.where(fieldname, '>=', fieldval).where(fieldname, '<=', fieldval + '\uf8ff');
+  }
+
+  /*************************************
+   * 
+   * 
+   *            Giochi
+   * 
+   * 
+   * 
+   * 
+   **************************************/
+
+  avgCompleteTime(games: any[]) {
+    if (!games || games.length == 0) {
+      return 0;
+    }
+    let sumTime = 0;
+    for (let game of games)
+      sumTime += game.payload.doc.data().completetime;
+
+    return Math.round((sumTime / games.length) * 100) / 100;
+  }
+
+  capitalize(str: string) {
+    var cap = "";
+    var splitted = str.split(" ");
+    for (let s of splitted) {
+      cap += s.substring(0, 1).toUpperCase() + s.substring(1) + " ";
+    }
+    return cap;
+  }
+
+  /*************************************
+   * 
+   * 
+   *            Validators
+   * 
+   * 
+   * 
+   * 
+   **************************************/
 
   /*
     Questo metodo restituisce i Validators necessari a controllare la struttura della password
@@ -187,9 +265,7 @@ export class UtilService {
     return undefined;
   }
 
-  getDateFormat(): string {
-    return 'dd/MM/YYYY';
-  }
+
 }
 
 

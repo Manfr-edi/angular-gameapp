@@ -1,9 +1,7 @@
-
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
 import { AngularFireAuth } from '@angular/fire/auth';
-import 'firebase/auth';
 import { AngularFirestore } from '@angular/fire/firestore';
+import 'firebase/auth';
 
 enum AuthError {
   CodeError,
@@ -21,11 +19,11 @@ export class AuthService {
 
   isLoading: boolean = false;
 
-  constructor(private afAuth: AngularFireAuth, private router: Router, private db: AngularFirestore) {
+  constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) {
     this.afAuth.authState.subscribe(async auth => {
       this.isLoading = true;
       if (auth != null)
-        await this.getDataAdminUser(auth.uid).then(() => this.authState = auth)
+        await this.getDataAdminUser(auth.uid).then(() => this.authState = auth);
       else
         this.authState = null;
       this.isLoading = false;
@@ -72,7 +70,7 @@ export class AuthService {
     this.authState?.sendEmailVerification();
   }
 
-  async signUpWithEmail(username: string, email: string, password: string): Promise<AuthError | undefined> {
+  signUpWithEmail(username: string, email: string, password: string): Promise<AuthError | undefined> {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((data) => {
         this.authState = data.user;
@@ -87,7 +85,7 @@ export class AuthService {
       .catch(err => this.getError(err.code));
   }
 
-  async loginWithEmail(email: string, password: string): Promise<AuthError | undefined> {
+  loginWithEmail(email: string, password: string): Promise<AuthError | undefined> {
     return this.afAuth.signInWithEmailAndPassword(email, password)
       .then(async (data) => {
         await this.getDataAdminUser(data.user!.uid).then(() => this.authState = data.user)
@@ -104,19 +102,21 @@ export class AuthService {
     })
   }
 
-  async ResetPassword(passwordResetEmail: string): Promise<AuthError | undefined> {
+  resetPassword(passwordResetEmail: string): Promise<AuthError | undefined> {
     return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
       .then(() => undefined)
       .catch(err => this.getError(err.code));
   }
 
-  async changePassword(code: string, new_psw: string): Promise<AuthError | undefined> {
-    return this.afAuth.confirmPasswordReset(code, new_psw).then(() => undefined)
+  changePassword(code: string, new_psw: string): Promise<AuthError | undefined> {
+    return this.afAuth.confirmPasswordReset(code, new_psw)
+      .then(() => undefined)
       .catch(e => this.getError(e.code));
   }
 
   verifyEmail(code: string) {
-    return this.afAuth.applyActionCode(code).then(() => undefined)
+    return this.afAuth.applyActionCode(code)
+      .then(() => undefined)
       .catch(err => this.getError(err.code));;
   }
 

@@ -19,7 +19,7 @@ export class AddToListComponent implements OnChanges {
   constructor(public userCollectionService: UserCollectionService) { }
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.userCollectionService.CheckUniqueList(this.gameID).then((res) => {
+    this.userCollectionService.checkUniqueList(this.gameID).then((res) => {
       this.isInList = !res;
       this.isLoading = false;
     });

@@ -114,7 +114,7 @@ export class SettingsTabComponent implements OnInit {
   }
 
   resetPsw() {
-    this.authService.ResetPassword(this.authService.currentEmail)
+    this.authService.resetPassword(this.authService.currentEmail)
       .then(e => this.snackBar.open(!e ? "Email di reset inviata!" : "Impossibile inviare email di reset!", 'Ok', { duration: 2000 }));
   }
 

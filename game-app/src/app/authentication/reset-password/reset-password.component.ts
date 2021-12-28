@@ -18,7 +18,7 @@ export class ResetPasswordComponent {
   }
 
   sendPasswordResetRequest() {
-    this.authService.ResetPassword(this.email.value).then(() =>
+    this.authService.resetPassword(this.email.value).then(() =>
       this.snackBar.open("Email di reset inviata", 'Ok', { duration: 2000 }));
   }
 

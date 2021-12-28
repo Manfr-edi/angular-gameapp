@@ -55,7 +55,7 @@ export class InsertgamelistComponent implements OnChanges {
 
     //La form viene mostrata nel caso in cui sto facendo un Update oppure
     //nel caso in cui sto facendo un add di un gioco non inserito in un'altra lista
-    if (this.updateList !== '' || await this.userCollectionService.CheckUniqueList(this.gameid)) {
+    if (this.updateList !== '' || await this.userCollectionService.checkUniqueList(this.gameid)) {
       this.show = true
       this.updateForm().then(() => {
         this.onChangeList();
@@ -131,7 +131,7 @@ export class InsertgamelistComponent implements OnChanges {
   }
 
   async onSubmit() {
-    this.userCollectionService.UpdateGame(this.gameForm.get("destinationList")?.value, this.updateList, this.gameid,
+    this.userCollectionService.updateGame(this.gameForm.get("destinationList")?.value, this.updateList, this.gameid,
       this.gametitle, this.gameForm.get("note")?.value,
       this.gameForm.get("time")?.value, this.gameForm.get("vote")?.value,
       this.gameForm.get("platform")?.value, this.gamegenre, this.gameForm.get("price")?.value)

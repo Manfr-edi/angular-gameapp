@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { AuthService } from 'src/app/services/auth.service';
 import { UserLoggedService } from 'src/app/services/user-logged.service';
 import { UtilService } from 'src/app/services/util.service';
-import { AcceptRequestDialogComponent } from './accept-request-dialog/accept-request-dialog.component';
+import { RemoveFriendDialogComponent } from './remove-friend-dialog/remove-friend-dialog.component';
 
 @Component({
   selector: 'app-friend-tab',
@@ -26,14 +26,13 @@ export class FriendTabComponent implements OnInit {
 
     //Carico la lista degli amici e le relative foto profilo
     let friends = userLoggedService.getFriends();
-    util.loadUserListImgUrls(friends, this.imgUrlFriends)
+    util.loadUserListImgUrls(friends).then(urls => this.imgUrlFriends = urls);
     this.friends$ = friends.snapshotChanges();
   }
 
   ngOnInit(): void {
     this.requests$ = this.userLoggedService.getRequests().snapshotChanges();
   }
-
 
   onKey(event: any) {
     let s = event.target.value as string;
@@ -44,9 +43,15 @@ export class FriendTabComponent implements OnInit {
       this.users$ = this.util.searchUser(s.toLowerCase()).snapshotChanges();
   }
 
+  acceptRequest(friendID: string, friendUsername: string) {
+    this.userLoggedService.acceptRequest(friendID, friendUsername, this.authService.currentUserId)
+      .then(() => {
+        this.util.getUserImageUrl(friendID).then(url => { if (url) this.imgUrlFriends.set(friendID, url) });
+      })
+  }
   removeFriend(friendID: string, friendUsername: string) {
-    const dialogRef = this.dialog.open(AcceptRequestDialogComponent,
-      { data: {username: friendUsername} });
+    const dialogRef = this.dialog.open(RemoveFriendDialogComponent,
+      { data: { username: friendUsername } });
 
     dialogRef.afterClosed().subscribe(result => {
 
