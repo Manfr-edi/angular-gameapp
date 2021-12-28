@@ -12,9 +12,10 @@ export class AdminService {
 
   constructor(private gameCollectionService: GameCollectionService, private db: AngularFirestore, private util: UtilService) { }
 
-  /*
-    Questo metodo permette di aggiornare un gioco dal catalogo.
-    Nel caso si tratti di un'aggiunta al catalogo non bisogna specificare il gameid.
+  /**
+    * Permette di aggiornare o caricare un gioco dal catalogo.
+    * Nel caso si tratti di un'aggiunta al catalogo non bisogna specificare il gameid.
+    * @returns true nel caso la modifica/aggiunta sia avvenuta correttamente, false altrimenti
   */
   updateGame(title: string, developer: string, price: number, release: Date, publisher: string,
     platform: string[], genre: string[], bio: string, img?: File, progress?: (perc: number) => void, gameid?: string): Promise<boolean> {
@@ -41,8 +42,10 @@ export class AdminService {
       }).then(() => true).catch(err => false);
   }
 
-  /*
-    Questo metodo permette di rimuovere un gioco dal catalogo, ne elimina ogni riferimento.
+ /**
+    * Permette di rimuovere un gioco dal catalogo.
+    * Rimuove ogni riferimento a al gioco per ogni Utente, e la relativa immagine di copertina.
+    * @returns true nel caso la rimozione sia avvenuta correttamente, false altrimenti
   */
   deleteGame(gameid: string): Promise<boolean> {
     return this.gameCollectionService.getGame(gameid).delete()

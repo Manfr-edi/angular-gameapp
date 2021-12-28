@@ -27,6 +27,7 @@ export class ChatComponent implements OnChanges {
   async ngOnInit(){
     this.friendUsername = await this.getFriendUsername();
   }
+  
   async ngOnChanges(changes: any) {
     this.messages$ = this.userLoggedService.getMessaggesOrdered(this.chatID).valueChanges();
     this.userLoggedService.chatExistsByID(this.chatID).then(e => this.curChatExists = e)

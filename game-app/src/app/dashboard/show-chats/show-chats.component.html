@@ -7,28 +7,24 @@
 			<input #searchTxt (keyup)="searchFriends(searchTxt.value)" matInput placeholder="Username">
 		</mat-form-field>
 
-		<div *ngIf="!friendsSearched$ && (friendsNoChat$ | async); let friendsNoChat">
-			<div *ngIf="friendsChat$ | async; let friendsChat">
-				<mat-selection-list [multiple]="false">
+		<ng-container *ngIf="!friendsSearched$">
+			<mat-selection-list [multiple]="false">
+				<ng-container *ngIf="friendsChat$ | async; let friendsChat">
 					<mat-list-option *ngFor="let friend of friendsChat" (click)="friendSelected(friend.payload.doc.id)">
 						<mat-divider></mat-divider>
-						
 						<div id="text"> {{friend.payload.doc.data().username}} </div>
 					</mat-list-option>
+				</ng-container>
 
+				<ng-container *ngIf="friendsNoChat$ | async; let friendsNoChat">
 					<mat-list-option *ngFor="let friend of friendsNoChat"
 						(click)="friendSelected(friend.payload.doc.id)">
 						<mat-divider></mat-divider>
 						{{friend.payload.doc.data().username}}
-						
 					</mat-list-option>
-				</mat-selection-list>
-
-				<div *ngIf="friendsChat.length + friendsNoChat.length == 0">
-					Nessun amico
-				</div>
-			</div>
-		</div>
+				</ng-container>
+			</mat-selection-list>
+		</ng-container>
 
 		<div *ngIf="friendsSearched$ | async; let friendsSearched">
 			<mat-selection-list [multiple]="false">

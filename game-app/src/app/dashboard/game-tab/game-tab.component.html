@@ -6,9 +6,9 @@
 			<div class="btnDiv">
 				<mat-button-toggle-group (change)="UpdateList($event.value); updateForm=false"
 					[value]="userlists[0].code">
-					<mat-button-toggle [value]="userlists[0].code">Completed Games</mat-button-toggle>
-					<mat-button-toggle [value]="userlists[1].code">Playing Games</mat-button-toggle>
-					<mat-button-toggle [value]="userlists[2].code">Desired Games</mat-button-toggle>
+					<mat-button-toggle [value]="userlists[0].code">{{userlists[0].name}}</mat-button-toggle>
+					<mat-button-toggle [value]="userlists[1].code">{{userlists[1].name}}</mat-button-toggle>
+					<mat-button-toggle [value]="userlists[2].code">{{userlists[2].name}}</mat-button-toggle>
 				</mat-button-toggle-group>
 			</div>
 
@@ -46,7 +46,15 @@
 									</mat-card-content>
 									<mat-card-content *ngIf="game.payload.doc.data().vote != null">Voto :
 										{{game.payload.doc.data().vote}}</mat-card-content>
-									<mat-card-content>Piattaforme : {{game.payload.doc.data().platform}}
+									<mat-card-content>Piattaforma : {{game.payload.doc.data().platform}}
+									</mat-card-content>
+								</div>
+
+								<div *ngIf="viewlist === userlists[1].code">
+									<mat-card-content>Prezzo : {{game.payload.doc.data().price}} <span
+											matSuffix>&euro;</span>
+									</mat-card-content>
+									<mat-card-content>Piattaforma : {{game.payload.doc.data().platform}}
 									</mat-card-content>
 								</div>
 							</mat-card-title>
@@ -85,12 +93,13 @@
 				<mat-card-title> Report Spese </mat-card-title>
 				<app-shopping-report *ngIf="updateReport" [updateReport]="updateReport"></app-shopping-report>
 			</mat-card>
-			
+
 			<div *ngIf="games$ | async; let games">
 				<mat-card id="timeDIv" *ngIf="viewlist === userlists[0].code && games.length > 0 && !updateForm">
 					<mat-card-title> Media dei tempi di completamento</mat-card-title>
 					<mat-card-content class="rett">Numero giochi completati: {{games.length}} </mat-card-content>
-					<mat-card-content class="rett">Tempo di completamento medio: {{util.avgCompleteTime(games) | number : '1.0-2'}}
+					<mat-card-content class="rett">Tempo di completamento medio: {{util.avgCompleteTime(games) | number
+						: '1.0-2'}}
 					</mat-card-content>
 				</mat-card>
 			</div>

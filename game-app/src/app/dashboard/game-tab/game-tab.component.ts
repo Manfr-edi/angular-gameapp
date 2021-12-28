@@ -49,7 +49,7 @@ export class GameTabComponent {
   }
 
   async onChangeFilter() {
-    this.games$ = this.userCollectionService.getGamesWithPlatGenNotEmpty(this.viewlist, this.filters).snapshotChanges();
+    this.games$ = this.userCollectionService.getGamesWithFilters(this.viewlist, this.filters).snapshotChanges();
     this.updateReport.emit(this.filters);
   }
 

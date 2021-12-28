@@ -30,9 +30,9 @@
 							[matMenuTriggerFor]="menu"
 							#menuTrigger="matMenuTrigger">{{authService.currentUsername}}</button>
 						<mat-menu #menu="matMenu">
-							<button mat-menu-item [routerLink]="['/gametab']">Games</button>
-							<button mat-menu-item [routerLink]="['/settings']">Settings</button>
-							<button mat-menu-item [routerLink]="['/friendtab']">Friends</button>
+							<button mat-menu-item [routerLink]="['/gametab']">Giochi</button>
+							<button mat-menu-item [routerLink]="['/settings']">Informazioni</button>
+							<button mat-menu-item [routerLink]="['/friendtab']">Amici</button>
 							<button mat-menu-item [routerLink]="['/chats']">Chat</button>
 						</mat-menu>
 					</li>
@@ -58,7 +58,7 @@
 
 				<!--LOGIN/LOGOUT-->
 				<li class="nav-item" *ngIf="!authService.isLogged">
-					<button mat-button [routerLink]="'/login'">Log In / Register</button>
+					<button mat-button [routerLink]="'/login'">Log In / Registrati</button>
 				</li>
 
 				<li class="nav-item" *ngIf="authService.isLogged">

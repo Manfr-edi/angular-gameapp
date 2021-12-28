@@ -19,6 +19,10 @@ export class AuthService {
 
   isLoading: boolean = false;
 
+  /**
+    * Questo costruttore permette di reagire alle modifiche di authState permettendo di avere le informazioni
+    * riguardo l'utente sempre aggiornate.
+  */
   constructor(private afAuth: AngularFireAuth, private db: AngularFirestore) {
     this.afAuth.authState.subscribe(async auth => {
       this.isLoading = true;
@@ -66,10 +70,17 @@ export class AuthService {
     return this.authState !== null && this.isadmin;
   }
 
+  /**
+    * Permette di inoltrare un'email di verifica all'utente attualmente loggato.
+  */
   public sendEmailVerification(): void {
     this.authState?.sendEmailVerification();
   }
 
+  /**
+    * Permette la registrazione di un utente mediante username, email e password.
+    * @returns Restituisce un errore oppure undefined che rappresenta l'avvenuta registrazione
+  */
   signUpWithEmail(username: string, email: string, password: string): Promise<AuthError | undefined> {
     return this.afAuth.createUserWithEmailAndPassword(email, password)
       .then((data) => {
@@ -85,6 +96,10 @@ export class AuthService {
       .catch(err => this.getError(err.code));
   }
 
+  /**
+    * Permette il login di un utente mediante email e password.
+    * @returns Restituisce un errore oppure undefined che rappresenta l'avvenuta registrazione
+  */
   loginWithEmail(email: string, password: string): Promise<AuthError | undefined> {
     return this.afAuth.signInWithEmailAndPassword(email, password)
       .then(async (data) => {
@@ -94,6 +109,9 @@ export class AuthService {
       .catch(err => this.getError(err.code));
   }
 
+  /**
+    * Permette il logout di un utente invalidando la sessione corrente.
+  */
   signOut(): void {
     this.afAuth.signOut().then(() => {
       this.authState = null;
@@ -102,24 +120,39 @@ export class AuthService {
     })
   }
 
+  /**
+    * Permette di inviare un'email di reset password all'utente correntemente loggato.
+    * @returns Restituisce un errore oppure undefined che rappresenta il corretto invio dell'email
+  */
   resetPassword(passwordResetEmail: string): Promise<AuthError | undefined> {
     return this.afAuth.sendPasswordResetEmail(passwordResetEmail)
       .then(() => undefined)
       .catch(err => this.getError(err.code));
   }
 
+  /**
+    * Permette cambiare la password attraverso l'uso del codice ricevuto mediante email di reset.
+    * @returns Restituisce un errore oppure undefined che rappresenta il corretto cambiamento della password.
+  */
   changePassword(code: string, new_psw: string): Promise<AuthError | undefined> {
     return this.afAuth.confirmPasswordReset(code, new_psw)
       .then(() => undefined)
       .catch(e => this.getError(e.code));
   }
 
+  /**
+    * Permette di verificare l'email dell'utente attualmente loggato.
+  */
   verifyEmail(code: string) {
     return this.afAuth.applyActionCode(code)
       .then(() => undefined)
       .catch(err => this.getError(err.code));;
   }
 
+  /**
+    * Trasforma il codice di errore di Auth in un oggetto AuthError
+    * @returns Oggetto AuthError corrispondende all'errore presentato in ingresso
+  */
   private getError(code: string): AuthError {
     switch (code) {
       case "auth/expired-action-code":
@@ -146,6 +179,9 @@ export class AuthService {
 
   }
 
+  /**
+    * Per l'userid presentato in ingresso verifica che esso sia un Admin e ne preleva l'username.
+  */
   private async getDataAdminUser(userid: string) {
     await this.db.doc("Admins/" + userid).ref.get().then(data => {
 

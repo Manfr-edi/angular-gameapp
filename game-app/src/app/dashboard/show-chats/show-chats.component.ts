@@ -25,8 +25,9 @@ export class ShowChatsComponent {
 
     this.userLoggedService.getFriendsWithChat(true).then(
       data => this.friendsChat$ = data ? data.snapshotChanges() : new Observable);
+
     this.userLoggedService.getFriendsWithChat(false).then(
-      data => this.friendsNoChat$ = data ? data.snapshotChanges() : new Observable);
+      data =>  this.friendsNoChat$ = data ? data.snapshotChanges() : new Observable);
   }
 
   searchFriends(txt: string) {
