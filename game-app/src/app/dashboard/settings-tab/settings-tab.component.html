@@ -8,12 +8,10 @@
 		<div id="grid">
 			<div id="img">
 				<img [src]="userImgUrl ? userImgUrl : '../../../assets/User.png'">
-
 				<div id="imageBtn">
 					<button mat-raised-button color="accent" (click)="chooseImage()">Carica
 						<input id="file-upload" type="file" accept="image/jpeg" (change)="loadUserImage($event)" />
 					</button>
-
 					<button mat-raised-button color="accent" [disabled]="!userImgUrl" (click)="cancelUserImage()">Cancella</button>
 					<button mat-raised-button color="accent" [disabled]="!canLoad" (click)="confirmUserImage()">Conferma</button>
 				</div>
@@ -65,7 +63,7 @@
 				</ng-container>
 			</div>
 			<button class="btn" mat-raised-button color="accent" (click)="modifyPlatform=true">Modifica Piattaforme
-				Preferite</button>
+			</button>
 		</div>
 		<div class="single" *ngIf="modifyPlatform">
 			<div id="flex">
@@ -79,10 +77,9 @@
 			</div>
 			<button mat-raised-button color="accent" class="btn"
 				(click)="updateData('platform', platformList, platforms)">Aggiorna
-				Piattaforme Preferite</button>
+				Piattaforme</button>
 		</div>
 
-		<mat-divider class="divider"></mat-divider>
 		<mat-divider class="divider"></mat-divider>
 		<br>
 
@@ -94,7 +91,7 @@
 				</ng-container>
 			</div>
 			<button mat-raised-button color="accent" class="btn" (click)="modifyGenre=true">Modifica Generi
-				Preferite</button>
+				Preferiti</button>
 		</div>
 
 		<div class="single" *ngIf="modifyGenre">
@@ -109,11 +106,8 @@
 			</div>
 
 			<button mat-raised-button color="accent" class="btn"
-				(click)="updateData('genre',genreList, genres)">Aggiorna Generi Preferite</button>
+				(click)="updateData('genre',genreList, genres)">Aggiorna Generi Preferiti</button>
 		</div>
-
-		<mat-divider class="divider"></mat-divider>
-		<mat-divider class="divider"></mat-divider>
 
 	</div>
 

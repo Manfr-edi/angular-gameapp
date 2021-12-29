@@ -1,13 +1,9 @@
-#container
-{
+#container{
     display: flex;
     flex-direction: column-reverse;
     height: 93vh;
-    
 }
-
-#containerChat
-{
+#containerChat{
     order:2;
     display: flex;
     flex-direction: column-reverse;
@@ -19,14 +15,12 @@
     background-size: 150px;
     height: 100%;
 }
-
-#container mat-card
-{
+#container mat-card{
     max-width: 30%;
 }
 #topbar{
     order:3;
-    height: 8.6%;
+    height: 9%;
     display: flex;
     justify-self: flex-start;
     padding: 0 5px;
@@ -35,54 +29,54 @@
 }
 #img{
     height: 90%;
+    margin-top: auto;
+    margin-bottom: auto;
 }
 #name{
     font-size:20;
     font-weight: bold;
     margin: auto 0;
 }
-.meCard
-{
+.meCard{
     float:right;
     margin-left: auto;
     min-width: 15%;
 }
-
-.friendCard
-{
+.friendCard{
     float:left;
     min-width: 15%;
 }
-
-.msg
-{
+.msg{
     font-size: 16;
     word-wrap: break-word;
 }
-
-
 .time{
     text-align: right;
     font-size: 11;
 }
-
-#sendMessage
-{
+#sendMessage{
+    height: 9%;
     width:100%;
     margin-left: auto;
     order:1;   
+    padding: 5px;
     display: flex;
-    background-color: white;
+    justify-content: space-around;
+    /*background-color: rgba(24,57,122);*/
+    background-color: rgba(63,81,181);
+    
 }
-
-#messageTxt
-{
+#messageTxt{
     width: 90%;
+    padding-left: 10px;
     vertical-align: middle;
-}
+    background-color: white;
+    border-radius: 20px;
+    border : 1px solid white;
 
-#messageSendBtn
-{
+}
+#messageSendBtn{
     vertical-align: middle;
-    margin-left: auto;
+    background-color: rgba(255, 64, 129); 
+    color:white;
 }

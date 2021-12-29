@@ -2,17 +2,14 @@
 <div id="container" *ngIf="authService.isUserEmailLoggedIn && authService.isUserEmailVerified">
 
 	<div id="friendsDiv">
-		<mat-form-field appearance="fill">
-			<mat-label>Cerca Amico</mat-label>
-			<input #searchTxt (keyup)="searchFriends(searchTxt.value)" matInput placeholder="Username">
-		</mat-form-field>
+		<input #searchTxt (keyup)="searchFriends(searchTxt.value)" id="searchbar" matInput placeholder="Cerca Amico">
 
 		<ng-container *ngIf="!friendsSearched$">
 			<mat-selection-list [multiple]="false">
 				<ng-container *ngIf="friendsChat$ | async; let friendsChat">
 					<mat-list-option *ngFor="let friend of friendsChat" (click)="friendSelected(friend.payload.doc.id)">
 						<mat-divider></mat-divider>
-						<div id="text"> {{friend.payload.doc.data().username}} </div>
+						{{friend.payload.doc.data().username}}
 					</mat-list-option>
 				</ng-container>
 
@@ -20,7 +17,10 @@
 					<mat-list-option *ngFor="let friend of friendsNoChat"
 						(click)="friendSelected(friend.payload.doc.id)">
 						<mat-divider></mat-divider>
-						{{friend.payload.doc.data().username}}
+						<div id="text">
+							{{friend.payload.doc.data().username}}
+							<div id="new">NEW</div>
+						</div>
 					</mat-list-option>
 				</ng-container>
 			</mat-selection-list>

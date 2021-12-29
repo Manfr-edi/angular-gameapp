@@ -47,13 +47,15 @@ body{
 #imageBtn
 {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 #imageBtn button
 {
+	margin-top: 5px;
     width: 32%;
     text-align: center;
+    
 }
 
 input[type="file"] {
@@ -150,3 +152,6 @@ input[type="file"] {
     border-radius: 5px;
 }
 
+#spinner{
+    margin: 250px auto 250px auto;
+}

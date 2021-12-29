@@ -10,32 +10,33 @@
 					<img mat-card-md-image id="img" [src]="userImgUrl ? userImgUrl : '../../../assets/User.png'">
 
 					<div id="wait" *ngIf="hasRequest">
-						<button mat-button class="btn btn-outline-primary" disabled>Richiesta d'amicizia inviata</button>
+						<button mat-button class="btn" mat-raised-button color="primary" disabled>Richiesta d'amicizia
+							inviata</button>
 					</div>
 
-					<div id="notfriends" *ngIf="!isFriend && !hasRequest && !requestReceived">
-						<button class="btn btn-outline-primary"
-							(click)="userLoggedService.sendRequest(userid,authService.currentUsername,authService.currentUserId); hasRequest=true">Aggiungi
-							Amico
-							<mat-icon>person_add</mat-icon>
+					<div *ngIf="!isFriend && !hasRequest && !requestReceived">
+						<button class="btn " mat-raised-button color="primary"
+							(click)="userLoggedService.sendRequest(userid,authService.currentUsername,authService.currentUserId); hasRequest=true">
+							<div id="friends">Aggiungi Amico<mat-icon>person_add</mat-icon>
+							</div>
 						</button>
 					</div>
 
-					<div id="friends" *ngIf="isFriend">
-						<div>Siete Amici <mat-icon>group</mat-icon>
+					<div *ngIf="isFriend">
+						<div id="friends">Siete Amici <mat-icon>group</mat-icon>
 						</div>
-						<button class="btn btn-outline-primary"
+						<button class="btn " mat-raised-button color="primary"
 							(click)="userLoggedService.removeFriend(userid,authService.currentUserId); isFriend = false">Rimuovi
 							Amico
 						</button>
 					</div>
 
 					<div *ngIf="requestReceived">
-						<button class="btn btn-outline-primary"
+						<button class="btn" mat-raised-button color="primary"
 							(click)="userLoggedService.acceptRequest(userid, userInfo.username, authService.currentUserId); isFriend = true; requestReceived=false">Accetta
 						</button>
 
-						<button class="btn btn-outline-primary"
+						<button class="btn" mat-raised-button color="primary"
 							(click)="userLoggedService.removeRequest(userid, authService.currentUserId); isFriend = false; requestReceived=false">Rifiuta
 						</button>
 					</div>
@@ -109,11 +110,19 @@
 					<div class="tab">
 						<div class="games" *ngIf="isFriend">
 
-							<mat-button-toggle-group id="btn-group" [value]="userlists[0].code">
-								<mat-button-toggle [value]="userlists[0].code" (click)="UpdateList(userlists[0].code);">{{userlists[0].name}}</mat-button-toggle>
-								<mat-button-toggle [value]="userlists[1].code" (click)="UpdateList(userlists[1].code);">{{userlists[1].name}}</mat-button-toggle>
-								<mat-button-toggle [value]="userlists[2].code" (click)="UpdateList(userlists[2].code);">{{userlists[2].name}}</mat-button-toggle>
-							</mat-button-toggle-group>
+							<div id="btn-group">
+								<mat-button-toggle-group [value]="userlists[0].code">
+									<mat-button-toggle [value]="userlists[0].code"
+										(click)="UpdateList(userlists[0].code);">{{userlists[0].name}}
+									</mat-button-toggle>
+									<mat-button-toggle [value]="userlists[1].code"
+										(click)="UpdateList(userlists[1].code);">{{userlists[1].name}}
+									</mat-button-toggle>
+									<mat-button-toggle [value]="userlists[2].code"
+										(click)="UpdateList(userlists[2].code);">{{userlists[2].name}}
+									</mat-button-toggle>
+								</mat-button-toggle-group>
+							</div>
 
 							<div id="flexp" *ngIf="gameList$ | async; let list">
 								<ng-container *ngFor="let u of list">
@@ -124,7 +133,10 @@
 												{{ util.capitalize(u.payload.doc.data().title) }}
 											</mat-card-title>
 											<mat-card-content *ngIf="viewlist===userlists[0].code">
-												Tempo di completamento: {{u.payload.doc.data().completetime}}
+												Tempo di completamento : {{u.payload.doc.data().completetime}} ore
+											</mat-card-content>
+											<mat-card-content *ngIf="viewlist===userlists[0].code">
+												Piattaforma : {{u.payload.doc.data().platform}}
 											</mat-card-content>
 										</div>
 									</mat-card>
@@ -143,28 +155,45 @@
 						<div *ngIf="isFriend">
 							<div *ngIf="gameList$ | async; let list">
 
-								<div id="cards"
-									*ngIf="(viewlist === userlists[0].code && (myGameList$ | async)); let mylist">
+								<div id="cards" *ngIf="(myGameList$ | async); let mylist">
 
-									<mat-card class="com">
+									<mat-card class="mycomStats">
 										<mat-card-title> Statistiche di {{authService.currentUsername}}</mat-card-title>
-										<mat-card-content>
-											Giochi totali: {{mylist.length}} <br>
-											Media di Completamento: {{util.avgCompleteTime(mylist)}} <br>
-											Somma spese: {{mySpese.sumPrice}}<br>
-											Media spese: {{mySpese.avgPrice}}<br>
-											Numero giochi acquistati: {{mySpese.countBoughtGame}}<br>
+										
+										<mat-card-content class="statcont">
+											Media dei tempi di completamento: {{util.avgCompleteTime(mylist) | number :
+											'1.0-2'}} ore
 										</mat-card-content>
+										<mat-card-content class="statcont">
+											Somma spese: {{mySpese.sumPrice}} <span matSuffix>&euro;</span>
+										</mat-card-content>
+										<mat-card-content class="statcont">
+											Media spese: {{mySpese.avgPrice | number : '1.0-2'}} <span
+												matSuffix>&euro;</span>
+										</mat-card-content>
+										<mat-card-content class="statcont">
+											Numero giochi acquistati: {{mySpese.countBoughtGame}}
+										</mat-card-content>
+
 									</mat-card>
-									<mat-card class="com">
+									<mat-card class="comStats">
 										<mat-card-title> Statistiche di {{userInfo.username}}</mat-card-title>
-										<mat-card-content>
-											Giochi totali: {{list.length}}<br>
-											Media di Completamento: {{util.avgCompleteTime(list)}}<br>
-											Somma spese: {{userSpese.sumPrice}}<br>
-											Media spese: {{userSpese.avgPrice}}<br>
-											Numero giochi acquistati: {{userSpese.countBoughtGame}}<br>
+										
+										<mat-card-content class="statcont">
+											Media dei tempi di completamento: {{util.avgCompleteTime(list) | number :
+											'1.0-2'}} ore
 										</mat-card-content>
+										<mat-card-content class="statcont">
+											Somma spese: {{userSpese.sumPrice}} <span matSuffix>&euro;</span>
+										</mat-card-content>
+										<mat-card-content class="statcont">
+											Media spese: {{userSpese.avgPrice | number : '1.0-2'}} <span
+												matSuffix>&euro;</span>
+										</mat-card-content>
+										<mat-card-content class="statcont">
+											Numero giochi acquistati: {{userSpese.countBoughtGame}}
+										</mat-card-content>
+
 									</mat-card>
 
 								</div>
@@ -174,36 +203,42 @@
 							<div id="cards" *ngIf="common$; let common">
 
 								<ng-container *ngFor="let u of common">
-									<mat-card class="com">
-										<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
+									<mat-card class="mycom">
+
 										<mat-card-content>
 											Lista : {{u.mylist}}
 											<div *ngIf="u.mylist===userlists[0].name">
-												Tempo di completamento mio: {{u.mytime }}
+												Tempo di completamento : {{u.mytime }} ore
 											</div>
 											<div
 												*ngIf="u.mylist===userlists[0].name || u.friendlist===userlists[1].name">
-												Spese del gioco mie: {{u.myprice }}
+												Spese del gioco : {{u.myprice }} <span matSuffix>&euro;</span>
 											</div>
 
 
 										</mat-card-content>
+									</mat-card>
+
+									<mat-card class="comTitle">
+										<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
 									</mat-card>
 
 									<mat-card class="com">
-										<mat-card-title> {{ util.capitalize(u.title) }} </mat-card-title>
+
 										<mat-card-content>
 											Lista : {{u.friendlist}}
 											<div *ngIf="u.friendlist===userlists[0].name">
-												Tempo di completamento: {{u.usertime }}
+												Tempo di completamento: {{u.usertime }} ore
 											</div>
 											<div
 												*ngIf="u.friendlist===userlists[0].name || u.friendlist===userlists[1].name">
-												Spese del gioco: {{u.userprice }}
+												Spese del gioco: {{u.userprice }} <span matSuffix>&euro;</span>
 											</div>
 
 										</mat-card-content>
 									</mat-card>
+
+
 
 								</ng-container>
 

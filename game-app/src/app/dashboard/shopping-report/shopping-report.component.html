@@ -1,6 +1,6 @@
 <div *ngIf="spesa.countBoughtGame > 0">
-	<div class="rett"> Spesa totale: {{spesa.sumPrice}} </div>
-	<div class="rett"> Spesa media: {{spesa.avgPrice}} </div>
+	<div class="rett"> Spesa totale: {{spesa.sumPrice}} <span matSuffix>&euro;</span></div>
+	<div class="rett"> Spesa media: {{spesa.avgPrice}} <span matSuffix>&euro;</span></div>
 	<div class="rett"> Numero giochi acquistati: {{spesa.countBoughtGame}} </div>
 </div>
 <div *ngIf="spesa.countBoughtGame == 0">

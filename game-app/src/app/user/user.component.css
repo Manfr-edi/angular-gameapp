@@ -20,16 +20,23 @@ body{
     width: 80%;
     margin: 50px auto 20px auto;
 }
+.btn{
+    margin-top: 10px;
+}
 #desc{
     width: 80%;
     font-size: 16;
     font-weight: bold;
     margin: auto;
-    
 }
 #bio{
     word-wrap: break-word;    
     font-weight: normal;
+}
+#friends{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 }
 #nickname{
     display: flex;
@@ -94,11 +101,7 @@ body{
     color: white;
     margin-top: 10px;
 }
-/*
-.divi{
-    
-    background-color: red;
-}*/
+
 #flex{
     margin-top: 20px;
     display: flex;
@@ -124,7 +127,8 @@ body{
     margin-top: 20px;
 }
 #btn-group{
-    left:32.5%;
+    display: table;
+    margin: 0 auto;
 }
 
 .title2{
@@ -140,8 +144,35 @@ body{
     flex-wrap: wrap;
     row-gap: 10px;
 }
+.mycomStats{
+    width:40%;
+    border: 3px solid rgba(255, 64, 129);
+}
+.comStats{
+    width:40%;
+    border: 3px solid rgb(81, 216, 250);
+}
+.mycom{
+    width:30%;
+    border: 3px solid rgba(255, 64, 129);
+    display: flex;
+    align-items: center;
+}
 .com{
-    width:45%;
+    width:30%;
+    border: 3px solid rgb(81, 216, 250);
+    display: flex;
+    align-items: center;
+}
+.comTitle{
+    width:30%;
+    display: flex;
+    align-items: center;
+    justify-content:center;
+    
+}
+.statcont{
+    font-size: 14;
 }
 
 #spinner{

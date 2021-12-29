@@ -12,13 +12,11 @@
     height: 93vh;
     width: 25%;
     background-color: white;
-    border: 2px solid rgba(255, 64, 129); 
     
 }
 .mat-form-field{
     width: 100%;
 }
-
 #chatDiv
 {
     background-image: url("../../../assets/background-light.png");
@@ -27,4 +25,27 @@
     height: 93vh;
     width: 75%;
 
+}
+#searchbar{
+    height: 7%;
+    width: 95%;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+    margin-top: 2.5%;
+    margin-bottom: 2.5%;
+    padding-left: 10px;
+    vertical-align: middle;
+    background-color: white;
+    border-radius: 30px;    
+    border : 1px solid rgba(219,220,220);
+}
+#text{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+#new{
+    color:rgb(40, 241, 40);
+    font-weight: bold;
+    
 }
