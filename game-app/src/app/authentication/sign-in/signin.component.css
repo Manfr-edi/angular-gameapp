@@ -1,8 +1,17 @@
+body{
+	background-image: url("../../../assets/background-light.png");
+    background-repeat: repeat-xy;
+    background-size: 150px;
+	padding:100px;
+	
+}
 #content{
 	width: 30%;
+	margin-top: auto;
 	margin: auto;
     display: flex;
     flex-direction: column;
+	padding:20px;
 }
 
 #loginForm{
@@ -12,6 +21,6 @@
 
 .mat-form-field
 {
-	width: 240px;
+	width: 70%;
     margin: auto;
 }

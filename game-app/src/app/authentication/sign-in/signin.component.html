@@ -1,5 +1,7 @@
+<body>
 {{ checkLoggedIn() }}
-<div id="content">
+
+	<mat-card id="content">
 	<form id="loginForm" (ngSubmit)="onLoginEmail()" [formGroup]="loginForm">
 		<mat-form-field appearance="fill">
 			<mat-label>Email</mat-label>
@@ -16,7 +18,9 @@
 		<button type="submit" [disabled]="!loginForm.valid" mat-button color="primary">Login</button>
 	</form>
 
-	<button [routerLink]="'/register-user'" mat-button color="primary">Register </button>
-	<button [routerLink]="'/resetpassword'" mat-button color="primary">Reset Password</button>
+	<button [routerLink]="'/register-user'" mat-button color="accent">Register </button>
+	<button [routerLink]="'/resetpassword'" mat-button color="accent">Reset Password</button>
+	</mat-card>
 
-</div>
+
+</body>

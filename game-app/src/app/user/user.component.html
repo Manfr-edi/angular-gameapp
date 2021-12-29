@@ -153,9 +153,9 @@
 				<mat-tab label="Giochi in Comune">
 					<div class="tab">
 						<div *ngIf="isFriend">
-							<div *ngIf="gameList$ | async; let list">
+							<div *ngIf="completedGameList$ | async; let list">
 
-								<div id="cards" *ngIf="(myGameList$ | async); let mylist">
+								<div id="cards" *ngIf="(myCompletedGameList$ | async); let mylist">
 
 									<mat-card class="mycomStats">
 										<mat-card-title> Statistiche di {{authService.currentUsername}}</mat-card-title>
@@ -180,8 +180,7 @@
 										<mat-card-title> Statistiche di {{userInfo.username}}</mat-card-title>
 										
 										<mat-card-content class="statcont">
-											Media dei tempi di completamento: {{util.avgCompleteTime(list) | number :
-											'1.0-2'}} ore
+											Media dei tempi di completamento: {{util.avgCompleteTime(list) | number : '1.0-2'}} ore
 										</mat-card-content>
 										<mat-card-content class="statcont">
 											Somma spese: {{userSpese.sumPrice}} <span matSuffix>&euro;</span>

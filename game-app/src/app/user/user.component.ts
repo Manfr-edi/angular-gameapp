@@ -26,6 +26,8 @@ export class UserComponent implements OnInit {
   userInfo$: Observable<any>;
   gameList$: Observable<any[]> = new Observable;
   myGameList$: Observable<any[]> = new Observable;
+  myCompletedGameList$: Observable<any[]> = new Observable;
+  completedGameList$: Observable<any[]> = new Observable;
   common$: any[] = [];
   userSpese: Spese = {} as Spese;
   mySpese: Spese = {} as Spese;
@@ -60,7 +62,8 @@ export class UserComponent implements OnInit {
     this.isFriend = await this.userLoggedService.checkIsFriend(this.userid);
     this.hasRequest = await this.userLoggedService.checkRequest(this.authService.currentUserId, this.userid);
     this.requestReceived = await this.userLoggedService.checkRequest(this.userid);
-    
+    this.myCompletedGameList$ = this.userCollectionService.getList(this.userlists[0].code).snapshotChanges();
+    this.completedGameList$ = this.userCollectionService.getList(this.userlists[0].code,this.userid).snapshotChanges();
     if (this.isFriend)
       await this.CommonGames();
   }

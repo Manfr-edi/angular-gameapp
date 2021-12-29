@@ -1,6 +1,7 @@
+<body>
 {{checkUserInfo()}}
 
-<div id="content">
+<mat-card id="content">
 	<form id="registerForm" (ngSubmit)="onRegister()" [formGroup]="registerForm">
 		<mat-form-field appearance="fill">
 			<mat-label>Username</mat-label>
@@ -22,5 +23,6 @@
 
 		<button type="submit" [disabled]="!registerForm.valid" mat-button color="primary">Register</button>
 	</form>
-	<button [routerLink]="'/login'" mat-button color="primary">Login</button>
-</div>
+	<button [routerLink]="'/login'" mat-button color="accent">Login</button>
+</mat-card>
+</body>
