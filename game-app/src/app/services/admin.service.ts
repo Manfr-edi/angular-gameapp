@@ -29,7 +29,7 @@ export class AdminService {
       //Faccio prima l'upload dell'immagine, in modo che se fallisce non ho sporcato il db.
       //Se img è diverso da null, devo fornire il gameid
       return this.util.uploadFile(this.util.getGameImageChild(doc.ref.id), img, progress)
-        .then(r => doc.update({
+        .then(r => doc.set({
           title: title, developer: developer, price: price,
           release: release, publisher: publisher, platform: platform, genre: genre, bio: bio
         }).then(() => true).catch(err => false))
