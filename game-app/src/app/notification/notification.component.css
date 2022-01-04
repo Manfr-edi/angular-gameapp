@@ -1,5 +1,7 @@
 ::ng-deep.mat-menu-panel {
     max-width:none !important;
+    background-color: rgba(233,236,239);
+    
   }
 
   #notext{
@@ -12,7 +14,9 @@
       width: 80%;
       padding: 0;
       vertical-align: middle;
+      
   }
+
 
   .flexContainer
   {

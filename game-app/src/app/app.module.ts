@@ -39,6 +39,7 @@ import { ShowChatsComponent } from './dashboard/show-chats/show-chats.component'
 import { GameCatalogueComponent } from './game-catalogue/game-catalogue.component';
 import { GameDetailsComponent } from './game-details/game-details.component';
 import { AddToListComponent } from './game-details/add-to-list/add-to-list.component';
+
 import { ShowStarVoteComponent } from './game-catalogue/show-star-vote/show-star-vote.component';
 //Componenti Utente
 import { UserComponent } from './user/user.component';

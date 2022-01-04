@@ -71,8 +71,10 @@ export class UserCollectionService {
     * @returns true nel caso il gioco sia presente di già in una lista, false altrimenti
     */
 	async checkUniqueList(gameid: string, userid?: string): Promise<boolean> {
+		
 		for (let l of userlist)
-			return !(await this.getGameDataFromList(gameid, l.code, userid)).exists
+			if( (await this.getGameDataFromList(gameid, l.code, userid)).exists )
+				return false;
 		return true;
 	}
 

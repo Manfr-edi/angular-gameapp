@@ -57,18 +57,18 @@
 
 		<div class="title"> Seleziona le tue piattaforme </div>
 		<div class="single" *ngIf="!modifyPlatform">
-			<div id="flex">
+			<div class="flex">
 				<ng-container *ngFor="let plat of platformList; let i = index">
-					<div id="plat" *ngIf="platforms[i]">{{platformList[i]}}</div>
+					<div class="plat" *ngIf="platforms[i]">{{platformList[i]}}</div>
 				</ng-container>
 			</div>
 			<button class="btn" mat-raised-button color="accent" (click)="modifyPlatform=true">Modifica Piattaforme
 			</button>
 		</div>
 		<div class="single" *ngIf="modifyPlatform">
-			<div id="flex">
+			<div class="flex">
 				<ng-container *ngFor="let item of [].constructor(platformList.length); let i = index">
-					<div id="plat">
+					<div class="plat">
 						<mat-checkbox [(ngModel)]="platforms[i]"></mat-checkbox>
 						<label for="scales">&nbsp;{{platformList[i]}}</label>
 
@@ -85,9 +85,9 @@
 
 		<div class="title"> Seleziona i tuoi generi preferiti </div>
 		<div class="single" *ngIf="!modifyGenre">
-			<div id="flex">
-				<ng-container id="for" *ngFor="let gen of genreList; let i = index">
-					<div id="plat" *ngIf="genres[i]">{{genreList[i]}}</div>
+			<div class="flex">
+				<ng-container *ngFor="let gen of genreList; let i = index">
+					<div class="plat" *ngIf="genres[i]">{{genreList[i]}}</div>
 				</ng-container>
 			</div>
 			<button mat-raised-button color="accent" class="btn" (click)="modifyGenre=true">Modifica Generi
@@ -95,9 +95,9 @@
 		</div>
 
 		<div class="single" *ngIf="modifyGenre">
-			<div id="flex">
+			<div class="flex">
 				<ng-container *ngFor="let item of [].constructor(genreList.length); let i = index">
-					<div id="plat">
+					<div class="plat">
 						<mat-checkbox [(ngModel)]="genres[i]">
 							<label for="scales">&nbsp;{{genreList[i]}}</label>
 						</mat-checkbox>

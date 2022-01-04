@@ -73,6 +73,5 @@ text-align: start;
     margin: 0 10px;
 }
 #spinner{
-    margin:0 auto;
-    color: white;
-}
+        margin: 250px auto 250px auto;
+    }

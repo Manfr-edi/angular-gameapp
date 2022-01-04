@@ -55,7 +55,7 @@ export class InsertgamelistComponent implements OnChanges {
 
     //La form viene mostrata nel caso in cui sto facendo un Update oppure
     //nel caso in cui sto facendo un add di un gioco non inserito in un'altra lista
-    if (this.updateList !== '' || await this.userCollectionService.checkUniqueList(this.gameid)) {
+    if (this.updateList !== '' || await this.userCollectionService.checkUniqueList(this.gameid,this.authService.currentUserId)) {
       this.show = true
       this.updateForm().then(() => {
         this.onChangeList();
